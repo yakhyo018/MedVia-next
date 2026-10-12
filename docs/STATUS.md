@@ -10,7 +10,7 @@ browser, not committed — waiting for the user's check.**_
 ## The project
 
 MedVia-next is the web client of MedVia (`~/Desktop/MedVia`, NestJS GraphQL API). The backend is
-complete: M0–M10 + AI-1 + AI-2 merged on its `develop` (Postman 1567 assertions, Jest 239).
+complete: M0–M10 + AI-1 + AI-2 merged on its `develop` (Postman 470 requests / 837 assertions after the 2026-10-12 slim-down, Jest 239). Demo data: 15 clinics, 40 doctors, 50 patients.
 Structure and code style come from `~/Desktop/nestar-client` (package `nestar-next`, read-only);
 the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimova, Yahyo Choriyev.
 
