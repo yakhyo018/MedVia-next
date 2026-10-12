@@ -1,0 +1,355 @@
+@import '../tokens';
+
+#mobile-wrap {
+	&.layout-basic #main {
+		background: $background;
+	}
+
+	#main {
+		flex: 1;
+	}
+
+	#top {
+		position: sticky;
+		top: 0;
+		z-index: 100;
+		.top {
+			height: 64px;
+			padding: 0 12px 0 16px;
+			flex-direction: row;
+			align-items: center;
+			justify-content: space-between;
+			background: $surface;
+			border-bottom: 1px solid $border;
+			.actions {
+				display: flex;
+				align-items: center;
+				gap: 4px;
+			}
+		}
+	}
+
+	.lang-btn {
+		height: 32px;
+		min-width: 0;
+		padding: 0 8px 0 10px;
+		border: 1px solid $border-strong;
+		border-radius: $radius-pill;
+		color: $text;
+		font-size: 13px;
+		font-weight: 700;
+		.MuiButton-startIcon {
+			margin-right: 4px;
+		}
+		.MuiButton-endIcon {
+			margin-left: 0;
+		}
+		svg {
+			font-size: 16px;
+		}
+	}
+
+	/* Home */
+	.home-page .hero {
+		padding: 32px 0 40px;
+		background: linear-gradient(180deg, $primary-tint 0%, $surface 100%);
+		.container {
+			flex-direction: column;
+			gap: 24px;
+		}
+		.hero-text {
+			display: flex;
+			flex-direction: column;
+			gap: 14px;
+			.badge {
+				align-self: flex-start;
+				padding: 5px 12px;
+				border-radius: $radius-pill;
+				background: $surface;
+				border: 1px solid $border;
+				font-size: 11px;
+				font-weight: 600;
+				i {
+					display: none;
+				}
+			}
+			h1 {
+				font-size: 32px;
+				font-weight: 800;
+				line-height: 1.15;
+				letter-spacing: -0.8px;
+				em {
+					font-style: normal;
+					color: $primary;
+				}
+			}
+			p {
+				font-size: 15px;
+				line-height: 1.55;
+				color: $text-secondary;
+			}
+		}
+		.hero-media {
+			position: relative;
+			height: 300px;
+			img {
+				width: 100%;
+				height: 220px;
+				object-fit: cover;
+				object-position: 72% center;
+				border-radius: 18px;
+			}
+			.verified-chip {
+				--mv-delay: 400ms;
+				position: absolute;
+				top: 12px;
+				right: 12px;
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				padding: 7px 12px;
+				border-radius: 12px;
+				background: $surface;
+				box-shadow: $shadow-menu;
+				font-size: 12px;
+				font-weight: 700;
+				svg {
+					font-size: 17px;
+					color: $success;
+				}
+			}
+			.hero-chat.compact {
+				--mv-delay: 500ms;
+				position: absolute;
+				left: 12px;
+				right: 12px;
+				bottom: 0;
+				padding: 12px;
+				border-radius: 14px;
+				background: $surface;
+				box-shadow: $shadow-modal;
+				.chat-head {
+					display: flex;
+					align-items: center;
+					gap: 8px;
+					padding-bottom: 8px;
+					.avatar {
+						width: 28px;
+						height: 28px;
+						font-size: 11px;
+					}
+					div {
+						display: flex;
+						flex-direction: column;
+					}
+					strong {
+						font-size: 12px;
+					}
+					.online {
+						display: flex;
+						align-items: center;
+						gap: 5px;
+						font-size: 10.5px;
+						color: $success;
+						i {
+							width: 6px;
+							height: 6px;
+							border-radius: 50%;
+							background: $success;
+						}
+					}
+				}
+				.chat-body {
+					min-height: 92px;
+					display: flex;
+					flex-direction: column;
+					gap: 6px;
+				}
+				.bubble {
+					max-width: 84%;
+					padding: 7px 11px;
+					font-size: 12px;
+					line-height: 1.4;
+					border-radius: 12px;
+					&.mine {
+						align-self: flex-end;
+						color: #ffffff;
+						background: $primary;
+						border-bottom-right-radius: 4px;
+					}
+					&.theirs,
+					&.typing {
+						align-self: flex-start;
+						background: $surface-alt;
+						border-bottom-left-radius: 4px;
+					}
+					&.typing {
+						display: flex;
+						gap: 4px;
+						i {
+							width: 6px;
+							height: 6px;
+							border-radius: 50%;
+							background: $text-muted;
+							animation: mv-typing 1s ease-in-out infinite;
+							&:nth-child(2) {
+								animation-delay: 0.15s;
+							}
+							&:nth-child(3) {
+								animation-delay: 0.3s;
+							}
+						}
+					}
+				}
+			}
+		}
+		.hero-search .search-box {
+			flex-direction: column;
+			align-items: stretch;
+			padding: 12px;
+			gap: 0;
+			.field {
+				padding: 8px 4px;
+				margin: 0;
+				border-right: 0;
+				&:not(:nth-last-child(2)) {
+					margin: 0;
+					border-right: 0;
+					border-bottom: 1px solid $border;
+				}
+			}
+			.search-btn {
+				gap: 8px;
+				font-family: $font;
+				font-size: 15px;
+				font-weight: 700;
+				.search-label {
+					display: inline;
+				}
+				width: 100%;
+				height: 48px;
+				margin-top: 8px;
+				border-radius: $radius-button;
+			}
+		}
+	}
+
+	/* Join */
+	.join-page {
+		padding: 16px 0 40px;
+		.container {
+			flex-direction: column;
+			gap: 16px;
+		}
+		.welcome {
+			padding: 22px 20px;
+			border-radius: 18px;
+			background: $primary;
+			color: #ffffff;
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			h2 {
+				font-size: 24px;
+				font-weight: 800;
+				letter-spacing: -0.4px;
+				margin-bottom: 2px;
+			}
+			div {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				font-size: 13px;
+				font-weight: 500;
+			}
+			span {
+				width: 22px;
+				height: 22px;
+				flex-shrink: 0;
+				border-radius: 50%;
+				background: rgba(255, 255, 255, 0.18);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				svg {
+					font-size: 14px;
+				}
+			}
+		}
+		.join-form {
+			width: 100%;
+			padding: 20px 16px;
+			border-radius: $radius-card;
+			border: 1px solid $border;
+			background: $surface;
+			.field-row {
+				flex-direction: column;
+				gap: 20px;
+			}
+		}
+	}
+
+	/* Footer */
+	#footer .footer-container {
+		padding: 32px 16px 24px;
+		background: $surface;
+		border-top: 1px solid $border;
+		.main {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 28px 16px;
+			padding-bottom: 28px;
+		}
+		.footer-box {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			min-width: 0;
+			&.brand,
+			&:nth-child(2) {
+				grid-column: 1 / -1;
+			}
+			> strong {
+				font-size: 15px;
+			}
+			p,
+			a {
+				font-size: 14px;
+				color: $text-secondary;
+				white-space: normal;
+			}
+			.contact {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				.icon {
+					width: 34px;
+					height: 34px;
+					border-radius: 10px;
+					background: $primary-tint;
+					color: $primary;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					svg {
+						font-size: 17px;
+					}
+				}
+				div {
+					display: flex;
+					flex-direction: column;
+					span {
+						font-size: 12px;
+						color: $text-secondary;
+					}
+				}
+			}
+		}
+		.second {
+			padding-top: 18px;
+			border-top: 1px solid $border;
+			font-size: 12px;
+			color: $text-secondary;
+		}
+	}
+}

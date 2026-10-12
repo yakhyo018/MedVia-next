@@ -3,8 +3,8 @@
 Where the frontend stands, what comes next, and how we work. A new session reads this first.
 Update it whenever a milestone closes.
 
-_Last updated: 2026-10-12 — project created; rules in CLAUDE.md; **next: build F0 (plan below,
-already approved by the user).**_
+_Last updated: 2026-10-12 — **F0 closed: approved by the user, merged into `develop` and pushed.
+Next: F1 starts with the doctors list page (`getDoctors`) — plan first.**_
 
 ## The project
 
@@ -17,8 +17,8 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 
 | # | Milestone | Status |
 | --- | --- | --- |
-| **F0** | **Skeleton — Next + MUI theme, 5 languages, Apollo + refresh, layouts, login/signup, alerts** | **next — plan approved** |
-| F1 | Public pages — home, clinics (search, filters, Recommended), clinic / doctor / treatment pages | |
+| F0 | Skeleton — Next + MUI theme, 5 languages, Apollo + refresh, layouts, login/signup, alerts | done 2026-10-12 |
+| **F1** | **Public pages — home, doctors list (first), clinics (search, filters, Recommended), clinic / doctor / treatment pages** | **next** |
 | F2 | Booking — slots → hold → questionnaire + consents → My Bookings | |
 | F3 | Chat + notifications — socket `/live`, bell, translations | |
 | F4 | MyPage — reviews, follows, settings, "who saw my medical data" | |
@@ -28,7 +28,29 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 | F8 | Assistant UI — chat panel, cards, Confirm button | |
 | F9 | Deploy — `medvia.uz` + `api.medvia.uz`, backend `develop` → `main` | |
 
-## Next step: F0 — the approved plan
+## F0 — what was built (2026-10-12)
+
+- Next 14.2.35 pages router on :4000, MUI 5 theme from `scss/MaterialTheme/tokens.ts`, five
+  locales (`en` default, `/ru`, `/uz`, `/kk`, `/ko`), 117 keys each.
+- Auth: memory-only access token, `restoreSession()` on load, refresh-and-retry in the Apollo
+  error link, one refresh at a time (shared promise + Web Lock), cross-tab login/logout.
+- Layouts Home / Basic / Full, `Top` (menu, language menu, user menu, mobile drawer), `Footer`.
+- Pages: `/` (hero + search box → `/clinics?…`, F1), `/account/join` (log in + patient sign up),
+  `/_dev/ui` (every alert, chip, button, field; 404 in production).
+- Logo: heart + pulse (L4, chosen by the user) — `Logo.tsx`, `public/img/logo/logo-mark.svg`, favicon.
+- Hero: `public/img/hero.jpg` from `MedVia-design/landing-with-photos` + animated sample chat card
+  (`HeroChat.tsx`). Login/signup panels: Unsplash, hot-linked (`IMAGES` in `libs/config.ts`).
+- Mobile (as drawn in the "MedVia Mobile" design canvas, approved by the user): hero photo +
+  compact chat card, labelled search button, language bottom sheet + a Language row in the
+  drawer, teal welcome card above the log in / sign up form.
+- Motion: `scss/motion.scss` (entrances, hover lift, header shadow, reduced-motion off switch).
+- Checked in the browser: signup → name in header; reload → still signed in; revoked access
+  token → `getMyProfile` refreshes and retries; wrong password alert; logout in one tab → the
+  other tab turns guest; RU locale; 1440 px, 800 px and 375 px mobile (drawer).
+- Not in F0: Google sign-in (needs `GOOGLE_CLIENT_ID`), clinic signup (F5).
+- Test account made during the check: `f0.feride@medvia.test` (local DB only).
+
+## The F0 plan (approved, kept for reference)
 
 Branch `feature/f0-skeleton` from `develop`.
 
@@ -86,10 +108,16 @@ cd ~/Desktop/MedVia && npm run start:dev          # API on :3000 (Atlas + local 
 cd ~/Desktop/MedVia && npm run start:dev:batch    # batch on :3001 (only for batch features)
 cd ~/Desktop/MedVia-next && npm run dev           # app on :4000
 ```
+Never run `npm run build` while `npm run dev` is running — both write `.next/`, and the dev
+server breaks (fix: stop it, `rm -rf .next`, start again).
+
 Demo accounts (backend seed): `feride@`, `yahyo@`, `clinic01@`, `doctor01@`, `admin@seed.medvia.test`
 with `SEED_PASSWORD` from `~/Desktop/MedVia/.env`.
 
 ## Open items
 
-- No GitHub remote yet — create the repo and push only when the user asks.
 - Google sign-in needs `GOOGLE_CLIENT_ID` (backend open item).
+- Before deploy (F9): copy the Unsplash photos into `public/img/` and re-check `npm audit` for
+  Next 14 (current advisories are mostly App Router / middleware / `next/image`).
+- `hero.jpg` came from the design folder without a recorded source — confirm its licence before a
+  public deploy. `MedVia-design/landing-with-photos/img/` also has treatment and clinic photos for F1.

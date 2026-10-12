@@ -1,0 +1,77 @@
+/** IMPORTS **/
+@import 'tokens';
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+a {
+	white-space: nowrap;
+	text-decoration: none;
+	color: $primary;
+	&:hover {
+		color: $primary-dark;
+	}
+}
+h1,
+h2,
+h3,
+h4,
+p {
+	margin: 0;
+}
+span,
+p {
+	line-height: 1.4;
+}
+img {
+	display: block;
+	max-width: 100%;
+}
+body {
+	font-family: $font;
+	color: $text;
+	-webkit-font-smoothing: antialiased;
+}
+hr {
+	border: 0;
+	border-bottom: 1px solid $border;
+	margin: 0;
+}
+
+/** VERSION: PC **/
+#pc-wrap {
+	width: 100%;
+	min-height: 100vh;
+
+	.container {
+		position: relative;
+		width: 100%;
+		max-width: calc(#{$container} + 48px);
+		padding: 0 24px;
+		margin: 0 auto;
+		display: flex;
+	}
+}
+
+/** VERSION: MOBILE **/
+#mobile-wrap {
+	width: 100%;
+	min-height: 100vh;
+
+	.container {
+		width: 100%;
+		padding: 0 16px;
+		display: flex;
+	}
+}
+
+@import 'motion';
+@import 'common';
+@import 'alert';
