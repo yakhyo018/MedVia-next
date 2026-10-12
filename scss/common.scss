@@ -1,0 +1,362 @@
+/** Shared pieces that render outside #pc-wrap / #mobile-wrap too (menus, drawers live in a portal). */
+@import 'tokens';
+
+/* Logo */
+.mv-logo {
+	display: inline-flex;
+	align-items: center;
+	gap: 9px;
+	.mark {
+		display: block;
+		overflow: visible;
+		.heart {
+			transform-origin: 18px 20px;
+		}
+		.pulse {
+			stroke-dasharray: 40;
+			stroke-dashoffset: 0;
+		}
+		/* Without motion (reduced-motion setting) the line must stay fully drawn. */
+		@media (prefers-reduced-motion: reduce) {
+			.pulse {
+				stroke-dasharray: none;
+			}
+		}
+	}
+	.word {
+		font-size: 22px;
+		font-weight: 800;
+		letter-spacing: -0.5px;
+		color: $text;
+		b {
+			font-weight: 800;
+			color: $primary;
+		}
+	}
+	&.white .word,
+	&.white .word b {
+		color: #ffffff;
+	}
+}
+/* The heart beats all the time (about 72 bpm); the pulse line redraws with each beat. */
+.mv-logo .mark {
+	.heart {
+		animation: mv-heartbeat 1.6s ease-in-out infinite;
+	}
+	.pulse {
+		animation: mv-draw 1.6s ease-in-out infinite;
+	}
+}
+
+/* Status chip: CONFIRMED / ACTIVE green, PENDING amber, DECLINED / CANCELLED red, COMPLETED teal */
+.mv-status-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	height: 26px;
+	padding: 0 10px;
+	border-radius: $radius-pill;
+	font-size: 12px;
+	font-weight: 700;
+	white-space: nowrap;
+	i {
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: currentColor;
+	}
+	&.small {
+		height: 22px;
+		padding: 0 8px;
+		font-size: 11px;
+	}
+	&.success {
+		color: $success;
+		background: $success-bg;
+	}
+	&.warning {
+		color: $warning;
+		background: $warning-bg;
+	}
+	&.danger {
+		color: $danger;
+		background: $danger-bg;
+	}
+	&.teal {
+		color: $primary;
+		background: $primary-tint;
+	}
+	&.neutral {
+		color: $text-secondary;
+		background: $surface-alt;
+	}
+}
+
+/* Empty state */
+.mv-empty-state {
+	width: 100%;
+	padding: 40px 24px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 8px;
+	text-align: center;
+	border: 1px dashed $border-strong;
+	border-radius: $radius-card;
+	background: $surface;
+	.icon {
+		width: 52px;
+		height: 52px;
+		border-radius: 50%;
+		background: $primary-tint;
+		color: $primary;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: 4px;
+	}
+	strong {
+		font-size: 16px;
+	}
+	p {
+		max-width: 360px;
+		font-size: 14px;
+		color: $text-secondary;
+		margin-bottom: 8px;
+	}
+}
+
+/* Header menus (portal) */
+.mv-lang-menu {
+	min-width: 238px;
+	padding: 4px 0;
+	.MuiMenuItem-root {
+		gap: 14px;
+		height: 40px;
+		.code {
+			width: 20px;
+			font-size: 12px;
+			font-weight: 700;
+			color: $text-muted;
+		}
+		.label {
+			flex: 1;
+			font-weight: 600;
+			color: $text;
+		}
+		.check {
+			font-size: 18px;
+			color: $primary;
+		}
+	}
+	.MuiDivider-root {
+		margin: 6px 8px;
+	}
+	.hint {
+		padding: 4px 22px 8px;
+		max-width: 238px;
+		font-size: 12px;
+		color: $text-secondary;
+		line-height: 1.35;
+	}
+}
+
+.mv-user-menu {
+	min-width: 230px;
+	.menu-head {
+		padding: 10px 22px 12px;
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		strong {
+			font-size: 14px;
+		}
+		span {
+			font-size: 12px;
+			color: $text-secondary;
+		}
+	}
+	.MuiDivider-root {
+		margin: 0 8px 6px;
+	}
+	.MuiMenuItem-root {
+		gap: 10px;
+		svg {
+			font-size: 19px;
+			color: $text-secondary;
+		}
+	}
+}
+
+/* Mobile drawer (portal) */
+.mv-drawer {
+	width: 300px;
+	min-height: 100%;
+	padding: 24px 16px;
+	gap: 18px;
+	.drawer-user {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		div {
+			display: flex;
+			flex-direction: column;
+			min-width: 0;
+		}
+		strong {
+			font-size: 15px;
+		}
+		span {
+			font-size: 12px;
+			color: $text-secondary;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+	}
+	.drawer-auth {
+		gap: 10px;
+	}
+	nav {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		a {
+			padding: 12px 14px;
+			border-radius: 10px;
+			font-size: 15px;
+			font-weight: 600;
+			color: $text-secondary;
+			&.active {
+				color: $primary;
+				background: $primary-tint;
+			}
+		}
+	}
+	.drawer-lang {
+		height: 48px;
+		padding: 0 14px;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		border: 1px solid $border-strong;
+		border-radius: 10px;
+		background: $surface;
+		font-family: $font;
+		font-size: 14px;
+		font-weight: 600;
+		color: $text;
+		svg {
+			font-size: 19px;
+		}
+		span {
+			flex: 1;
+			text-align: left;
+		}
+		em {
+			font-style: normal;
+			font-weight: 500;
+			color: $text-secondary;
+		}
+	}
+	.drawer-logout {
+		margin-top: auto;
+		height: 48px;
+		justify-content: flex-start;
+		padding: 0 14px;
+		border-radius: 10px;
+		color: $danger;
+		background: $danger-bg;
+		font-weight: 700;
+	}
+}
+
+/* Mobile language bottom sheet (portal) */
+.mv-lang-sheet {
+	padding: 10px 16px 28px;
+	border-radius: 20px 20px 0 0;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	.handle {
+		align-self: center;
+		width: 40px;
+		height: 4px;
+		margin-bottom: 8px;
+		border-radius: 4px;
+		background: $border-strong;
+	}
+	.title {
+		padding: 0 6px 6px;
+		font-size: 17px;
+	}
+	button {
+		height: 52px;
+		padding: 0 14px;
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		border: 0;
+		border-radius: 12px;
+		background: $surface;
+		font-family: $font;
+		text-align: left;
+		cursor: pointer;
+		.code {
+			width: 24px;
+			font-size: 12px;
+			font-weight: 700;
+			color: $text-secondary;
+		}
+		.label {
+			flex: 1;
+			font-size: 15px;
+			font-weight: 600;
+			color: $text;
+		}
+		.check {
+			font-size: 20px;
+			color: $primary;
+		}
+		&.active {
+			background: $primary-tint;
+			.label {
+				font-weight: 700;
+			}
+		}
+	}
+	.hint {
+		margin: 8px 6px 0;
+		padding-top: 12px;
+		border-top: 1px solid $border;
+		font-size: 12px;
+		color: $text-secondary;
+	}
+}
+
+/* Avatar (header, drawer) */
+.avatar {
+	width: 38px;
+	height: 38px;
+	flex-shrink: 0;
+	border-radius: 50%;
+	background: $primary-tint;
+	color: $primary;
+	font-size: 14px;
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+}
+
+/* Red 12px field error outside a TextField (checkbox rows) */
+.field-error {
+	margin-top: 4px;
+	font-size: 12px;
+	color: $danger;
+}

@@ -1,0 +1,152 @@
+/**
+ * SweetAlert2 in the MedVia look. sweetAlert.ts turns SweetAlert's own button styles off
+ * (buttonsStyling: false) and puts these classes on every part.
+ */
+@import 'tokens';
+
+.mv-swal.swal2-backdrop-show {
+	background: $backdrop;
+}
+
+.mv-swal .mv-swal-popup {
+	width: 420px;
+	max-width: calc(100vw - 32px);
+	padding: 32px 28px 28px;
+	border-radius: $radius-modal;
+	box-shadow: $shadow-modal;
+	font-family: $font;
+	color: $text;
+}
+
+.mv-swal .mv-swal-icon {
+	margin: 0 auto 18px;
+	transform: scale(0.8);
+	&.swal2-question {
+		border-color: $primary-soft;
+		color: $primary;
+	}
+	&.swal2-warning {
+		border-color: $danger-bg;
+		color: $danger;
+	}
+	&.swal2-error {
+		border-color: $danger-bg;
+		[class^='swal2-x-mark-line'] {
+			background-color: $danger;
+		}
+	}
+	&.swal2-success {
+		border-color: $success-bg;
+		[class^='swal2-success-line'] {
+			background-color: $success;
+		}
+		.swal2-success-ring {
+			border-color: $success-bg;
+		}
+	}
+}
+
+.mv-swal .mv-swal-title {
+	padding: 0;
+	font-size: 18px;
+	font-weight: 700;
+	line-height: 1.4;
+	color: $text;
+}
+
+.mv-swal .mv-swal-text {
+	margin: 8px 0 0;
+	font-size: 14px;
+	color: $text-secondary;
+}
+
+.mv-swal .mv-swal-actions {
+	width: 100%;
+	margin: 24px 0 0;
+	gap: 10px;
+	flex-wrap: nowrap;
+}
+
+.mv-swal .mv-swal-btn {
+	flex: 1;
+	height: 42px;
+	margin: 0;
+	padding: 0 22px;
+	border-radius: $radius-button;
+	font-family: $font;
+	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+	border: 1px solid transparent;
+	transition: background 0.15s ease;
+	&:focus-visible {
+		outline: 3px solid $primary-tint;
+	}
+	&--primary {
+		background: $primary;
+		color: #ffffff;
+		&:hover {
+			background: $primary-hover;
+		}
+	}
+	&--danger {
+		background: $danger;
+		color: #ffffff;
+		&:hover {
+			background: #a93226;
+		}
+	}
+	&--outlined {
+		background: $surface;
+		color: $text;
+		border-color: $border-strong;
+		&:hover {
+			background: $background;
+		}
+	}
+}
+
+/* Top toast: a white pill with a green mark */
+.mv-swal--toast .mv-toast {
+	width: auto;
+	margin-top: 16px;
+	padding: 10px 20px 10px 12px;
+	border-radius: $radius-pill;
+	border: 1px solid $border;
+	box-shadow: $shadow-menu;
+	font-family: $font;
+	align-items: center;
+	.mv-toast-icon {
+		width: 26px;
+		height: 26px;
+		min-width: 26px;
+		margin: 0 10px 0 0;
+		border: 0;
+		border-radius: 50%;
+		background: $success-bg;
+		&.swal2-success {
+			[class^='swal2-success-line'],
+			.swal2-success-ring,
+			.swal2-success-fix,
+			[class^='swal2-success-circular-line'] {
+				display: none;
+			}
+			&::after {
+				content: '';
+				width: 10px;
+				height: 5px;
+				margin-top: -2px;
+				border-left: 2.4px solid $success;
+				border-bottom: 2.4px solid $success;
+				transform: rotate(-45deg);
+			}
+		}
+	}
+	.mv-toast-title {
+		margin: 0;
+		padding: 0;
+		font-size: 14px;
+		font-weight: 600;
+		color: $text;
+	}
+}

@@ -1,0 +1,141 @@
+#pc-wrap {
+	.join-page {
+		padding: 56px 0 88px;
+		.main {
+			width: 100%;
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 48px;
+			padding: 12px;
+			border-radius: 24px;
+			border: 1px solid $border;
+			background: $surface;
+			box-shadow: $shadow-card;
+		}
+		.left {
+			padding: 48px;
+			gap: 30px;
+			border-radius: 18px;
+			background: $primary;
+			h2 {
+				font-size: 34px;
+				font-weight: 800;
+				line-height: 1.25;
+				letter-spacing: -0.6px;
+				color: #ffffff;
+			}
+			.points {
+				display: flex;
+				flex-direction: column;
+				gap: 14px;
+				@for $i from 1 through 3 {
+					div:nth-child(#{$i}) {
+						--mv-delay: #{200 + $i * 90}ms;
+					}
+				}
+				div {
+					display: flex;
+					align-items: center;
+					gap: 12px;
+					font-size: 15px;
+					font-weight: 500;
+					color: #ffffff;
+				}
+				span {
+					width: 28px;
+					height: 28px;
+					border-radius: 50%;
+					background: rgba(255, 255, 255, 0.16);
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					svg {
+						font-size: 17px;
+					}
+				}
+			}
+			.illustration {
+				margin-top: auto;
+				position: relative;
+				height: 280px;
+				border-radius: 16px;
+				overflow: hidden;
+				background: #168390;
+				img {
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+				}
+				/* A teal wash ties the photo to the panel colour. */
+				&::after {
+					content: '';
+					position: absolute;
+					inset: 0;
+					background: linear-gradient(180deg, rgba(11, 122, 138, 0.1) 0%, rgba(11, 122, 138, 0.45) 100%);
+					pointer-events: none;
+				}
+				.credit {
+					position: absolute;
+					right: 12px;
+					bottom: 10px;
+					z-index: 1;
+					font-size: 11px;
+					color: rgba(255, 255, 255, 0.85);
+				}
+			}
+		}
+		.right {
+			padding: 36px 36px 36px 0;
+		}
+	}
+}
+
+/* Shared by desktop and mobile */
+.join-form {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	.form-body {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+	.field {
+		flex: 1;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		.field-label {
+			font-size: 13px;
+			font-weight: 600;
+			color: $text;
+		}
+		.MuiSelect-select {
+			display: flex;
+			align-items: center;
+		}
+		.MuiFormHelperText-root:not(.Mui-error) {
+			color: $text-secondary;
+		}
+	}
+	.field-row {
+		display: flex;
+		gap: 16px;
+	}
+	.terms {
+		margin-top: -6px;
+		.MuiFormControlLabel-label {
+			font-size: 14px;
+		}
+	}
+	.ask-info {
+		text-align: center;
+		font-size: 14px;
+		color: $text-secondary;
+		b {
+			color: $primary;
+			cursor: pointer;
+		}
+	}
+}

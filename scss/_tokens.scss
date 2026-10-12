@@ -1,0 +1,42 @@
+/**
+ * SCSS names for the design tokens. The values are CSS custom properties written on :root
+ * from scss/MaterialTheme/tokens.ts (through MUI CssBaseline) — tokens.ts is the only source.
+ * Because they are var(), Sass colour functions (rgba($primary, …), darken()) cannot use them.
+ */
+$primary: var(--mv-primary);
+$primary-hover: var(--mv-primary-hover);
+$primary-dark: var(--mv-primary-dark);
+$primary-tint: var(--mv-primary-tint);
+$primary-soft: var(--mv-primary-soft);
+
+$text: var(--mv-text);
+$text-secondary: var(--mv-text-secondary);
+$text-muted: var(--mv-text-muted);
+
+$border: var(--mv-border);
+$border-strong: var(--mv-border-strong);
+$background: var(--mv-background);
+$surface: var(--mv-surface);
+$surface-alt: var(--mv-surface-alt);
+
+$success: var(--mv-success);
+$success-bg: var(--mv-success-bg);
+$warning: var(--mv-warning);
+$warning-bg: var(--mv-warning-bg);
+$danger: var(--mv-danger);
+$danger-bg: var(--mv-danger-bg);
+$star: var(--mv-star);
+$backdrop: var(--mv-backdrop);
+
+$radius-button: var(--mv-radius-button);
+$radius-card: var(--mv-radius-card);
+$radius-modal: var(--mv-radius-modal);
+$radius-pill: var(--mv-radius-pill);
+
+$shadow-card: var(--mv-shadow-card);
+$shadow-menu: var(--mv-shadow-menu);
+$shadow-modal: var(--mv-shadow-modal);
+
+$font: var(--mv-font);
+$container: var(--mv-container);
+$header-height: var(--mv-header-height);

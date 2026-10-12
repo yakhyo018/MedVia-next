@@ -1,0 +1,47 @@
+#pc-wrap,
+#mobile-wrap {
+	.dev-ui-page {
+		padding: 48px 0 80px;
+		.container {
+			flex-direction: column;
+			gap: 20px;
+		}
+		.hint {
+			font-size: 13px;
+			color: $text-secondary;
+		}
+		.ui-section {
+			padding: 24px;
+			border-radius: $radius-card;
+			border: 1px solid $border;
+			background: $surface;
+			h3 {
+				font-size: 13px;
+				font-weight: 700;
+				letter-spacing: 1px;
+				text-transform: uppercase;
+				color: $text-muted;
+				margin-bottom: 16px;
+			}
+		}
+		.ui-row {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			gap: 12px;
+		}
+		.ui-fields {
+			width: 100%;
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+			gap: 16px;
+			align-items: start;
+		}
+		.ui-skeletons {
+			width: 260px;
+		}
+		code {
+			font-size: 14px;
+		}
+	}
+}
