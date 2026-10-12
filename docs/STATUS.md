@@ -117,9 +117,9 @@ The full rules are in `CLAUDE.md`. The ones a new session must not miss:
 ```bash
 cd ~/Desktop/MedVia && npm run start:dev          # API on :3000 (Atlas + local Redis)
 cd ~/Desktop/MedVia && npm run start:dev:batch    # batch on :3001 (only for batch features)
-cd ~/Desktop/MedVia-next && npm run dev           # app on :4000
+cd ~/Desktop/MedVia-next && yarn dev                # app on :4000 (yarn, not npm)
 ```
-Never run `npm run build` while `npm run dev` is running — both write `.next/`, and the dev
+Never run `yarn build` while `yarn dev` is running — both write `.next/`, and the dev
 server breaks (fix: stop it, `rm -rf .next`, start again).
 
 Demo accounts (backend seed): `feride@`, `yahyo@`, `clinic01@`, `doctor01@`, `admin@seed.medvia.test`
@@ -128,7 +128,7 @@ with `SEED_PASSWORD` from `~/Desktop/MedVia/.env`.
 ## Open items
 
 - Google sign-in needs `GOOGLE_CLIENT_ID` (backend open item).
-- Before deploy (F9): copy the Unsplash photos into `public/img/` and re-check `npm audit` for
+- Before deploy (F9): copy the Unsplash photos into `public/img/` and re-check `yarn audit` for
   Next 14 (current advisories are mostly App Router / middleware / `next/image`).
 - Seed data (backend): every seeded doctor speaks only KO / EN, so the RU / UZ / KK language
   filter finds nobody; and ~190 test doctors from Postman runs ("Assistant Test Clinic …") sit in
