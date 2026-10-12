@@ -32,6 +32,7 @@ const Top = () => {
 	const currentLocale = router.locale ?? 'en';
 	const menu = [
 		{ href: '/', label: t('Home') },
+		{ href: '/doctors', label: t('Doctors') },
 		{ href: '/clinics', label: t('Clinics') },
 		...(user._id ? [{ href: '/mypage', label: t('My Page') }] : []),
 		{ href: '/community', label: t('Community') },

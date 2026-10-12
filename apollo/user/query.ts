@@ -29,3 +29,37 @@ export const GET_MY_PROFILE = gql`
 		}
 	}
 `;
+
+/**************************
+ *         DOCTOR         *
+ *************************/
+
+export const GET_DOCTORS = gql`
+	query GetDoctors($input: DoctorsInquiry!) {
+		getDoctors(input: $input) {
+			list {
+				_id
+				doctorName
+				doctorNameKo
+				doctorSpecialty
+				doctorExperience
+				doctorLangs
+				doctorImage
+				doctorLikes
+				doctorViews
+				doctorRating
+				doctorReviews
+				meLiked
+				clinicData {
+					_id
+					clinicName
+					clinicNameKo
+					clinicDistrict
+				}
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;

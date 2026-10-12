@@ -4,7 +4,8 @@ Where the frontend stands, what comes next, and how we work. A new session reads
 Update it whenever a milestone closes.
 
 _Last updated: 2026-10-12 — **F0 closed: approved by the user, merged into `develop` and pushed.
-Next: F1 starts with the doctors list page (`getDoctors`) — plan first.**_
+F1 in progress on `feature/f1-doctors`: the doctors list (`/doctors`) is built and checked in the
+browser, not committed — waiting for the user's check.**_
 
 ## The project
 
@@ -49,6 +50,16 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
   other tab turns guest; RU locale; 1440 px, 800 px and 375 px mobile (drawer).
 - Not in F0: Google sign-in (needs `GOOGLE_CLIENT_ID`), clinic signup (F5).
 - Test account made during the check: `f0.feride@medvia.test` (local DB only).
+
+## F1 — doctors list (2026-10-12, in progress)
+
+- `/doctors`, in the menu before Clinics: `getDoctors` (public), 8 per page, name / specialty /
+  language filters, sort pills (Recommended = `doctorScore` default, Rating, Likes, Views, Recent),
+  MUI pagination, skeletons, empty and error states. Filters live in the URL (`?text=&specialty=
+  &lang=&sort=&page=`), so back / forward and shared links work; unknown values are ignored.
+- Desktop 4 columns (3 / 2 on narrower windows), mobile one column with photo left.
+- Found while building: GraphQL takes `Direction` by name (`"DESC"`), not the backend's number.
+- Not yet: the "Any clinic" filter (with the clinics page), liking from the card, doctor detail.
 
 ## The F0 plan (approved, kept for reference)
 
@@ -119,5 +130,8 @@ with `SEED_PASSWORD` from `~/Desktop/MedVia/.env`.
 - Google sign-in needs `GOOGLE_CLIENT_ID` (backend open item).
 - Before deploy (F9): copy the Unsplash photos into `public/img/` and re-check `npm audit` for
   Next 14 (current advisories are mostly App Router / middleware / `next/image`).
+- Seed data (backend): every seeded doctor speaks only KO / EN, so the RU / UZ / KK language
+  filter finds nobody; and ~190 test doctors from Postman runs ("Assistant Test Clinic …") sit in
+  the dev DB. Both are backend seed / cleanup tasks.
 - `hero.jpg` came from the design folder without a recorded source — confirm its licence before a
   public deploy. `MedVia-design/landing-with-photos/img/` also has treatment and clinic photos for F1.

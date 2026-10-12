@@ -19,6 +19,9 @@ const withLayoutBasic = (Component: React.ComponentType<T>) => {
 			let title = '';
 
 			switch (router.pathname) {
+				case '/doctors':
+					title = 'Find a doctor';
+					break;
 				case '/account/join':
 					title = 'Log in / Sign up';
 					break;

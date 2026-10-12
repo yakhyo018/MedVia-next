@@ -7,8 +7,11 @@ export enum Language {
 	KK = 'KK',
 }
 
-/** The backend sends `Direction` as numbers: ASC = 1, DESC = -1. */
+/**
+ * The backend's enum holds numbers (ASC = 1, DESC = -1) for MongoDB's $sort, but GraphQL
+ * exposes an enum by its NAMES — the client sends "DESC", never -1.
+ */
 export enum Direction {
-	ASC = 1,
-	DESC = -1,
+	ASC = 'ASC',
+	DESC = 'DESC',
 }
