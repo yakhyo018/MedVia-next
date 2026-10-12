@@ -51,7 +51,23 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 - Not in F0: Google sign-in (needs `GOOGLE_CLIENT_ID`), clinic signup (F5).
 - Test account made during the check: `f0.feride@medvia.test` (local DB only).
 
-## F1 — doctors list (2026-10-12, in progress)
+## F1 — clinics list + doctor page (2026-10-12, in progress)
+
+- Menu: Home · Clinics · Doctors. Both lists carry "Clinics N | Doctors M" tabs.
+- `/clinics`: sidebar filters (name or treatment, 7 districts, specialty, ₩ range, languages,
+  interpreter) applied on Apply; sort Recommended / Rating / Price ↑ / Likes / Views / Newest;
+  removable chips; 9 per page; URL keys `text, specialty, district, lang, min, max, interpreter,
+  sort, page`; mobile filters in a bottom sheet. The home search now lands here.
+- Cards: real photos (seeded from the landing sample), Verified, ♡ (guest → login prompt that
+  returns to the page; clinic / doctor accounts refused; the cache updates in place).
+- `/doctors/detail?id=`: header with stats, Follow + ♡, About, Education and career, the doctor's
+  treatments, reviews with the rating summary and "Show more"; clinic box in the sidebar.
+- Fixes found while checking: the Log in → Sign up tab dropped `?referrer=`; queries sent before
+  the session was restored showed a guest's meLiked / meFollowed — active queries now refetch
+  once the session is back.
+- Next: the clinic page (`/clinics/detail`) — cards and the doctor page already link to it.
+
+## F1 — doctors list (2026-10-12)
 
 - `/doctors`, in the menu before Clinics: `getDoctors` (public), 8 per page, name / specialty /
   language filters, sort pills (Recommended = `doctorScore` default, Rating, Likes, Views, Recent),

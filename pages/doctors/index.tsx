@@ -1,17 +1,17 @@
 import React, { useMemo } from 'react';
 import { NextPage } from 'next';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import { useQuery } from '@apollo/client';
 import { Box, Button, Pagination, Skeleton, Stack } from '@mui/material';
-import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import DoctorCard from '../../libs/components/doctor/DoctorCard';
 import DoctorFilter, { DoctorFilterValues } from '../../libs/components/doctor/DoctorFilter';
 import EmptyState from '../../libs/components/common/EmptyState';
+import ListBanner from '../../libs/components/common/ListBanner';
+import ListTabs from '../../libs/components/common/ListTabs';
 import { GET_DOCTORS } from '../../apollo/user/query';
 import { Doctor } from '../../libs/types/doctor/doctor';
 import { DoctorSort, DoctorsInquiry } from '../../libs/types/doctor/doctor.input';
@@ -123,17 +123,11 @@ const DoctorList: NextPage = () => {
 	};
 
 	const banner = (
-		<Stack className={'doctor-banner'}>
-			<Stack className={'container'}>
-				<nav className={'crumbs'} aria-label={t('Breadcrumb')}>
-					<Link href={'/'}>{t('Home')}</Link>
-					<ChevronRightRoundedIcon />
-					<span>{t('Doctors')}</span>
-				</nav>
-				<h1>{t('Find a doctor')}</h1>
-				<p>{t('Verified doctors of Seoul clinics who speak your language')}</p>
-			</Stack>
-		</Stack>
+		<ListBanner
+			crumb={t('Doctors')}
+			title={t('Find a doctor')}
+			text={t('Verified doctors of Seoul clinics who speak your language')}
+		/>
 	);
 
 	const list = (
@@ -216,6 +210,7 @@ const DoctorList: NextPage = () => {
 		<Stack className={'doctor-list-page'}>
 			{banner}
 			<Stack className={'container'}>
+				<ListTabs active={'doctors'} />
 				<DoctorFilter values={filter} onSearch={searchHandler} />
 				{list}
 			</Stack>

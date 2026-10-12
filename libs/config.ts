@@ -35,6 +35,7 @@ export enum ClientMessages {
 	FULL_NAME_INVALID = 'Full name must be 2 to 60 characters!',
 	PHONE_INVALID = 'Please enter a valid phone number!',
 	TERMS_REQUIRED = 'Please accept the Terms of Use and Privacy Policy!',
+	PATIENTS_ONLY = 'Only patient accounts can do this!',
 }
 
 /** The GraphQL error code the API returns for a missing, expired or revoked access token. */

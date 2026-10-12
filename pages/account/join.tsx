@@ -124,7 +124,9 @@ const Join: NextPage = () => {
 	/** HANDLERS **/
 	const viewChangeHandler = async (login: boolean) => {
 		setSubmitted(false);
-		await router.replace({ pathname: router.pathname, query: login ? {} : { mode: 'signup' } }, undefined, {
+		// Keep the referrer: a guest sent here from a clinic page goes back there after signing up too.
+		const rest = Object.fromEntries(Object.entries(router.query).filter(([key]) => key !== 'mode'));
+		await router.replace({ pathname: router.pathname, query: login ? rest : { ...rest, mode: 'signup' } }, undefined, {
 			shallow: true,
 		});
 	};

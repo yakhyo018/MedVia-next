@@ -1,0 +1,550 @@
+/* Doctor page — shared by desktop and mobile; #mobile-wrap overrides in mobile/main.scss */
+.doctor-detail-page {
+	padding: 24px 0 80px;
+	> .container {
+		flex-direction: column;
+		gap: 22px;
+	}
+	.crumbs {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 4px;
+		font-size: 14px;
+		color: $text-secondary;
+		a {
+			color: $text-secondary;
+			&:hover {
+				color: $primary;
+			}
+		}
+		svg {
+			font-size: 18px;
+			color: $text-muted;
+		}
+		span {
+			font-weight: 600;
+			color: $text;
+		}
+	}
+	h2 {
+		font-size: 22px;
+		font-weight: 800;
+		margin-bottom: 14px;
+	}
+	.muted {
+		font-size: 14px;
+		color: $text-secondary;
+	}
+}
+
+.doctor-hero {
+	display: grid;
+	grid-template-columns: 140px minmax(0, 1fr) 220px;
+	align-items: center;
+	gap: 32px;
+	padding: 32px;
+	border-radius: 20px;
+	border: 1px solid $border;
+	background: linear-gradient(135deg, $primary-tint 0%, $surface 70%);
+	.photo {
+		width: 140px;
+		height: 140px;
+		border-radius: 50%;
+		border: 6px solid $surface;
+		box-shadow: $shadow-card;
+		background: $primary-tint;
+		overflow: hidden;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+		span {
+			font-size: 46px;
+			font-weight: 800;
+			color: $primary;
+		}
+	}
+	.info {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		min-width: 0;
+	}
+	.chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		span {
+			display: inline-flex;
+			align-items: center;
+			gap: 4px;
+			padding: 4px 10px;
+			border-radius: $radius-pill;
+			font-size: 12px;
+			font-weight: 700;
+		}
+		.specialty {
+			background: $surface;
+			color: $primary;
+			border: 1px solid $primary-soft;
+		}
+		.verified {
+			background: $success-bg;
+			color: $success;
+			svg {
+				font-size: 15px;
+			}
+		}
+	}
+	h1 {
+		font-size: 34px;
+		font-weight: 800;
+		letter-spacing: -0.6px;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 10px;
+		small {
+			font-size: 16px;
+			font-weight: 600;
+			color: $text-muted;
+		}
+	}
+	.meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 18px;
+		font-size: 14px;
+		color: $text-secondary;
+		a,
+		span {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			color: $text-secondary;
+			white-space: normal;
+		}
+		a:hover {
+			color: $primary;
+		}
+		svg {
+			font-size: 18px;
+			color: $text-muted;
+		}
+	}
+	.stats {
+		margin: 6px 0 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 32px;
+		div {
+			display: flex;
+			flex-direction: column-reverse;
+		}
+		dd {
+			margin: 0;
+			font-size: 20px;
+			font-weight: 800;
+		}
+		dt {
+			font-size: 12px;
+			color: $text-secondary;
+		}
+	}
+	.actions {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		.MuiButton-root {
+			height: 46px;
+		}
+		.like {
+			height: 46px;
+			border-radius: $radius-button;
+			border: 1px solid $border-strong;
+			background: $surface;
+			gap: 6px;
+			font-size: 14px;
+			font-weight: 700;
+			color: $text-secondary;
+			svg {
+				font-size: 20px;
+			}
+			&:hover {
+				color: $danger;
+				background: $surface;
+			}
+			&.liked {
+				color: $danger;
+				border-color: $danger-bg;
+				svg {
+					animation: mv-heartbeat 0.6s ease-in-out;
+				}
+			}
+		}
+	}
+}
+
+.detail-grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 340px;
+	align-items: start;
+	gap: 36px;
+	.main {
+		gap: 36px;
+		section {
+			padding-bottom: 32px;
+			border-bottom: 1px solid $border;
+			&:last-child {
+				border-bottom: 0;
+			}
+		}
+	}
+	.bio {
+		font-size: 15px;
+		line-height: 1.7;
+		color: $text-secondary;
+		white-space: pre-line;
+	}
+	.career {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		li {
+			display: flex;
+			gap: 12px;
+		}
+		.icon {
+			width: 30px;
+			height: 30px;
+			flex-shrink: 0;
+			border-radius: 8px;
+			background: $primary-tint;
+			color: $primary;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			svg {
+				font-size: 17px;
+			}
+		}
+		div {
+			display: flex;
+			flex-direction: column;
+		}
+		strong {
+			font-size: 15px;
+		}
+		span {
+			font-size: 12px;
+			color: $text-secondary;
+		}
+	}
+	.side {
+		position: sticky;
+		top: calc(#{$header-height} + 16px);
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+		padding: 20px;
+		border-radius: $radius-card;
+		border: 1px solid $border;
+		background: $surface;
+		box-shadow: $shadow-card;
+		.note {
+			font-size: 12px;
+			color: $text-secondary;
+			text-align: center;
+		}
+	}
+}
+
+.treatment-table {
+	border-radius: 12px;
+	border: 1px solid $border;
+	overflow: hidden;
+	.row {
+		display: grid;
+		grid-template-columns: minmax(0, 2fr) 1fr 1fr;
+		gap: 12px;
+		padding: 14px 16px;
+		border-top: 1px solid $border;
+		font-size: 15px;
+		&.head {
+			border-top: 0;
+			background: $background;
+			font-size: 12px;
+			font-weight: 700;
+			color: $text-secondary;
+		}
+		span {
+			color: $text-secondary;
+		}
+		b {
+			font-weight: 800;
+		}
+	}
+}
+
+.clinic-box {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 10px;
+	border-radius: 12px;
+	background: $background;
+	color: $text;
+	white-space: normal;
+	transition: background-color 0.2s ease;
+	&:hover {
+		background: $primary-tint;
+		color: $text;
+		.go {
+			transform: translateX(3px);
+		}
+	}
+	.photo {
+		width: 64px;
+		height: 64px;
+		flex-shrink: 0;
+		border-radius: 10px;
+		overflow: hidden;
+		background: $surface-alt;
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+	.text {
+		flex: 1;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 3px;
+		strong {
+			font-size: 15px;
+		}
+		span {
+			display: inline-flex;
+			align-items: center;
+			gap: 4px;
+			font-size: 12px;
+			color: $text-secondary;
+			svg {
+				font-size: 15px;
+			}
+		}
+		.verified {
+			color: $success;
+		}
+	}
+	.go {
+		color: $primary;
+		transition: transform 0.2s ease;
+	}
+}
+
+.side-treatments {
+	display: flex;
+	flex-direction: column;
+	.label {
+		margin-bottom: 4px;
+		font-size: 12px;
+		font-weight: 700;
+		color: $text-secondary;
+	}
+	> div {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 10px;
+		padding: 10px 0;
+		border-top: 1px solid $border;
+		span {
+			display: flex;
+			flex-direction: column;
+		}
+		strong {
+			font-size: 14px;
+		}
+		em {
+			font-style: normal;
+			font-size: 12px;
+			color: $text-secondary;
+		}
+		b {
+			font-size: 14px;
+			font-weight: 800;
+			white-space: nowrap;
+		}
+	}
+}
+
+/* Reviews (shared with the clinic page) */
+.mv-stars {
+	display: inline-flex;
+	svg {
+		color: $border-strong;
+		&.on {
+			color: $star;
+		}
+	}
+}
+
+.rating-summary {
+	display: grid;
+	grid-template-columns: 180px minmax(0, 1fr);
+	align-items: center;
+	gap: 32px;
+	padding: 24px 28px;
+	border-radius: $radius-card;
+	background: $primary-tint;
+	.score {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 4px;
+		strong {
+			font-size: 48px;
+			font-weight: 800;
+			line-height: 1;
+		}
+		span {
+			font-size: 13px;
+			color: $text-secondary;
+		}
+	}
+	.bars {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+	.bar {
+		display: grid;
+		grid-template-columns: 14px minmax(0, 1fr) 40px;
+		align-items: center;
+		gap: 12px;
+		font-size: 13px;
+		color: $text-secondary;
+		i {
+			height: 8px;
+			border-radius: $radius-pill;
+			background: $surface;
+			overflow: hidden;
+		}
+		b {
+			display: block;
+			height: 100%;
+			border-radius: $radius-pill;
+			background: $primary;
+			transition: width 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+		}
+		em {
+			font-style: normal;
+			text-align: right;
+		}
+	}
+}
+
+.review-list {
+	margin-top: 16px;
+	gap: 14px;
+}
+
+.review-card {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	padding: 20px 22px;
+	border-radius: $radius-card;
+	border: 1px solid $border;
+	background: $surface;
+	.top {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.verified {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		padding: 3px 10px;
+		border-radius: $radius-pill;
+		background: $success-bg;
+		font-size: 12px;
+		font-weight: 700;
+		color: $success;
+		svg {
+			font-size: 15px;
+		}
+	}
+	.content {
+		font-size: 15px;
+		line-height: 1.6;
+		white-space: pre-line;
+	}
+	.reply {
+		padding: 12px 14px;
+		border-radius: 12px;
+		background: $background;
+		strong {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			margin-bottom: 4px;
+			font-size: 13px;
+			color: $primary;
+		}
+		p {
+			font-size: 14px;
+			color: $text-secondary;
+		}
+	}
+	.author {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding-top: 14px;
+		border-top: 1px solid $border;
+		div {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			min-width: 0;
+		}
+		strong {
+			font-size: 14px;
+		}
+		span:not(.avatar) {
+			font-size: 12px;
+			color: $text-secondary;
+		}
+		time {
+			font-size: 12px;
+			color: $text-muted;
+			white-space: nowrap;
+		}
+	}
+}
+
+.doctor-detail-page .more {
+	margin-top: 16px;
+	align-self: flex-start;
+}
+
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+}

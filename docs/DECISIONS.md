@@ -31,3 +31,14 @@ Decision / Why / Risks / Alternatives — one table per milestone.
 | Hero photo = `MedVia-design/landing-with-photos/img/hero.jpg` (the user's approved landing sample), copied to `public/img/`, with the sample's chat card animated on top. Login/signup panels: Unsplash (free licence), hot-linked with credit. | The user picked the sample over eight Unsplash candidates. | The sample photo's source/licence is not recorded in MedVia-design — confirm before a public deploy; Unsplash images depend on their CDN until copied (F9). | Unsplash hero photos. |
 | Login and patient signup only; Google button and clinic signup left out of F0. | Google needs `GOOGLE_CLIENT_ID`; clinic signup belongs to F5 (`signupClinic`). | The mockup's two extra controls are missing for now. | Disabled placeholders. |
 | Next 14.2.35 kept despite `yarn audit` advisories. | Same major as nestar-next (F-1); most advisories concern App Router, middleware, `next/image` — unused here. | Must be re-checked before deploy (F9). | Next 15/16 now. |
+
+## F1 — Public pages (2026-10-12, in progress)
+
+| Decision | Why | Risks | Alternatives |
+| --- | --- | --- | --- |
+| Filters and sort in the URL (readable keys), validated on read. | Back / forward and shared links keep the list; the query is user input. | Long URLs with many filters. | Component state only; one JSON `?input=` (nestar-next). |
+| Clinic filters apply on "Apply"; the doctor name searches on "Search". | One request per decision, not per keystroke or tick. | One click more. | Live filtering with a debounce. |
+| Likes and follows update the Apollo cache (`cache.modify`) from the mutation's answer. | Instant, no refetch of the page. | The cache shape must match the API types (`_id` keys). | `refetchQueries`. |
+| After the session is restored, active queries refetch once. | The first queries leave as a guest, so viewer flags came back empty. | Signed-in pages send their first queries twice. | Hold every query until the session is ready (slower first paint for everyone). |
+| Seed clinics use the landing sample's photos; seed doctors get a career with generic places. | Real-looking cards and doctor pages; fictional doctors are never tied to real institutions. | Four photos repeat across 15 clinics. | Unsplash per clinic; no career section. |
+

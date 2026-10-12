@@ -132,9 +132,24 @@ const requestRefresh = async (): Promise<boolean> => {
 export const restoreSession = async (): Promise<boolean> => {
 	try {
 		if (!storage.get(SESSION_HINT)) return false;
-		return await refreshAccessToken();
+		const restored = await refreshAccessToken();
+		if (restored) await refetchViewerQueries();
+		return restored;
 	} finally {
 		sessionReadyVar(true);
+	}
+};
+
+/**
+ * A page's first queries can leave before the session is back (they go out as a guest), so
+ * their viewer fields — meLiked, meFollowed — come back empty. Once the member is known, the
+ * queries on screen run once more with the token.
+ */
+const refetchViewerQueries = async () => {
+	try {
+		await initializeApollo().refetchQueries({ include: 'active' });
+	} catch (err) {
+		console.log('refetch after sign-in failed:', (err as Error).message);
 	}
 };
 
@@ -194,7 +209,7 @@ export const listenSessionEvents = (): (() => void) => {
 			clearSession();
 			await initializeApollo().clearStore();
 		} else if (event.key === LOGIN_EVENT) {
-			await refreshAccessToken();
+			if (await refreshAccessToken()) await refetchViewerQueries();
 		}
 	};
 	window.addEventListener('storage', onStorage);

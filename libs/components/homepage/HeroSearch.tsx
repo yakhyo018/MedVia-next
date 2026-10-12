@@ -30,7 +30,12 @@ const HeroSearch = () => {
 	};
 
 	const searchHandler = async () => {
-		const query = Object.fromEntries(Object.entries(input).filter(([, value]) => value !== ''));
+		// The /clinics URL keys: specialty, district, lang.
+		const query = Object.fromEntries(
+			Object.entries({ specialty: input.specialty, district: input.district, lang: input.language }).filter(
+				([, value]) => value !== '',
+			),
+		);
 		await router.push({ pathname: '/clinics', query });
 	};
 

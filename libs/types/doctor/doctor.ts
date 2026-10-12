@@ -29,6 +29,8 @@ export interface Doctor {
 	doctorReviews?: number;
 	doctorScore?: number;
 	clinicId: string;
+	/** The doctor's account — what Follow targets. */
+	memberId: string;
 	createdAt: Date;
 	updatedAt: Date;
 	/** Only when the viewer is signed in. */
