@@ -65,6 +65,10 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 - Fixes found while checking: the Log in → Sign up tab dropped `?referrer=`; queries sent before
   the session was restored showed a guest's meLiked / meFollowed — active queries now refetch
   once the session is back.
+- Home bands in the mockup's order: Recommended clinics → Trending treatments → Recommended doctors.
+  The two "Recommended" bands follow nestar-next's TopProperties / TopAgents: the public list,
+  `limit: 4`, sorted by the batch's `clinicScore` / `doctorScore` (Bayes rating 60 % + recent
+  visits 25 % + followers 15 %) — not by raw rating, where one 5-star review tops forty 4.8 ones.
 - Home "Trending treatments": 4 cards from the backend's `getTrendingTreatments` (most-booked
   treatment names of the last 30 days, photo by specialty from the landing sample); a card opens
   `/clinics?treatment=<name>` — the exact filter, so "4 clinics" on the card means 4 in the list.

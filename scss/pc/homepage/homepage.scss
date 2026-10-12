@@ -353,10 +353,15 @@
 	}
 }
 
-/* Trending treatments — shared by desktop and mobile */
-.trending-treatments {
+/* Landing bands (HomeSection) — shared by desktop and mobile */
+.home-section {
 	padding: 72px 0;
-	background: $background;
+	&.white {
+		background: $surface;
+	}
+	&.tint {
+		background: $background;
+	}
 	> .container {
 		flex-direction: column;
 		gap: 28px;
@@ -393,6 +398,7 @@
 	}
 }
 
+.home-grid,
 .trending-grid {
 	display: grid;
 	grid-template-columns: repeat(4, minmax(0, 1fr));
