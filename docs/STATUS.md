@@ -65,6 +65,9 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 - Fixes found while checking: the Log in → Sign up tab dropped `?referrer=`; queries sent before
   the session was restored showed a guest's meLiked / meFollowed — active queries now refetch
   once the session is back.
+- Home "Trending treatments": 4 cards from the backend's `getTrendingTreatments` (most-booked
+  treatment names of the last 30 days, photo by specialty from the landing sample); a card opens
+  `/clinics?treatment=<name>` — the exact filter, so "4 clinics" on the card means 4 in the list.
 - Next: the clinic page (`/clinics/detail`) — cards and the doctor page already link to it.
 
 ## F1 — doctors list (2026-10-12)

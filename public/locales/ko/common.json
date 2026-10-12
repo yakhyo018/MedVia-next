@@ -198,5 +198,9 @@
   "Doctor not found": "의사를 찾을 수 없습니다",
   "The page may have moved, or the doctor no longer takes patients here.": "페이지가 이동했거나 더 이상 진료하지 않습니다.",
   "All doctors": "전체 의사",
-  "Loading": "로딩 중"
+  "Loading": "로딩 중",
+  "Trending treatments": "인기 시술",
+  "What international patients book most this month": "이번 달 외국인 환자들이 가장 많이 예약한 시술",
+  "See all clinics": "전체 병원 보기",
+  "booked this month": "건 이번 달 예약"
 }

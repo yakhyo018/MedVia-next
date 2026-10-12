@@ -59,11 +59,23 @@ const ClinicList: NextPage = () => {
 	const [filterOpen, setFilterOpen] = useState<boolean>(false);
 
 	/** The URL is the state: back / forward and a shared link show the same list. */
-	const { text, specialty, district, lang, min, max, interpreter, sort: sortKey, page: pageQuery } = router.query;
+	const {
+		text,
+		treatment,
+		specialty,
+		district,
+		lang,
+		min,
+		max,
+		interpreter,
+		sort: sortKey,
+		page: pageQuery,
+	} = router.query;
 	const filter: ClinicFilterValues = useMemo(() => {
 		const sp = queryValue(specialty);
 		return {
 			text: queryValue(text).slice(0, 100),
+			treatment: queryValue(treatment).slice(0, 100),
 			specialty: (Object.values(Specialty) as string[]).includes(sp) ? (sp as Specialty) : '',
 			districts: listOf(queryValue(district), Object.values(District)),
 			langs: listOf(
@@ -74,7 +86,7 @@ const ClinicList: NextPage = () => {
 			priceMax: price(queryValue(max)),
 			interpreter: queryValue(interpreter) === '1',
 		};
-	}, [text, specialty, district, lang, min, max, interpreter]);
+	}, [text, treatment, specialty, district, lang, min, max, interpreter]);
 
 	const sort = SORTS.find((item) => item.key === queryValue(sortKey)) ?? SORTS[0];
 	const page = Math.max(1, parseInt(queryValue(pageQuery), 10) || 1);
@@ -86,6 +98,7 @@ const ClinicList: NextPage = () => {
 		direction: sort.direction,
 		search: {
 			...(filter.text && { text: filter.text }),
+			...(filter.treatment && { treatment: filter.treatment }),
 			...(filter.specialty && { specialty: filter.specialty }),
 			...(filter.districts.length && { districts: filter.districts }),
 			...(filter.langs.length && { langs: filter.langs }),
@@ -127,6 +140,7 @@ const ClinicList: NextPage = () => {
 		setFilterOpen(false);
 		await pushQuery({
 			text: values.text,
+			treatment: values.treatment,
 			specialty: values.specialty,
 			district: values.districts.join(','),
 			lang: values.langs.join(','),
@@ -151,6 +165,7 @@ const ClinicList: NextPage = () => {
 	/** The applied filters as removable chips. */
 	const chips: { label: string; remove: Partial<ClinicFilterValues> }[] = [
 		...(filter.text ? [{ label: `“${filter.text}”`, remove: { text: '' } }] : []),
+		...(filter.treatment ? [{ label: filter.treatment, remove: { treatment: '' } }] : []),
 		...filter.districts.map((d) => ({
 			label: t(`district.${d}`),
 			remove: { districts: filter.districts.filter((x) => x !== d) },

@@ -198,5 +198,9 @@
   "Doctor not found": "Дәрігер табылмады",
   "The page may have moved, or the doctor no longer takes patients here.": "Бет көшкен болуы мүмкін немесе дәрігер енді мұнда қабылдамайды.",
   "All doctors": "Барлық дәрігерлер",
-  "Loading": "Жүктелуде"
+  "Loading": "Жүктелуде",
+  "Trending treatments": "Танымал ем-шаралар",
+  "What international patients book most this month": "Осы айда шетелдік пациенттер жиі брондайтын ем-шаралар",
+  "See all clinics": "Барлық клиникалар",
+  "booked this month": "жазылу осы айда"
 }

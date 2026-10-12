@@ -7,6 +7,7 @@ import useDeviceDetect from '../libs/hooks/useDeviceDetect';
 import withLayoutHome from '../libs/components/layout/LayoutHome';
 import HeroSearch from '../libs/components/homepage/HeroSearch';
 import HeroChat from '../libs/components/homepage/HeroChat';
+import TrendingTreatments from '../libs/components/homepage/TrendingTreatments';
 import { T } from '../libs/types/common';
 import { IMAGES } from '../libs/config';
 
@@ -54,6 +55,7 @@ const Home: NextPage = () => {
 						<HeroSearch />
 					</Stack>
 				</Stack>
+				<TrendingTreatments />
 			</Stack>
 		);
 	} else {
@@ -82,6 +84,7 @@ const Home: NextPage = () => {
 						</Stack>
 					</Stack>
 				</Stack>
+				<TrendingTreatments />
 			</Stack>
 		);
 	}

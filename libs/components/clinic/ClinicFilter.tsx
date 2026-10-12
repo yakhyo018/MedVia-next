@@ -9,6 +9,8 @@ import { LANGUAGES } from '../../config';
 
 export interface ClinicFilterValues {
 	text: string;
+	/** Exact treatment name from a trending card; shown as a chip, not in the sidebar. */
+	treatment: string;
 	specialty: Specialty | '';
 	districts: District[];
 	langs: Language[];
@@ -20,6 +22,7 @@ export interface ClinicFilterValues {
 
 export const EMPTY_CLINIC_FILTER: ClinicFilterValues = {
 	text: '',
+	treatment: '',
 	specialty: '',
 	districts: [],
 	langs: [],

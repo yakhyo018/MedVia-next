@@ -16,6 +16,8 @@ interface CISearch {
 	/** Clinic name or treatment name. */
 	text?: string;
 	specialty?: Specialty;
+	/** Exactly this treatment name (the trending cards); `text` is fuzzy. */
+	treatment?: string;
 	districts?: District[];
 	/** Clinics that speak or interpret at least one of these. */
 	langs?: Language[];

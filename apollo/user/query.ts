@@ -156,6 +156,20 @@ export const GET_DOCTORS = gql`
  *       TREATMENT        *
  *************************/
 
+/** The landing page's "Trending treatments" (public, cached 10 minutes on the API). */
+export const GET_TRENDING_TREATMENTS = gql`
+	query GetTrendingTreatments($limit: Int) {
+		getTrendingTreatments(limit: $limit) {
+			treatmentName
+			treatmentCategory
+			specialty
+			minPrice
+			bookings
+			clinics
+		}
+	}
+`;
+
 export const GET_CLINIC_TREATMENTS = gql`
 	query GetClinicTreatments($input: ClinicTreatmentsInquiry!) {
 		getClinicTreatments(input: $input) {
