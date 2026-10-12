@@ -1,0 +1,95 @@
+# Status
+
+Where the frontend stands, what comes next, and how we work. A new session reads this first.
+Update it whenever a milestone closes.
+
+_Last updated: 2026-10-12 — project created; rules in CLAUDE.md; **next: build F0 (plan below,
+already approved by the user).**_
+
+## The project
+
+MedVia-next is the web client of MedVia (`~/Desktop/MedVia`, NestJS GraphQL API). The backend is
+complete: M0–M10 + AI-1 + AI-2 merged on its `develop` (Postman 1567 assertions, Jest 239).
+Structure and code style come from `~/Desktop/nestar-client` (package `nestar-next`, read-only);
+the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimova, Yahyo Choriyev.
+
+## Milestones
+
+| # | Milestone | Status |
+| --- | --- | --- |
+| **F0** | **Skeleton — Next + MUI theme, 5 languages, Apollo + refresh, layouts, login/signup, alerts** | **next — plan approved** |
+| F1 | Public pages — home, clinics (search, filters, Recommended), clinic / doctor / treatment pages | |
+| F2 | Booking — slots → hold → questionnaire + consents → My Bookings | |
+| F3 | Chat + notifications — socket `/live`, bell, translations | |
+| F4 | MyPage — reviews, follows, settings, "who saw my medical data" | |
+| F5 | Clinic dashboard — schedule, requests, treatments, doctors | |
+| F6 | Community + CS — posts, FAQ, inquiries | |
+| F7 | Admin — dashboard (one GraphQL request), moderation, audit | |
+| F8 | Assistant UI — chat panel, cards, Confirm button | |
+| F9 | Deploy — `medvia.uz` + `api.medvia.uz`, backend `develop` → `main` | |
+
+## Next step: F0 — the approved plan
+
+Branch `feature/f0-skeleton` from `develop`.
+
+1. **Project files.** `npm init` with scripts `dev` (`next dev -p 4000`), `build`, `start`,
+   `typecheck` (`tsc --noEmit`), `lint:check` (`next lint`), `lint:fix`. `.prettierrc`,
+   `tsconfig.json`, `global.d.ts` copied from nestar-next. `next.config.js` with nestar-next's env
+   names `REACT_APP_API_URL` (`http://localhost:3000`), `REACT_APP_API_GRAPHQL_URL`
+   (`http://localhost:3000/graphql`), `REACT_APP_API_WS` (`http://localhost:3000`).
+   `next-i18next.config.js`: locales `en, ru, uz, kk, ko`, default `en`, `localeDetection: false`.
+   `.env.example`, `.gitignore` (already here).
+2. **Packages (only these in F0):** `next@14`, `react@18.2`, `react-dom@18.2`, `typescript`,
+   `@types/react`, `@types/node`, `@mui/material@5`, `@mui/icons-material@5`, `@emotion/react`,
+   `@emotion/styled`, `sass`, `@apollo/client@3`, `graphql`, `next-i18next`, `i18next`,
+   `react-i18next`, `sweetalert2`, `eslint` + `eslint-config-next@14`, `prettier`.
+3. **Apollo + auth.** `apollo/client.ts` (nestar-next's `initializeApollo` / `useApollo`):
+   `authLink` reads the in-memory token; `HttpLink` with `credentials: 'include'`; `errorLink`
+   refreshes once on `UNAUTHENTICATED` and retries. `apollo/store.ts`: `userVar` in the MedVia
+   `Member` shape. `apollo/user/mutation.ts`: `LOGIN`, `SIGN_UP`, `LOGOUT`, `REFRESH_TOKEN`;
+   `apollo/user/query.ts`: `GET_MY_PROFILE`. `libs/auth/index.ts`: `logIn(email, password)`,
+   `signUp(...)`, `restoreSession()`, `updateUserInfo()` (via `getMyProfile`), `logOut()`
+   (mutation + cross-tab signal). Check the exact field names in the backend DTOs first
+   (`~/Desktop/MedVia/apps/medvia-api/src/libs/dto/member/*`, `member.resolver.ts`).
+4. **Ported logic.** `libs/sweetAlert.ts` (nestar-next functions, MedVia look, + 
+   `sweetDangerConfirmAlert`), `libs/hooks/useDeviceDetect.ts`, `libs/utils.ts` (`formatKrw`,
+   `seoulTime`), `libs/config.ts` (`Messages` mirroring the backend), `libs/types/common.ts`,
+   `libs/types/member/*`, `libs/enums/member.enum.ts`, `libs/enums/common.enum.ts` (`Language`).
+5. **UI.** `scss/MaterialTheme/tokens.ts` + theme, `scss/_tokens.scss`, `scss/app.scss`,
+   `scss/pc/main.scss`, `scss/mobile/main.scss`, alert styles. Layouts `withLayoutHome`,
+   `withLayoutBasic`, `withLayoutFull`; `Top` (logo, menu, language switch, login / profile),
+   `Footer`; `StatusChip`. Pages: `_app.tsx` (calls `restoreSession()`), `_document.tsx`
+   (Plus Jakarta Sans), `index.tsx` (simple hero + search box), `account/join.tsx` (login +
+   signup), `_dev/ui.tsx` (every alert / toast / chip / button variant; development only).
+   Locales `public/locales/<lang>/common.json` for the five languages.
+6. **Check.** `typecheck`, `lint:check`, `build`; in the browser with the API on :3000 and the app
+   on :4000: sign up → name in Top; reload → still signed in (refresh cookie); token expiry →
+   the request refreshes by itself; logout → the second tab logs out too; five languages;
+   `/_dev/ui` vs the mockup; desktop + mobile screenshots. `rg "nestar|Nestar|property|Property"`
+   empty. Then explain + LEARN.md + DECISIONS.md, the user checks, merge into `develop`.
+
+## How we work
+
+The full rules are in `CLAUDE.md`. The ones a new session must not miss:
+
+1. **Answer in Uzbek, short and decisive.** Code, comments and these docs stay in English.
+2. Plan → wait for yes → build → verify in the browser → explain (problem → alternatives → code →
+   interview Q&A) → LEARN.md → the user checks → merge.
+3. Same structure and code style as nestar-next; the four deliberate differences are in CLAUDE.md.
+4. Never touch `~/Desktop/nestar-client`, `~/Desktop/Nestar` or `~/Desktop/MedVia-design`.
+5. Commit hygiene: stage by name, read the staged diff, run the secret scan, no Claude attribution.
+
+## How to run
+
+```bash
+cd ~/Desktop/MedVia && npm run start:dev          # API on :3000 (Atlas + local Redis)
+cd ~/Desktop/MedVia && npm run start:dev:batch    # batch on :3001 (only for batch features)
+cd ~/Desktop/MedVia-next && npm run dev           # app on :4000
+```
+Demo accounts (backend seed): `feride@`, `yahyo@`, `clinic01@`, `doctor01@`, `admin@seed.medvia.test`
+with `SEED_PASSWORD` from `~/Desktop/MedVia/.env`.
+
+## Open items
+
+- No GitHub remote yet — create the repo and push only when the user asks.
+- Google sign-in needs `GOOGLE_CLIENT_ID` (backend open item).
