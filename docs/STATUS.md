@@ -3,13 +3,13 @@
 Where the frontend stands, what comes next, and how we work. A new session reads this first.
 Update it whenever a milestone closes.
 
-_Last updated: 2026-10-12 — **F0 closed: approved by the user, merged into `develop` and pushed.
-Next: F1 starts with the doctors list page (`getDoctors`) — plan first.**_
+_Last updated: 2026-10-13 — **F1 closed: approved by the user, `feature/f1-doctors` merged into
+`develop` and pushed. Next: F2 (booking) — start with the screen list review.**_
 
 ## The project
 
 MedVia-next is the web client of MedVia (`~/Desktop/MedVia`, NestJS GraphQL API). The backend is
-complete: M0–M10 + AI-1 + AI-2 merged on its `develop` (Postman 1567 assertions, Jest 239).
+complete: M0–M10 + AI-1 + AI-2 merged on its `develop` (Postman 470 requests / 837 assertions after the 2026-10-12 slim-down, Jest 239). Demo data: 15 clinics, 40 doctors, 50 patients.
 Structure and code style come from `~/Desktop/nestar-client` (package `nestar-next`, read-only);
 the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimova, Yahyo Choriyev.
 
@@ -18,8 +18,8 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 | # | Milestone | Status |
 | --- | --- | --- |
 | F0 | Skeleton — Next + MUI theme, 5 languages, Apollo + refresh, layouts, login/signup, alerts | done 2026-10-12 |
-| **F1** | **Public pages — home, doctors list (first), clinics (search, filters, Recommended), clinic / doctor / treatment pages** | **next** |
-| F2 | Booking — slots → hold → questionnaire + consents → My Bookings | |
+| F1 | Public pages — home bands, clinics list, doctors list, doctor page, clinic page | done 2026-10-13 |
+| **F2** | **Booking — slots → hold → questionnaire + consents → My Bookings** | **next** |
 | F3 | Chat + notifications — socket `/live`, bell, translations | |
 | F4 | MyPage — reviews, follows, settings, "who saw my medical data" | |
 | F5 | Clinic dashboard — schedule, requests, treatments, doctors | |
@@ -49,6 +49,86 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
   other tab turns guest; RU locale; 1440 px, 800 px and 375 px mobile (drawer).
 - Not in F0: Google sign-in (needs `GOOGLE_CLIENT_ID`), clinic signup (F5).
 - Test account made during the check: `f0.feride@medvia.test` (local DB only).
+
+## F1 — home: the last three bands (2026-10-13, waiting for the user's check)
+
+- Mobile drawn first on the MedVia Mobile canvas ("Home · reviews, patients, community"), approved.
+- **Verified reviews** (`HomeReviews`): `getReviews({ page: 1, limit: 6 })`, the shared `ReviewCard`
+  cut to four lines; desktop shows three, mobile swipes through six.
+- **For international patients** (`PatientServices`): the mockup's "Events and promotions" — the
+  API has no events, so two static i18n cards (interpreters → `/clinics?interpreter=1`, prices →
+  `/clinics?sort=price`); no invented offers (the user chose static cards).
+- **Community board** (`CommunityBoard`): `getArticles` per category (QNA, HEALTH_TIP; the API
+  has no "treatment reviews" category), 4 most viewed each; two columns on desktop, tabs on
+  mobile; read-only until F6; answers / comments with plural keys.
+- Carousels (2026-10-13, user's request — home was too long on a phone): `swiper@11.2.10` added
+  (nestar-next's home bands use Swiper; 11 instead of nestar's 8 — current, cleaner module
+  imports). `HomeCarousel`: Recommended clinics / doctors 8 each, 4 in view; Verified reviews 9,
+  3 in view; MUI arrow buttons outside the row on desktop (hidden at the ends), swipe + dots on a
+  phone; no autoplay. The CSS `swipe-row` mixin stays for the clinic page's rows.
+- After `yarn add` the running dev server answered `/` with 500 ("getStaticPaths is not a
+  function"); touching `pages/index.tsx` made it recompile. Restart `yarn dev` after adding a package.
+- `HomeSection.link` is optional now. Checked on desktop (six bands, links, no overflow); the
+  mobile checked once the user opened the Browser pane (a hidden pane never hydrates).
+
+## F1 — clinic page `/clinics/detail?id=` (2026-10-13, waiting for the user's check)
+
+- Designs: Web Mockup `ClinicDetail` + Prototype `ClinicDetailDoctor`; mobile drawn first on the
+  MedVia Mobile canvas ("F1 — clinic page": Clinic detail + Book sheet) and approved.
+- Header (chips, rating, district, languages; Follow · N, ♡, Share = Web Share or copy link),
+  photo grid that follows the photo count (1–5; mobile: swipe row with "1 / 5"), About + facts
+  (opening hours folded by `openingHours()`, interpreter, doctors count with plurals),
+  Treatments and prices (table; cards on mobile), Doctors, Location (OpenStreetMap iframe, no key),
+  Verified reviews (`RatingSummary`, `ReviewCard`, Show more), Similar clinics nearby
+  (`getNearbyClinics`, `ClinicCard`).
+- Booking card (sticky side on desktop, bottom sheet behind a fixed Book bar on mobile): treatment
+  and doctor pickers, interpreter, total. Dates / times, Request booking and Chat are disabled
+  until F2 / F3.
+- `?doctor=` (the doctor page's new "Book at the clinic"): that doctor is preselected, a banner
+  "Showing the treatments this doctor performs · Show all doctors", treatments the doctor does not
+  perform show "Other doctors" (the seed's doctors perform every treatment of their clinic, so
+  this state is not visible with demo data).
+- Checked: guest ♡ → login prompt; patient Follow and ♡ update in place and survive a reload
+  (undone afterwards); bad id → "Clinic not found"; RU strings. Test patient
+  `f1.clinic@medvia.test` (local DB; `npm run clean:test -- --yes` removes it).
+- Found while checking: a flex column grew to the doctor strip's width on mobile (page scrolled
+  sideways) — `min-width: 0`; scroll-snap rows snapped past the 16 px gutter — `scroll-padding`.
+- Dev-only: in the hidden Browser pane, pages with a query (`?id=`) take 20–60 s until
+  `router.isReady` (Next dev router + throttled background tab); `/doctors?sort=` behaves the
+  same, so it is not this page. Re-check in a visible browser / production build.
+
+## F1 — clinics list + doctor page + home bands (2026-10-12 / 13)
+
+- Menu: Home · Clinics · Doctors. Both lists carry "Clinics N | Doctors M" tabs.
+- `/clinics`: sidebar filters (name or treatment, 7 districts, specialty, ₩ range, languages,
+  interpreter) applied on Apply; sort Recommended / Rating / Price ↑ / Likes / Views / Newest;
+  removable chips; 9 per page; URL keys `text, specialty, district, lang, min, max, interpreter,
+  sort, page`; mobile filters in a bottom sheet. The home search now lands here.
+- Cards: real photos (seeded from the landing sample), Verified, ♡ (guest → login prompt that
+  returns to the page; clinic / doctor accounts refused; the cache updates in place).
+- `/doctors/detail?id=`: header with stats, Follow + ♡, About, Education and career, the doctor's
+  treatments, reviews with the rating summary and "Show more"; clinic box in the sidebar.
+- Fixes found while checking: the Log in → Sign up tab dropped `?referrer=`; queries sent before
+  the session was restored showed a guest's meLiked / meFollowed — active queries now refetch
+  once the session is back.
+- Home bands in the mockup's order: Recommended clinics → Trending treatments → Recommended doctors.
+  The two "Recommended" bands follow nestar-next's TopProperties / TopAgents: the public list,
+  `limit: 4`, sorted by the batch's `clinicScore` / `doctorScore` (Bayes rating 60 % + recent
+  visits 25 % + followers 15 %) — not by raw rating, where one 5-star review tops forty 4.8 ones.
+- Home "Trending treatments": 4 cards from the backend's `getTrendingTreatments` (most-booked
+  treatment names of the last 30 days, photo by specialty from the landing sample); a card opens
+  `/clinics?treatment=<name>` — the exact filter, so "4 clinics" on the card means 4 in the list.
+- Next: the clinic page (`/clinics/detail`) — cards and the doctor page already link to it.
+
+## F1 — doctors list (2026-10-12)
+
+- `/doctors`, in the menu before Clinics: `getDoctors` (public), 8 per page, name / specialty /
+  language filters, sort pills (Recommended = `doctorScore` default, Rating, Likes, Views, Recent),
+  MUI pagination, skeletons, empty and error states. Filters live in the URL (`?text=&specialty=
+  &lang=&sort=&page=`), so back / forward and shared links work; unknown values are ignored.
+- Desktop 4 columns (3 / 2 on narrower windows), mobile one column with photo left.
+- Found while building: GraphQL takes `Direction` by name (`"DESC"`), not the backend's number.
+- Not yet: the "Any clinic" filter (with the clinics page), liking from the card, doctor detail.
 
 ## The F0 plan (approved, kept for reference)
 
@@ -106,10 +186,12 @@ The full rules are in `CLAUDE.md`. The ones a new session must not miss:
 ```bash
 cd ~/Desktop/MedVia && npm run start:dev          # API on :3000 (Atlas + local Redis)
 cd ~/Desktop/MedVia && npm run start:dev:batch    # batch on :3001 (only for batch features)
-cd ~/Desktop/MedVia-next && npm run dev           # app on :4000
+cd ~/Desktop/MedVia-next && yarn dev                # app on :4000 (yarn, not npm)
 ```
-Never run `npm run build` while `npm run dev` is running — both write `.next/`, and the dev
+Never run `yarn build` while `yarn dev` is running — both write `.next/`, and the dev
 server breaks (fix: stop it, `rm -rf .next`, start again).
+`yarn build:check` is safe beside `yarn dev` (it writes `.next-check/`). After `yarn add`, restart
+`yarn dev`.
 
 Demo accounts (backend seed): `feride@`, `yahyo@`, `clinic01@`, `doctor01@`, `admin@seed.medvia.test`
 with `SEED_PASSWORD` from `~/Desktop/MedVia/.env`.
@@ -117,7 +199,13 @@ with `SEED_PASSWORD` from `~/Desktop/MedVia/.env`.
 ## Open items
 
 - Google sign-in needs `GOOGLE_CLIENT_ID` (backend open item).
-- Before deploy (F9): copy the Unsplash photos into `public/img/` and re-check `npm audit` for
+- Before deploy (F9): copy the Unsplash photos into `public/img/` and re-check `yarn audit` for
   Next 14 (current advisories are mostly App Router / middleware / `next/image`).
+- `yarn build:check` builds into `.next-check/` while `yarn dev` runs (F1 passed: 47 static
+  pages). Run it before every merge; the real `yarn build` is for deploy.
+- A test patient from the browser checks, `f1.feride@medvia.test`, stays until the backend's
+  `npm run clean:test -- --yes` (or the next `npm run test:api`) removes it.
+- The demo seed was rebuilt several times on 2026-10-12/13 (`--reset`): clinic and doctor ids
+  changed; old links with ids no longer resolve.
 - `hero.jpg` came from the design folder without a recorded source — confirm its licence before a
   public deploy. `MedVia-design/landing-with-photos/img/` also has treatment and clinic photos for F1.

@@ -155,6 +155,22 @@ export const light: ThemeOptions = {
 		MuiSkeleton: {
 			styleOverrides: { root: { background: colors.surfaceAlt }, rounded: { borderRadius: radius.card } },
 		},
+		MuiPaginationItem: {
+			styleOverrides: {
+				root: {
+					minWidth: 40,
+					height: 40,
+					borderRadius: radius.button,
+					border: `1px solid ${colors.border}`,
+					background: colors.surface,
+					fontWeight: 600,
+					color: colors.text,
+					'&.Mui-selected': { background: colors.primary, borderColor: colors.primary, color: '#FFFFFF' },
+					'&.Mui-selected:hover': { background: colors.primaryHover },
+				},
+				ellipsis: { border: 0, background: 'transparent' },
+			},
+		},
 		MuiDialog: {
 			styleOverrides: { paper: { borderRadius: radius.modal, boxShadow: shadows.modal } },
 		},

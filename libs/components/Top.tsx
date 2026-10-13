@@ -33,6 +33,7 @@ const Top = () => {
 	const menu = [
 		{ href: '/', label: t('Home') },
 		{ href: '/clinics', label: t('Clinics') },
+		{ href: '/doctors', label: t('Doctors') },
 		...(user._id ? [{ href: '/mypage', label: t('My Page') }] : []),
 		{ href: '/community', label: t('Community') },
 		{ href: '/cs', label: t('CS') },

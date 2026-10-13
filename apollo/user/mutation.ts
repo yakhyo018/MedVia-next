@@ -73,3 +73,40 @@ export const LOGOUT = gql`
 		logout
 	}
 `;
+
+/**************************
+ *          LIKE          *
+ *************************/
+
+/** One click likes, the next one removes the like. Patients only. */
+export const LIKE_TARGET = gql`
+	mutation LikeTarget($input: LikeTargetInput!) {
+		likeTarget(input: $input) {
+			likeGroup
+			likeRefId
+			meLiked
+			likes
+		}
+	}
+`;
+
+/**************************
+ *         FOLLOW         *
+ *************************/
+
+/** memberId: the account behind the doctor or clinic (Doctor.memberId), not the doctor's _id. */
+export const FOLLOW_MEMBER = gql`
+	mutation FollowMember($input: FollowInput!) {
+		followMember(input: $input) {
+			_id
+			followingId
+			followingType
+		}
+	}
+`;
+
+export const UNFOLLOW_MEMBER = gql`
+	mutation UnfollowMember($input: FollowInput!) {
+		unfollowMember(input: $input)
+	}
+`;

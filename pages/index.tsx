@@ -7,6 +7,12 @@ import useDeviceDetect from '../libs/hooks/useDeviceDetect';
 import withLayoutHome from '../libs/components/layout/LayoutHome';
 import HeroSearch from '../libs/components/homepage/HeroSearch';
 import HeroChat from '../libs/components/homepage/HeroChat';
+import TrendingTreatments from '../libs/components/homepage/TrendingTreatments';
+import TopClinics from '../libs/components/homepage/TopClinics';
+import TopDoctors from '../libs/components/homepage/TopDoctors';
+import HomeReviews from '../libs/components/homepage/HomeReviews';
+import PatientServices from '../libs/components/homepage/PatientServices';
+import CommunityBoard from '../libs/components/homepage/CommunityBoard';
 import { T } from '../libs/types/common';
 import { IMAGES } from '../libs/config';
 
@@ -54,6 +60,12 @@ const Home: NextPage = () => {
 						<HeroSearch />
 					</Stack>
 				</Stack>
+				<TopClinics />
+				<TrendingTreatments />
+				<TopDoctors />
+				<HomeReviews />
+				<PatientServices />
+				<CommunityBoard />
 			</Stack>
 		);
 	} else {
@@ -82,6 +94,12 @@ const Home: NextPage = () => {
 						</Stack>
 					</Stack>
 				</Stack>
+				<TopClinics />
+				<TrendingTreatments />
+				<TopDoctors />
+				<HomeReviews />
+				<PatientServices />
+				<CommunityBoard />
 			</Stack>
 		);
 	}

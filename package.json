@@ -5,6 +5,7 @@
 	"scripts": {
 		"dev": "next dev -p 4000",
 		"build": "next build",
+		"build:check": "NEXT_DIST_DIR=.next-check next build",
 		"start": "next start -p 4000",
 		"typecheck": "tsc --noEmit",
 		"lint:check": "next lint",
@@ -18,13 +19,14 @@
 		"@mui/material": "^5.18.0",
 		"graphql": "^16.14.2",
 		"i18next": "^23.16.8",
-		"next": "^14.2.35",
+		"next": "14.2.35",
 		"next-i18next": "^15.4.3",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
+		"react": "18.2.0",
+		"react-dom": "18.2.0",
 		"react-i18next": "^15.7.4",
 		"sass": "^1.105.1",
-		"sweetalert2": "^11.26.25"
+		"sweetalert2": "^11.26.25",
+		"swiper": "^11"
 	},
 	"devDependencies": {
 		"@types/node": "^20.19.43",
@@ -34,5 +36,6 @@
 		"eslint-config-next": "^14.2.35",
 		"prettier": "^3.9.10",
 		"typescript": "^5.9.3"
-	}
+	},
+	"packageManager": "yarn@1.22.22"
 }
