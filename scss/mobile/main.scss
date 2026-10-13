@@ -693,6 +693,106 @@
 		}
 	}
 
+	/* Booking (F2) */
+	.booking-page {
+		padding: 16px 0 110px;
+		> .container {
+			gap: 16px;
+		}
+		.detail-grid .main {
+			min-width: 0;
+			width: 100%;
+			gap: 14px;
+		}
+	}
+	.booking-steps {
+		gap: 4px;
+		li {
+			padding-top: 8px;
+		}
+		.label,
+		.dot {
+			display: none;
+		}
+	}
+	.booking-step {
+		padding: 18px 16px;
+		gap: 18px;
+		.step-head h1 {
+			font-size: 21px;
+		}
+		.question .chips button {
+			height: 36px;
+			padding: 0 14px;
+			font-size: 13px;
+		}
+	}
+	.booking-summary {
+		padding: 14px;
+		border-radius: $radius-card;
+		border: 1px solid $border;
+		background: $surface;
+		gap: 10px;
+		.photo {
+			width: 44px;
+			height: 44px;
+		}
+		.total strong {
+			font-size: 18px;
+		}
+	}
+	.booking-actions {
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 90;
+		padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+		background: $surface;
+		border-top: 1px solid $border;
+		.MuiButton-root {
+			height: 48px;
+			min-width: 0;
+		}
+		.MuiButton-contained {
+			flex: 1;
+		}
+	}
+	&:has(.booking-actions) #footer {
+		padding-bottom: 84px;
+	}
+	.my-bookings-page {
+		padding: 20px 0 48px;
+		.page-head h1 {
+			font-size: 26px;
+		}
+		.booking-tabs {
+			align-self: stretch;
+			display: grid;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			button {
+				padding: 0 6px;
+			}
+		}
+	}
+	.booking-item {
+		flex-wrap: wrap;
+		padding: 16px;
+		gap: 12px;
+		.photo {
+			width: 52px;
+			height: 52px;
+		}
+		.actions {
+			width: 100%;
+			flex-direction: row;
+			.MuiButton-root {
+				flex: 1;
+				height: 40px;
+			}
+		}
+	}
+
 	/* Doctors */
 	.list-banner {
 		padding: 24px 0 52px;

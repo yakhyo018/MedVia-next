@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { Box, Button, Drawer, IconButton, Skeleton, Stack } from '@mui/material';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded';
@@ -28,7 +28,7 @@ import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import EmptyState from '../../libs/components/common/EmptyState';
 import ClinicGallery from '../../libs/components/clinic/ClinicGallery';
 import TreatmentTable from '../../libs/components/clinic/TreatmentTable';
-import BookingCard from '../../libs/components/clinic/BookingCard';
+import BookingCard, { BookingRequest } from '../../libs/components/clinic/BookingCard';
 import ClinicCard from '../../libs/components/clinic/ClinicCard';
 import RatingSummary from '../../libs/components/review/RatingSummary';
 import ReviewCard from '../../libs/components/review/ReviewCard';
@@ -42,14 +42,18 @@ import {
 	GET_NEARBY_CLINICS,
 	GET_REVIEWS,
 } from '../../apollo/user/query';
+import { HOLD_SLOTS } from '../../apollo/user/mutation';
+import { userVar } from '../../apollo/store';
+import { SlotHold } from '../../libs/types/booking/booking';
+import { MemberType } from '../../libs/enums/member.enum';
 import { Clinic } from '../../libs/types/clinic/clinic';
 import { Doctor } from '../../libs/types/doctor/doctor';
 import { Treatment } from '../../libs/types/treatment/treatment';
 import { Review, Reviews } from '../../libs/types/review/review';
 import { LikeGroup } from '../../libs/enums/like.enum';
 import { Language } from '../../libs/enums/common.enum';
-import { LANGUAGES, REACT_APP_API_URL } from '../../libs/config';
-import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
+import { ClientMessages, LANGUAGES, REACT_APP_API_URL } from '../../libs/config';
+import { sweetLoginConfirmAlert, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
 import { formatCount, formatKrw, imageUrl, initials, isObjectId, openingHours } from '../../libs/utils';
 import { T } from '../../libs/types/common';
 
@@ -78,12 +82,15 @@ const ClinicDetail: NextPage = () => {
 	const [pickedTreatmentId, setPickedTreatmentId] = useState<string>('');
 	const [pickedDoctorId, setPickedDoctorId] = useState<string | null>(null);
 	const [sheetOpen, setSheetOpen] = useState<boolean>(false);
+	const [requesting, setRequesting] = useState<boolean>(false);
+	const user = useReactiveVar(userVar);
 	const clinicId = router.query.id;
 	const validId = isObjectId(clinicId);
 	// `?doctor=` — the patient came from a doctor's page ("Book at the clinic").
 	const fromDoctorId = isObjectId(router.query.doctor) ? router.query.doctor : undefined;
 
 	/** APOLLO REQUESTS **/
+	const [holdSlots] = useMutation(HOLD_SLOTS);
 	const {
 		loading: getClinicLoading,
 		data: getClinicData,
@@ -178,6 +185,38 @@ const ClinicDetail: NextPage = () => {
 		}
 	};
 
+	/** Request booking: hold the time for 10 minutes, then the questionnaire on /booking. */
+	const requestBookingHandler = async (request: BookingRequest) => {
+		try {
+			if (!user._id) {
+				const login = await sweetLoginConfirmAlert(ClientMessages.LOGIN_REQUIRED);
+				if (login) await router.push({ pathname: '/account/join', query: { referrer: router.asPath } });
+				return;
+			}
+			if (user.memberType !== MemberType.USER) throw new Error(ClientMessages.PATIENTS_ONLY);
+			setRequesting(true);
+			const result = await holdSlots({
+				variables: { input: { treatmentId, doctorId: request.doctorId, slotStart: request.slotStart } },
+			});
+			const hold: SlotHold = result.data.holdSlots;
+			await router.push({
+				pathname: '/booking',
+				query: {
+					clinic: clinicId,
+					treatment: treatmentId,
+					doctor: request.doctorId,
+					start: new Date(hold.slotStart).toISOString(),
+					until: new Date(hold.holdExpiresAt).toISOString(),
+					...(request.interpreter && { interpreter: request.interpreter }),
+				},
+			});
+		} catch (err) {
+			await sweetMixinErrorAlert((err as Error).message);
+		} finally {
+			setRequesting(false);
+		}
+	};
+
 	const showAllDoctorsHandler = async () => {
 		setPickedDoctorId('');
 		await router.replace({ pathname: router.pathname, query: { id: clinicId } }, undefined, {
@@ -242,6 +281,8 @@ const ClinicDetail: NextPage = () => {
 			fromDoctorId={fromDoctor?._id}
 			onTreatmentChange={treatmentChangeHandler}
 			onDoctorChange={setPickedDoctorId}
+			requesting={requesting}
+			onRequest={requestBookingHandler}
 		/>
 	);
 
@@ -515,6 +556,7 @@ const ClinicDetail: NextPage = () => {
 						anchor={'bottom'}
 						open={sheetOpen}
 						onClose={() => setSheetOpen(false)}
+						keepMounted
 						PaperProps={{ className: 'book-sheet' }}
 					>
 						<span className={'handle'} aria-hidden={true} />

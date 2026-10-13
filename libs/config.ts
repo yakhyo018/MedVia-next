@@ -24,6 +24,13 @@ export enum Messages {
 	USED_EMAIL = 'This email address is already registered!',
 	TERMS_REQUIRED = 'Please accept the Terms of Use and Privacy Policy!',
 	SESSION_EXPIRED = 'Your session has expired, please log in again!',
+	SLOT_NOT_AVAILABLE = 'This time is no longer available, please choose another one!',
+	SLOT_TOO_SOON = 'This time starts too soon to book, please choose a later one!',
+	HOLD_EXPIRED = 'Your reserved time has expired, please choose the time again!',
+	CONSENT_REQUIRED = 'Please give the required consents to send the request!',
+	TOO_MANY_REQUESTS = 'You already have 3 requests waiting for clinics!',
+	CANCEL_TOO_LATE = 'A confirmed booking can be cancelled up to 24 hours before the visit!',
+	TRANSITION_NOT_ALLOWED = 'This booking cannot be changed this way!',
 }
 
 /** Client texts: i18n keys in `common.json`. */

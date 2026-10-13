@@ -110,3 +110,43 @@ export const UNFOLLOW_MEMBER = gql`
 		unfollowMember(input: $input)
 	}
 `;
+
+/**************************
+ *        BOOKING         *
+ *************************/
+
+/** Step 1: reserve the treatment's slots for 10 minutes (patients only). */
+export const HOLD_SLOTS = gql`
+	mutation HoldSlots($input: SlotHoldInput!) {
+		holdSlots(input: $input) {
+			slotIds
+			slotStart
+			holdExpiresAt
+		}
+	}
+`;
+
+/** Step 3: send the request with the questionnaire and consents; the hold becomes a PENDING booking. */
+export const CREATE_BOOKING = gql`
+	mutation CreateBooking($input: BookingCreateInput!) {
+		createBooking(input: $input) {
+			_id
+			bookingCode
+			bookingStatus
+			bookingDate
+			bookingPrice
+			respondDeadline
+			createdAt
+		}
+	}
+`;
+
+/** The patient cancels a request or a confirmed booking. */
+export const UPDATE_BOOKING_STATUS = gql`
+	mutation UpdateBookingStatus($input: BookingStatusUpdate!) {
+		updateBookingStatus(input: $input) {
+			_id
+			bookingStatus
+		}
+	}
+`;
