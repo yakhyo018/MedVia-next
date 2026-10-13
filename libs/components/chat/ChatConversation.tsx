@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { useApolloClient, useMutation } from '@apollo/client';
-import { Box, Button, CircularProgress, IconButton, TextField } from '@mui/material';
+import { Box, Button, CircularProgress, IconButton, MenuItem, Select, TextField } from '@mui/material';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import { GET_MY_ROOMS, GET_ROOM_MESSAGES } from '../../../apollo/user/query';
@@ -49,6 +49,8 @@ const ChatConversation = (props: ChatConversationProps) => {
 	const [loading, setLoading] = useState<boolean>(true);
 	const [loadingOlder, setLoadingOlder] = useState<boolean>(false);
 	const [text, setText] = useState<string>('');
+	// The language of the message box: the profile language by default, any of the five on demand.
+	const [inputLang, setInputLang] = useState<Language>(myLang);
 	const [sending, setSending] = useState<boolean>(false);
 	const [originals, setOriginals] = useState<Set<string>>(new Set());
 	const bottomRef = useRef<HTMLDivElement>(null);
@@ -143,7 +145,9 @@ const ChatConversation = (props: ChatConversationProps) => {
 		if (!body || sending) return;
 		try {
 			setSending(true);
-			const result = await sendMessage({ variables: { input: { roomId: room._id, messageText: body } } });
+			const result = await sendMessage({
+				variables: { input: { roomId: room._id, messageText: body, messageLang: inputLang } },
+			});
 			setMessages((current) => merge(current, [result.data.sendMessage]));
 			setText('');
 		} catch (err) {
@@ -176,8 +180,9 @@ const ChatConversation = (props: ChatConversationProps) => {
 					<strong>{room.clinicName}</strong>
 					<Link href={`/clinics/detail?id=${room.clinicId}`}>{t('Clinic page')}</Link>
 				</span>
-				<span className={'pair'} title={`${langLabel(myLang)} ↔ ${langLabel(otherLang)}`}>
-					{myLang} ↔ {otherLang}
+				{/* Follows the message box: the language the patient is writing in now, and Korean */}
+				<span className={'pair'} title={`${langLabel(inputLang)} ↔ ${langLabel(otherLang)}`}>
+					{inputLang} ↔ {otherLang}
 				</span>
 			</header>
 
@@ -238,12 +243,26 @@ const ChatConversation = (props: ChatConversationProps) => {
 			</div>
 
 			<form className={'chat-compose'} onSubmit={sendHandler}>
+				<Select
+					size={'small'}
+					className={'input-lang'}
+					value={inputLang}
+					onChange={(event) => setInputLang(event.target.value as Language)}
+					inputProps={{ 'aria-label': t('I write in') }}
+					renderValue={(value) => value}
+				>
+					{LANGUAGES.map((lang) => (
+						<MenuItem key={lang.code} value={lang.code}>
+							{lang.label}
+						</MenuItem>
+					))}
+				</Select>
 				<TextField
 					fullWidth
 					multiline
 					maxRows={4}
 					value={text}
-					placeholder={t('Write in {{lang}}…', { lang: langLabel(myLang) })}
+					placeholder={t('Write in {{lang}}…', { lang: langLabel(inputLang) })}
 					inputProps={{ maxLength: MESSAGE_MAX, 'aria-label': t('Message') }}
 					onChange={(event) => setText(event.target.value)}
 					onKeyDown={(event) => {

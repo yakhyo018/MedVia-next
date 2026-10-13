@@ -430,5 +430,6 @@
   "Notifications, {{count}} unread_one": "Уведомления, {{count}} непрочитанное",
   "Notifications, {{count}} unread_few": "Уведомления, {{count}} непрочитанных",
   "Notifications, {{count}} unread_many": "Уведомления, {{count}} непрочитанных",
-  "Notifications, {{count}} unread_other": "Уведомления, {{count}} непрочитанных"
+  "Notifications, {{count}} unread_other": "Уведомления, {{count}} непрочитанных",
+  "I write in": "Я пишу на"
 }

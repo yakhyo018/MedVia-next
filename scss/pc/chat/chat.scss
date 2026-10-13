@@ -498,6 +498,19 @@
 		.MuiOutlinedInput-root {
 			border-radius: 22px;
 		}
+		.input-lang {
+			flex-shrink: 0;
+			height: 44px;
+			min-width: 72px;
+			border-radius: 22px;
+			font-size: 13px;
+			font-weight: 700;
+			color: $primary;
+			background: $primary-tint;
+			.MuiOutlinedInput-notchedOutline {
+				border: 0;
+			}
+		}
 		.send {
 			width: 44px;
 			height: 44px;
