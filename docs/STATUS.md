@@ -3,10 +3,8 @@
 Where the frontend stands, what comes next, and how we work. A new session reads this first.
 Update it whenever a milestone closes.
 
-_Last updated: 2026-10-13 — **F1 built on `feature/f1-doctors` (committed and pushed, not merged):
-the clinic page `/clinics/detail`, the home's last three bands and the home carousels are checked
-in the browser (desktop, 375 px mobile, RU). Left for F1: LEARN.md F1, `yarn build` (stop
-`yarn dev` first), the user's check, merge into `develop`, push.**_
+_Last updated: 2026-10-13 — **F1 closed: approved by the user, `feature/f1-doctors` merged into
+`develop` and pushed. Next: F2 (booking) — start with the screen list review.**_
 
 ## The project
 
@@ -20,8 +18,8 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 | # | Milestone | Status |
 | --- | --- | --- |
 | F0 | Skeleton — Next + MUI theme, 5 languages, Apollo + refresh, layouts, login/signup, alerts | done 2026-10-12 |
-| **F1** | **Public pages — home bands, clinics list, doctors list, doctor page, clinic page** | **in progress — clinic page left** |
-| F2 | Booking — slots → hold → questionnaire + consents → My Bookings | |
+| F1 | Public pages — home bands, clinics list, doctors list, doctor page, clinic page | done 2026-10-13 |
+| **F2** | **Booking — slots → hold → questionnaire + consents → My Bookings** | **next** |
 | F3 | Chat + notifications — socket `/live`, bell, translations | |
 | F4 | MyPage — reviews, follows, settings, "who saw my medical data" | |
 | F5 | Clinic dashboard — schedule, requests, treatments, doctors | |
@@ -192,6 +190,8 @@ cd ~/Desktop/MedVia-next && yarn dev                # app on :4000 (yarn, not np
 ```
 Never run `yarn build` while `yarn dev` is running — both write `.next/`, and the dev
 server breaks (fix: stop it, `rm -rf .next`, start again).
+`yarn build:check` is safe beside `yarn dev` (it writes `.next-check/`). After `yarn add`, restart
+`yarn dev`.
 
 Demo accounts (backend seed): `feride@`, `yahyo@`, `clinic01@`, `doctor01@`, `admin@seed.medvia.test`
 with `SEED_PASSWORD` from `~/Desktop/MedVia/.env`.
@@ -201,8 +201,8 @@ with `SEED_PASSWORD` from `~/Desktop/MedVia/.env`.
 - Google sign-in needs `GOOGLE_CLIENT_ID` (backend open item).
 - Before deploy (F9): copy the Unsplash photos into `public/img/` and re-check `yarn audit` for
   Next 14 (current advisories are mostly App Router / middleware / `next/image`).
-- `yarn build` was not run for the last two commits: a dev server the user started holds
-  `.next/` on :4000. Stop it, then `yarn build` before the F1 merge.
+- `yarn build:check` builds into `.next-check/` while `yarn dev` runs (F1 passed: 47 static
+  pages). Run it before every merge; the real `yarn build` is for deploy.
 - A test patient from the browser checks, `f1.feride@medvia.test`, stays until the backend's
   `npm run clean:test -- --yes` (or the next `npm run test:api`) removes it.
 - The demo seed was rebuilt several times on 2026-10-12/13 (`--reset`): clinic and doctor ids
