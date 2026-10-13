@@ -14,6 +14,8 @@ export interface CurrentUser {
 	memberImage: string;
 	memberLang: Language | '';
 	memberMustChangePassword: boolean;
+	/** When the member allowed AI processing (chat translation, the assistant); '' = not yet. */
+	memberAiConsentAt: string;
 }
 
 export const EMPTY_USER: CurrentUser = {
@@ -27,6 +29,7 @@ export const EMPTY_USER: CurrentUser = {
 	memberImage: '',
 	memberLang: '',
 	memberMustChangePassword: false,
+	memberAiConsentAt: '',
 };
 
 export const userVar = makeVar<CurrentUser>(EMPTY_USER);

@@ -244,7 +244,7 @@ const Join: NextPage = () => {
 									type={'tel'}
 									value={input.memberPhone}
 									onChange={(e) => inputHandler('memberPhone', e.target.value)}
-									placeholder={'+998 90 123 45 67'}
+									placeholder={'+82 10 1234 5678'}
 									autoComplete={'tel'}
 									error={Boolean(errors.memberPhone)}
 									helperText={errorText('memberPhone') ?? t('So the clinic can reach you on the visit day')}

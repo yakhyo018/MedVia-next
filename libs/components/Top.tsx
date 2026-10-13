@@ -14,8 +14,10 @@ import useDeviceDetect from '../hooks/useDeviceDetect';
 import { sessionReadyVar, userVar } from '../../apollo/store';
 import { logOut } from '../auth';
 import { LANGUAGES, REACT_APP_API_URL } from '../config';
+import { MemberType } from '../enums/member.enum';
 import { imageUrl, initials, shortName } from '../utils';
 import Logo from './common/Logo';
+import NotificationBell from './common/NotificationBell';
 
 const Top = () => {
 	const device = useDeviceDetect();
@@ -30,11 +32,19 @@ const Top = () => {
 	const [langSheetOpen, setLangSheetOpen] = useState<boolean>(false);
 
 	const currentLocale = router.locale ?? 'en';
+	/**
+	 * Each role's own area under its own name: "My Page" only for patients. A clinic, doctor or
+	 * admin gets "Clinic Dashboard" / "Doctor Panel" / "Admin" when that area exists (F5, F7);
+	 * until then nothing, rather than a link to a patient page. /mypage itself arrives in F4,
+	 * so a patient lands on My Bookings for now.
+	 */
+	const workspace: { href: string; label: string } | null =
+		user.memberType === MemberType.USER ? { href: '/mypage/bookings', label: t('My Page') } : null;
 	const menu = [
 		{ href: '/', label: t('Home') },
 		{ href: '/clinics', label: t('Clinics') },
 		{ href: '/doctors', label: t('Doctors') },
-		...(user._id ? [{ href: '/mypage', label: t('My Page') }] : []),
+		...(workspace ? [workspace] : []),
 		{ href: '/community', label: t('Community') },
 		{ href: '/cs', label: t('CS') },
 	];
@@ -155,6 +165,7 @@ const Top = () => {
 						{currentLocale.toUpperCase()}
 					</Button>
 					{langSheet}
+					{user._id && <NotificationBell mobile />}
 					<IconButton aria-label={t('Menu')} onClick={() => setDrawerOpen(true)}>
 						<MenuRoundedIcon />
 					</IconButton>
@@ -229,6 +240,7 @@ const Top = () => {
 						<Box component={'div'} className={'user-box'}>
 							{langButton}
 							{langMenu}
+							{user._id && <NotificationBell mobile={false} />}
 							{!sessionReady ? (
 								<span className={'user-placeholder'} />
 							) : user._id ? (
@@ -256,10 +268,12 @@ const Top = () => {
 											<span>{user.memberEmail}</span>
 										</Box>
 										<Divider />
-										<MenuItem onClick={() => router.push('/mypage')}>
-											<PersonOutlineRoundedIcon />
-											{t('My Page')}
-										</MenuItem>
+										{workspace && (
+											<MenuItem onClick={() => router.push(workspace.href)}>
+												<PersonOutlineRoundedIcon />
+												{workspace.label}
+											</MenuItem>
+										)}
 										<MenuItem onClick={logoutHandler}>
 											<LogoutRoundedIcon />
 											{t('Log out')}

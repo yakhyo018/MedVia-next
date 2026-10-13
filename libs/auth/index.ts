@@ -1,3 +1,4 @@
+import Router from 'next/router';
 import { ApolloError } from '@apollo/client';
 import { initializeApollo } from '../../apollo/client';
 import { EMPTY_USER, sessionReadyVar, userVar } from '../../apollo/store';
@@ -93,6 +94,8 @@ let refreshing: Promise<boolean> | null = null;
  * first one already rotated.
  */
 export const refreshAccessToken = (): Promise<boolean> => {
+	// After logout a failing query must not try to refresh (and then reset userVar) while leaving.
+	if (leaving) return Promise.resolve(false);
 	if (!refreshing) {
 		refreshing = withRefreshLock(requestRefresh).finally(() => {
 			refreshing = null;
@@ -177,12 +180,38 @@ const fillUserInfo = (member: Member) => {
 		memberImage: member.memberImage ?? '',
 		memberLang: member.memberLang,
 		memberMustChangePassword: member.memberMustChangePassword,
+		memberAiConsentAt: member.memberAiConsentAt ? String(member.memberAiConsentAt) : '',
 	});
 };
 
 /**************************
  *         LOGOUT         *
  *************************/
+
+/**
+ * After a logout every tab goes to the home page, in its current language ("/" or "/ru/").
+ * A full load, not a client push: it also empties every in-memory store (Apollo, userVar).
+ */
+const goHome = () => {
+	const locale = Router.locale;
+	window.location.assign(locale && locale !== Router.defaultLocale ? `/${locale}/` : '/');
+};
+
+/** Set once the page is leaving for home after a logout: no refresh may revive the session. */
+let leaving = false;
+
+/**
+ * Logout's last step. Only the token and the session hint are dropped — not `userVar`: emptying
+ * it would re-render the current page as a guest for the moment before the browser leaves, and a
+ * signed-in-only page (/notifications, My Bookings, chat) would flash its "Please log in" prompt.
+ * The full page load to home empties every in-memory store anyway.
+ */
+const leaveForHome = () => {
+	leaving = true;
+	setJwtToken('');
+	storage.remove(SESSION_HINT);
+	goHome();
+};
 
 /** Ends this device's session on the API, then tells the other tabs to follow. */
 export const logOut = async (): Promise<void> => {
@@ -193,21 +222,19 @@ export const logOut = async (): Promise<void> => {
 		// An already-expired session is still a logout on this side.
 		console.log('logout err:', (err as Error).message);
 	} finally {
-		clearSession();
 		storage.set(LOGOUT_EVENT, Date.now().toString());
-		window.location.reload();
+		leaveForHome();
 	}
 };
 
 /**
  * The `storage` event fires in every other tab of this origin when one tab writes a key.
- * Logout there → drop the session here; login there → pick it up from the shared cookie.
+ * Logout there → drop the session here and go home; login there → pick it up from the shared cookie.
  */
 export const listenSessionEvents = (): (() => void) => {
 	const onStorage = async (event: StorageEvent) => {
 		if (event.key === LOGOUT_EVENT) {
-			clearSession();
-			await initializeApollo().clearStore();
+			leaveForHome();
 		} else if (event.key === LOGIN_EVENT) {
 			if (await refreshAccessToken()) await refetchViewerQueries();
 		}

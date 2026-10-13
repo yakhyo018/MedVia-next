@@ -284,3 +284,86 @@ explains when it is not; the server stays the judge.
 5. **Where are booking rules enforced — client or server?** The server: the transition table,
    the 24-hour rule and the required reason. The client only hides buttons that would fail and
    shows the server's message when something still does.
+
+## F3 — Chat and notifications (2026-10-13)
+
+The header bell, `/notifications`, `/mypage/chat`, and one live socket under all of them.
+
+### 1. One socket, push only
+
+**Problem.** A clinic's reply, a translation that finishes a few seconds later, a "booking
+confirmed" — the patient should see them without reloading.
+
+**Alternatives.** Polling every few seconds (simple, but a request per tab per interval, and
+always late) · GraphQL subscriptions (a second transport the API does not have) ·
+**Socket.IO namespace `/live`, push only** (chosen — the API's gateway).
+
+**Code.** `libs/hooks/useLiveSocket.ts`, mounted once in `_app.tsx` inside `ApolloProvider`:
+- `io(`${REACT_APP_API_WS}/live`, { auth: { token }, transports: ['websocket'] })`. The access
+  token lives in memory, not in a cookie, so it is handed over in the handshake; the server joins
+  the socket to `member:<id>` (and a clinic account to `clinic:<id>`).
+- The effect depends on `user._id`: login opens the socket, logout closes it; a guest has none.
+- The socket only says *that* something changed. Every write still goes through GraphQL, and a
+  page opened later reads the truth from GraphQL — a lost event costs freshness, never data.
+
+### 2. Living with a 15-minute token
+
+The server cuts the socket when the handshake token expires (`reason === 'io server
+disconnect'`). Socket.IO does not reconnect after a server-side cut, and on a refused handshake
+(`connect_error`) its own retries would resend the same dead token. Both handlers call
+`refreshAccessToken()` — the F0 function with one shared promise per tab and a Web Lock across
+tabs — then set `socket.auth = { token: newToken }` and `connect()` again.
+
+### 3. An event bus between the socket and the pages
+
+`liveEvents` is a plain browser `EventTarget`; each socket event is re-dispatched as a
+`CustomEvent`. The socket does not know which components care; a component subscribes in an
+effect and unsubscribes in its cleanup.
+- Global effects live in the hook: `notification:new` bumps the unread count with
+  `cache.updateQuery` (no request) and evicts `getMyNotifications` so the lists on screen read
+  again; `room:updated` refetches `getMyRooms`.
+- The open room (`ChatConversation`) listens to `message:new` and `message:translated` for its
+  own `roomId`.
+
+### 4. Merging messages by `_id`
+
+The patient's own message arrives twice — in the `sendMessage` response and as `message:new`
+from the server; a translation arrives later as `message:translated` with the same `_id`.
+`merge()` keeps one copy per `_id` (the newer fields win) and sorts by `createdAt`. History is
+paged by cursor (`before: nextCursor`), not by page number: new messages keep arriving, so
+"page 2" would shift under the reader.
+
+Socket payloads have no `displayText` (the API computes it per viewer in GraphQL), so the client
+repeats the backend's `textFor`: the original if it is in the reader's language, else the
+translation, else the original.
+
+### 5. Translation needs consent
+
+The API translates a chat only when the patient allowed AI processing (`memberAiConsentAt`);
+otherwise messages are `SKIPPED`. The chat shows a banner that calls `setAiConsent(true)` and
+updates `userVar`, instead of silently showing untranslated text.
+
+### 6. Notifications in the reader's language
+
+The API stores an English title and description plus `notificationParamsJson`. The client
+renders known types from the type and params with i18n templates (`libs/notificationText.ts`)
+and falls back to the server's English for a type it does not know. "Today" / "Earlier" use the
+Seoul calendar day, like every date on the site.
+
+### Interview questions
+
+1. **Why not keep the socket inside the chat page?** Notifications arrive on every page; one
+   connection in `_app` serves all of them and survives client-side navigation. A page-level
+   socket would reconnect on every route change.
+2. **How does the socket authenticate without cookies?** The access token goes in the
+   handshake's `auth` field; the gateway verifies it in its middleware before the connection is
+   accepted, then joins the socket to per-member (and per-clinic) rooms.
+3. **What happens when the access token expires mid-connection?** The server disconnects the
+   socket; the client sees `io server disconnect`, refreshes the token (deduplicated across
+   tabs), puts the new token in `socket.auth` and reconnects.
+4. **The sender receives its own message twice. How do you avoid a duplicate bubble?**
+   Idempotent merge by `_id`: the second copy (or the translated copy) replaces the first instead
+   of being appended.
+5. **Why push only, and not write through the socket?** GraphQL already has validation, auth
+   guards and errors per field; a second write path would duplicate them. With push-only, a
+   missed event is fixed by the next query — the socket can be lossy without losing data.
