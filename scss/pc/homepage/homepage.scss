@@ -486,3 +486,233 @@
 		}
 	}
 }
+
+/* Home carousels (HomeCarousel, Swiper 11): arrows outside the row, equal-height slides */
+.home-carousel {
+	position: relative;
+	--swiper-theme-color: var(--mv-primary);
+	--swiper-pagination-bullet-inactive-color: var(--mv-border-strong);
+	--swiper-pagination-bullet-inactive-opacity: 1;
+	.swiper {
+		padding: 4px 2px 8px;
+	}
+	.swiper-slide {
+		width: var(--slide-width);
+		height: auto;
+		display: flex;
+		> * {
+			flex: 1;
+			min-width: 0;
+		}
+	}
+	.swiper-pagination {
+		display: none;
+	}
+	.carousel-nav {
+		position: absolute;
+		top: 50%;
+		z-index: 2;
+		width: 44px;
+		height: 44px;
+		transform: translateY(-50%);
+		border: 1px solid $border;
+		background: $surface;
+		color: $text;
+		box-shadow: $shadow-card;
+		transition:
+			opacity 0.2s ease,
+			color 0.2s ease;
+		&:hover {
+			background: $surface;
+			color: $primary;
+		}
+		&.prev {
+			left: -22px;
+		}
+		&.next {
+			right: -22px;
+		}
+		&.swiper-button-disabled {
+			opacity: 0;
+			pointer-events: none;
+		}
+		&.swiper-button-lock {
+			display: none;
+		}
+	}
+}
+
+/* Verified reviews: the shared ReviewCard, text cut to four lines, no reply */
+.home-reviews .review-card {
+	.content {
+		display: -webkit-box;
+		-webkit-line-clamp: 4;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		flex: 1;
+	}
+	.reply {
+		display: none;
+	}
+}
+
+/* For international patients: two static cards */
+.service-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 20px;
+}
+
+.service-card {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: 28px;
+	border-radius: $radius-card;
+	.chip {
+		align-self: flex-start;
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 4px 10px;
+		border-radius: $radius-pill;
+		font-size: 12px;
+		font-weight: 700;
+		svg {
+			font-size: 15px;
+		}
+	}
+	h3 {
+		font-size: 22px;
+		font-weight: 800;
+		line-height: 1.3;
+	}
+	p {
+		font-size: 15px;
+		line-height: 1.6;
+		flex: 1;
+	}
+	.action {
+		align-self: flex-start;
+		height: 42px;
+		padding: 0 20px;
+		border-radius: $radius-button;
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		font-size: 14px;
+		font-weight: 700;
+		svg {
+			font-size: 18px;
+			transition: transform 0.2s ease;
+		}
+		&:hover svg {
+			transform: translateX(3px);
+		}
+	}
+	&.teal {
+		background: $primary;
+		color: #fff;
+		.chip {
+			background: rgba(255, 255, 255, 0.18);
+		}
+		p {
+			color: rgba(255, 255, 255, 0.86);
+		}
+		.action {
+			background: $surface;
+			color: $primary;
+		}
+	}
+	&.light {
+		background: $primary-tint;
+		.chip {
+			background: $surface;
+			color: $primary;
+		}
+		p {
+			color: $text-secondary;
+		}
+		.action {
+			background: $primary;
+			color: #fff;
+			&:hover {
+				background: $primary-hover;
+			}
+		}
+	}
+}
+
+/* Community board: two columns; the tabs are for mobile only */
+.board-tabs {
+	display: none;
+}
+
+.board-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 20px;
+}
+
+.board-column {
+	padding: 8px 0;
+	border-radius: $radius-card;
+	border: 1px solid $border;
+	background: $surface;
+	h3 {
+		padding: 12px 20px;
+		font-size: 17px;
+		font-weight: 800;
+	}
+	ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	li {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		padding: 14px 20px;
+		border-top: 1px solid $border;
+		strong {
+			font-size: 15px;
+			line-height: 1.4;
+		}
+		&.empty {
+			font-size: 14px;
+			color: $text-secondary;
+		}
+	}
+	.meta {
+		display: flex;
+		justify-content: space-between;
+		gap: 12px;
+		font-size: 12px;
+		color: $text-secondary;
+		em {
+			margin-left: 6px;
+			padding: 1px 6px;
+			border-radius: $radius-pill;
+			background: $primary-tint;
+			color: $primary;
+			font-style: normal;
+			font-weight: 700;
+		}
+	}
+	.views {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		white-space: nowrap;
+		svg {
+			font-size: 15px;
+		}
+	}
+}
+
+.board-note {
+	text-align: center;
+	font-size: 13px;
+	color: $text-muted;
+}

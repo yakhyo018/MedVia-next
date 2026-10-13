@@ -1,5 +1,6 @@
-/* Doctor page — shared by desktop and mobile; #mobile-wrap overrides in mobile/main.scss */
-.doctor-detail-page {
+/* Doctor page (and the clinic page's shared parts) — desktop and mobile; #mobile-wrap overrides in mobile/main.scss */
+.doctor-detail-page,
+.clinic-detail-page {
 	padding: 24px 0 80px;
 	> .container {
 		flex-direction: column;
@@ -536,7 +537,8 @@
 	}
 }
 
-.doctor-detail-page .more {
+.doctor-detail-page .more,
+.clinic-detail-page .more {
 	margin-top: 16px;
 	align-self: flex-start;
 }

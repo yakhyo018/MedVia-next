@@ -24,7 +24,8 @@
 		"react-dom": "18.2.0",
 		"react-i18next": "^15.7.4",
 		"sass": "^1.105.1",
-		"sweetalert2": "^11.26.25"
+		"sweetalert2": "^11.26.25",
+		"swiper": "^11"
 	},
 	"devDependencies": {
 		"@types/node": "^20.19.43",

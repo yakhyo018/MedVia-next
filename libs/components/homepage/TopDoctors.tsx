@@ -7,12 +7,13 @@ import { DoctorsInquiry } from '../../types/doctor/doctor.input';
 import { Direction } from '../../enums/common.enum';
 import DoctorCard from '../doctor/DoctorCard';
 import HomeSection from './HomeSection';
+import HomeCarousel from './HomeCarousel';
 
 /**
- * nestar-next's TopAgents pattern: the public list, sorted, four of it — no new API.
+ * nestar-next's TopAgents pattern: the public list, sorted, eight of it in a carousel — no new API.
  * doctorScore (the batch's RANK), not doctorRating: one 5-star review must not top the list.
  */
-const INPUT: DoctorsInquiry = { page: 1, limit: 4, sort: 'doctorScore', direction: Direction.DESC, search: {} };
+const INPUT: DoctorsInquiry = { page: 1, limit: 8, sort: 'doctorScore', direction: Direction.DESC, search: {} };
 
 const TopDoctors = () => {
 	const { t } = useTranslation('common');
@@ -31,15 +32,20 @@ const TopDoctors = () => {
 			text={t('Verified reviews, recent visits and followers together · they speak your language')}
 			link={{ href: '/doctors', label: t('See all doctors') }}
 		>
-			<Box className={'home-grid'}>
-				{list.length === 0
-					? Array.from({ length: 4 }).map((_, index) => <Skeleton key={index} variant={'rounded'} height={330} />)
-					: list.map((doctor, index) => (
-							<Box key={doctor._id} className={'mv-enter'} style={{ ['--mv-delay' as string]: `${index * 60}ms` }}>
-								<DoctorCard doctor={doctor} />
-							</Box>
-						))}
-			</Box>
+			{list.length === 0 ? (
+				<Box className={'home-grid'}>
+					{Array.from({ length: 4 }).map((_, index) => (
+						<Skeleton key={index} variant={'rounded'} height={330} />
+					))}
+				</Box>
+			) : (
+				<HomeCarousel
+					label={t('Recommended doctors')}
+					perView={4}
+					slideWidth={270}
+					items={list.map((doctor) => ({ key: doctor._id, node: <DoctorCard doctor={doctor} /> }))}
+				/>
+			)}
 		</HomeSection>
 	);
 };

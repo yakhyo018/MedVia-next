@@ -1,4 +1,5 @@
 import { SEOUL_TIME_ZONE } from './config';
+import { ClinicHour } from './types/clinic/clinic';
 
 /** 99000 → "₩99,000". KRW has no minor unit. */
 export const formatKrw = (value: number | null | undefined): string => {
@@ -54,4 +55,40 @@ export const formatCount = (value: number | null | undefined): string => {
 	if (n < 1000) return String(n);
 	if (n < 1_000_000) return `${(n / 1000).toFixed(n < 10_000 ? 1 : 0).replace(/\.0$/, '')}k`;
 	return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
+};
+
+/** A MongoDB id from the URL (`?id=`): anything else never reaches the API. */
+export const isObjectId = (value: unknown): value is string =>
+	typeof value === 'string' && /^[a-f0-9]{24}$/i.test(value);
+
+/** 0 = Sunday … 6 = Saturday, in the reader's language: weekdayName(1, 'ru') → "пн". */
+const weekdayName = (day: number, locale: string): string =>
+	// 2026-01-04 was a Sunday, so 4 + day lands on that weekday.
+	new Intl.DateTimeFormat(locale, { weekday: 'short', timeZone: 'UTC' }).format(new Date(Date.UTC(2026, 0, 4 + day)));
+
+/**
+ * The clinic's week folded into lines, Monday first:
+ * six days 09:00–19:00 → ["Mon–Sat 09:00–19:00"]. Closed days are left out.
+ */
+export const openingHours = (hours: ClinicHour[] | undefined, locale = 'en'): string[] => {
+	const open = new Map(
+		(hours ?? []).filter((h) => !h.closed && h.open && h.close).map((h) => [h.day, `${h.open}–${h.close}`]),
+	);
+	const week = [1, 2, 3, 4, 5, 6, 0];
+	const lines: string[] = [];
+	let start = 0;
+	while (start < week.length) {
+		const time = open.get(week[start]);
+		let end = start;
+		while (time && end + 1 < week.length && open.get(week[end + 1]) === time) end += 1;
+		if (time) {
+			const days =
+				start === end
+					? weekdayName(week[start], locale)
+					: `${weekdayName(week[start], locale)}–${weekdayName(week[end], locale)}`;
+			lines.push(`${days} ${time}`);
+		}
+		start = end + 1;
+	}
+	return lines;
 };

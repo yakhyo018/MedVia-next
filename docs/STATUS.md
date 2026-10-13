@@ -3,9 +3,10 @@
 Where the frontend stands, what comes next, and how we work. A new session reads this first.
 Update it whenever a milestone closes.
 
-_Last updated: 2026-10-13 — **F1 in progress on `feature/f1-doctors` (committed and pushed, not
-merged): home bands, `/clinics`, `/doctors`, `/doctors/detail` are built and checked in the
-browser. Next: the clinic page `/clinics/detail` — see "Next step" below.**_
+_Last updated: 2026-10-13 — **F1 built on `feature/f1-doctors` (committed and pushed, not merged):
+the clinic page `/clinics/detail`, the home's last three bands and the home carousels are checked
+in the browser (desktop, 375 px mobile, RU). Left for F1: LEARN.md F1, `yarn build` (stop
+`yarn dev` first), the user's check, merge into `develop`, push.**_
 
 ## The project
 
@@ -51,18 +52,52 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 - Not in F0: Google sign-in (needs `GOOGLE_CLIENT_ID`), clinic signup (F5).
 - Test account made during the check: `f0.feride@medvia.test` (local DB only).
 
-## Next step: the clinic page `/clinics/detail?id=` (F1, last page)
+## F1 — home: the last three bands (2026-10-13, waiting for the user's check)
 
-Plan it with the user first (screen list review: mockups `MedVia-design/screens/01_Public_Site/
-04_Clinic_Detail_7.png` and `06_Clinics_Doctors_tab_3.png`). APIs already on the backend:
-`getClinic(clinicId)` (records a view), `getClinicTreatments({ clinicId })`,
-`getDoctors({ search: { clinicId } })`, `getReviews({ clinicId })` (with `summary`),
-`getNearbyClinics`, `likeTarget` (CLINIC), `followMember` (the clinic's `memberId`).
-Reuse: `ClinicCard`, `DoctorCard`, `RatingSummary`, `ReviewCard`, `Stars`, `useLikeTarget`,
-`useFollow` (typename 'Clinic'), the doctor page's layout classes (`detail-grid`, `side`).
-Cards on `/clinics`, the doctor page's clinic box and breadcrumbs already link here (404 today).
-Book / Chat buttons wait for F2 / F3. After the clinic page: LEARN.md F1 section, the user checks,
-merge `feature/f1-doctors` into `develop`, push.
+- Mobile drawn first on the MedVia Mobile canvas ("Home · reviews, patients, community"), approved.
+- **Verified reviews** (`HomeReviews`): `getReviews({ page: 1, limit: 6 })`, the shared `ReviewCard`
+  cut to four lines; desktop shows three, mobile swipes through six.
+- **For international patients** (`PatientServices`): the mockup's "Events and promotions" — the
+  API has no events, so two static i18n cards (interpreters → `/clinics?interpreter=1`, prices →
+  `/clinics?sort=price`); no invented offers (the user chose static cards).
+- **Community board** (`CommunityBoard`): `getArticles` per category (QNA, HEALTH_TIP; the API
+  has no "treatment reviews" category), 4 most viewed each; two columns on desktop, tabs on
+  mobile; read-only until F6; answers / comments with plural keys.
+- Carousels (2026-10-13, user's request — home was too long on a phone): `swiper@11.2.10` added
+  (nestar-next's home bands use Swiper; 11 instead of nestar's 8 — current, cleaner module
+  imports). `HomeCarousel`: Recommended clinics / doctors 8 each, 4 in view; Verified reviews 9,
+  3 in view; MUI arrow buttons outside the row on desktop (hidden at the ends), swipe + dots on a
+  phone; no autoplay. The CSS `swipe-row` mixin stays for the clinic page's rows.
+- After `yarn add` the running dev server answered `/` with 500 ("getStaticPaths is not a
+  function"); touching `pages/index.tsx` made it recompile. Restart `yarn dev` after adding a package.
+- `HomeSection.link` is optional now. Checked on desktop (six bands, links, no overflow); the
+  mobile checked once the user opened the Browser pane (a hidden pane never hydrates).
+
+## F1 — clinic page `/clinics/detail?id=` (2026-10-13, waiting for the user's check)
+
+- Designs: Web Mockup `ClinicDetail` + Prototype `ClinicDetailDoctor`; mobile drawn first on the
+  MedVia Mobile canvas ("F1 — clinic page": Clinic detail + Book sheet) and approved.
+- Header (chips, rating, district, languages; Follow · N, ♡, Share = Web Share or copy link),
+  photo grid that follows the photo count (1–5; mobile: swipe row with "1 / 5"), About + facts
+  (opening hours folded by `openingHours()`, interpreter, doctors count with plurals),
+  Treatments and prices (table; cards on mobile), Doctors, Location (OpenStreetMap iframe, no key),
+  Verified reviews (`RatingSummary`, `ReviewCard`, Show more), Similar clinics nearby
+  (`getNearbyClinics`, `ClinicCard`).
+- Booking card (sticky side on desktop, bottom sheet behind a fixed Book bar on mobile): treatment
+  and doctor pickers, interpreter, total. Dates / times, Request booking and Chat are disabled
+  until F2 / F3.
+- `?doctor=` (the doctor page's new "Book at the clinic"): that doctor is preselected, a banner
+  "Showing the treatments this doctor performs · Show all doctors", treatments the doctor does not
+  perform show "Other doctors" (the seed's doctors perform every treatment of their clinic, so
+  this state is not visible with demo data).
+- Checked: guest ♡ → login prompt; patient Follow and ♡ update in place and survive a reload
+  (undone afterwards); bad id → "Clinic not found"; RU strings. Test patient
+  `f1.clinic@medvia.test` (local DB; `npm run clean:test -- --yes` removes it).
+- Found while checking: a flex column grew to the doctor strip's width on mobile (page scrolled
+  sideways) — `min-width: 0`; scroll-snap rows snapped past the 16 px gutter — `scroll-padding`.
+- Dev-only: in the hidden Browser pane, pages with a query (`?id=`) take 20–60 s until
+  `router.isReady` (Next dev router + throttled background tab); `/doctors?sort=` behaves the
+  same, so it is not this page. Re-check in a visible browser / production build.
 
 ## F1 — clinics list + doctor page + home bands (2026-10-12 / 13)
 

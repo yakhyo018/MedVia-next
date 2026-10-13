@@ -59,6 +59,64 @@ export const GET_CLINICS = gql`
 	}
 `;
 
+/** The clinic page. Records a view when a patient opens it; meLiked / meFollowed only when signed in. */
+export const GET_CLINIC = gql`
+	query GetClinic($clinicId: String!) {
+		getClinic(clinicId: $clinicId) {
+			_id
+			clinicName
+			clinicNameKo
+			clinicSpecialty
+			clinicDistrict
+			clinicAddress
+			clinicLocation {
+				coordinates
+			}
+			clinicPhone
+			clinicHours {
+				day
+				open
+				close
+				closed
+			}
+			clinicLangs
+			clinicInterpreterLangs
+			clinicImages
+			clinicDesc
+			clinicMinPrice
+			clinicLikes
+			clinicFollowers
+			clinicViews
+			clinicRating
+			clinicReviews
+			memberId
+			meLiked
+			meFollowed
+		}
+	}
+`;
+
+/** "Similar clinics nearby": same specialty, nearest first. */
+export const GET_NEARBY_CLINICS = gql`
+	query GetNearbyClinics($clinicId: String!, $limit: Int) {
+		getNearbyClinics(clinicId: $clinicId, limit: $limit) {
+			_id
+			clinicName
+			clinicNameKo
+			clinicSpecialty
+			clinicDistrict
+			clinicLangs
+			clinicInterpreterLangs
+			clinicImages
+			clinicMinPrice
+			clinicRating
+			clinicReviews
+			clinicLikes
+			meLiked
+		}
+	}
+`;
+
 /** Only the total — the Clinics / Doctors tab counters. */
 export const COUNT_CLINICS = gql`
 	query CountClinics($input: ClinicsInquiry!) {
@@ -179,6 +237,10 @@ export const GET_CLINIC_TREATMENTS = gql`
 			treatmentDuration
 			treatmentPrice
 			treatmentPriceNote
+			doctors {
+				_id
+				doctorName
+			}
 		}
 	}
 `;
@@ -218,6 +280,34 @@ export const GET_REVIEWS = gql`
 					stars
 					count
 				}
+			}
+		}
+	}
+`;
+
+/**************************
+ *     BOARD ARTICLE      *
+ *************************/
+
+/** The landing's Community board (F6 reads more fields). */
+export const GET_ARTICLES = gql`
+	query GetArticles($input: ArticlesInquiry!) {
+		getArticles(input: $input) {
+			list {
+				_id
+				articleCategory
+				articleTitle
+				articleLang
+				articleAnswered
+				articleLikes
+				articleViews
+				articleComments
+				createdAt
+				authorName
+				authorType
+			}
+			metaCounter {
+				total
 			}
 		}
 	}

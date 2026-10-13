@@ -30,7 +30,7 @@ import { Treatment } from '../../libs/types/treatment/treatment';
 import { Review, Reviews } from '../../libs/types/review/review';
 import { LikeGroup } from '../../libs/enums/like.enum';
 import { LANGUAGES, REACT_APP_API_URL } from '../../libs/config';
-import { formatCount, formatKrw, imageUrl, initials } from '../../libs/utils';
+import { formatCount, formatKrw, imageUrl, initials, isObjectId } from '../../libs/utils';
 import { T } from '../../libs/types/common';
 
 export const getStaticProps = async ({ locale }: T) => ({
@@ -40,7 +40,6 @@ export const getStaticProps = async ({ locale }: T) => ({
 });
 
 const REVIEWS_STEP = 5;
-const isObjectId = (value: unknown): value is string => typeof value === 'string' && /^[a-f0-9]{24}$/i.test(value);
 
 const DoctorDetail: NextPage = () => {
 	const router = useRouter();
@@ -344,6 +343,17 @@ const DoctorDetail: NextPage = () => {
 									</div>
 								))}
 							</div>
+						)}
+						{clinic && (
+							<Button
+								variant={'contained'}
+								fullWidth
+								endIcon={<ArrowForwardRoundedIcon />}
+								LinkComponent={Link}
+								href={`/clinics/detail?id=${clinic._id}&doctor=${doctor._id}`}
+							>
+								{t('Book at the clinic')}
+							</Button>
 						)}
 						<p className={'note'}>{t('Bookings are made through the clinic this doctor works at.')}</p>
 					</aside>

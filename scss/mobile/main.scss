@@ -1,5 +1,28 @@
 @import '../tokens';
 
+/**
+ * A row of cards the patient swipes sideways, bleeding to the screen edges and snapping
+ * to the 16px gutter (scroll-padding), not to the edge. $card: each card's width.
+ */
+@mixin swipe-row($card, $gap: 12px) {
+	display: flex;
+	gap: $gap;
+	margin: 0 -16px;
+	padding: 0 16px 4px;
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+	scroll-padding: 0 16px;
+	scrollbar-width: none;
+	&::-webkit-scrollbar {
+		display: none;
+	}
+	> * {
+		flex: 0 0 $card;
+		min-width: 0;
+		scroll-snap-align: start;
+	}
+}
+
 #mobile-wrap {
 	&.layout-basic #main {
 		background: $background;
@@ -245,9 +268,87 @@
 			}
 		}
 	}
-	.home-grid {
+	/* Home carousels on a phone: bleed to the edges (Swiper adds the 16px offsets), dots, no arrows */
+	.home-carousel {
+		margin: 0 -16px;
+		.carousel-nav {
+			display: none;
+		}
+		.swiper {
+			padding: 4px 0 28px;
+		}
+		.swiper-pagination {
+			display: block;
+			bottom: 0;
+		}
+	}
+	.home-reviews .review-card {
+		padding: 16px;
+	}
+	.service-grid {
 		grid-template-columns: 1fr;
 		gap: 14px;
+	}
+	.service-card {
+		padding: 20px;
+		gap: 10px;
+		h3 {
+			font-size: 19px;
+		}
+		p {
+			font-size: 14px;
+		}
+	}
+	.board-tabs {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 4px;
+		padding: 4px;
+		border-radius: 12px;
+		border: 1px solid $border;
+		background: $surface;
+		button {
+			height: 38px;
+			border: 0;
+			border-radius: 9px;
+			background: transparent;
+			font-family: $font;
+			font-size: 14px;
+			font-weight: 600;
+			color: $text-secondary;
+			&[aria-selected='true'] {
+				background: $primary-tint;
+				color: $primary;
+				font-weight: 700;
+			}
+		}
+	}
+	.board-grid {
+		grid-template-columns: 1fr;
+	}
+	.board-column {
+		display: none;
+		padding: 0;
+		&.active {
+			display: block;
+		}
+		h3 {
+			display: none;
+		}
+		li:first-child {
+			border-top: 0;
+		}
+		li {
+			padding: 14px 16px;
+			strong {
+				font-size: 14px;
+			}
+		}
+	}
+
+	/* Skeletons while the carousels load */
+	.home-grid {
+		@include swipe-row(270px);
 	}
 	.trending-grid {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -345,7 +446,8 @@
 	}
 
 	/* Doctor page */
-	.doctor-detail-page {
+	.doctor-detail-page,
+	.clinic-detail-page {
 		padding-top: 16px;
 		.crumbs {
 			font-size: 12px;
@@ -408,6 +510,187 @@
 	}
 	.review-card {
 		padding: 16px;
+	}
+
+	/* Clinic page */
+	/* The fixed Book bar must not cover the end of the footer */
+	&:has(.book-bar) #footer {
+		padding-bottom: 84px;
+	}
+	.clinic-detail-page {
+		> .container {
+			gap: 18px;
+		}
+		.crumbs {
+			.back {
+				font-size: 20px;
+				color: $primary;
+			}
+			a {
+				font-weight: 600;
+				color: $primary;
+			}
+			.slash {
+				font-weight: 400;
+				color: $text-muted;
+			}
+			span {
+				font-weight: 400;
+				color: $text-secondary;
+			}
+		}
+		h2 {
+			font-size: 19px;
+			margin-bottom: 12px;
+		}
+		.detail-grid .main {
+			/* A flex child grows to its widest row (the doctor strip) unless allowed to shrink */
+			min-width: 0;
+			width: 100%;
+			gap: 28px;
+			section {
+				padding-bottom: 0;
+				border-bottom: 0;
+			}
+		}
+		.facts {
+			gap: 8px;
+			> div {
+				padding: 12px 10px;
+				border: 0;
+				background: $surface;
+			}
+			svg {
+				font-size: 18px;
+				margin-bottom: 2px;
+			}
+			span {
+				font-size: 11px;
+			}
+			strong {
+				font-size: 12.5px;
+			}
+		}
+		.clinic-map {
+			height: 180px;
+		}
+		.address strong {
+			font-size: 14px;
+		}
+		.nearby {
+			margin-top: 0;
+			.nearby-grid {
+				@include swipe-row(260px);
+			}
+		}
+	}
+	.clinic-head {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 14px;
+		h1 {
+			font-size: 26px;
+		}
+		.meta {
+			flex-direction: column;
+			gap: 6px;
+			font-size: 13px;
+		}
+		.actions .follow {
+			flex: 1;
+		}
+	}
+	.clinic-treatments {
+		border: 0;
+		background: transparent;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		.row {
+			grid-template-columns: minmax(0, 1fr) auto;
+			grid-template-areas:
+				'name price'
+				'meta action';
+			row-gap: 8px;
+			column-gap: 12px;
+			padding: 14px;
+			border: 1px solid $border;
+			border-radius: 12px;
+			background: $surface;
+			&.head {
+				display: none;
+			}
+			&.selected {
+				border: 1.5px solid $primary;
+			}
+		}
+		.name {
+			grid-area: name;
+		}
+		.price {
+			grid-area: price;
+			text-align: right;
+		}
+		.meta {
+			grid-area: meta;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			font-size: 12px;
+		}
+		.doctors i {
+			width: 22px;
+			height: 22px;
+			font-size: 9px;
+		}
+		.action {
+			grid-area: action;
+		}
+	}
+	.clinic-doctors {
+		@include swipe-row(220px);
+	}
+	.book-bar {
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 90;
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+		background: $surface;
+		border-top: 1px solid $border;
+		box-shadow: 0 -12px 32px rgba(15, 42, 61, 0.1);
+		.text {
+			flex: 1;
+			min-width: 0;
+			display: flex;
+			flex-direction: column;
+			span {
+				font-size: 12px;
+				color: $text-secondary;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+			strong {
+				font-size: 18px;
+				font-weight: 800;
+			}
+		}
+		.MuiButton-root {
+			height: 48px;
+			padding: 0 22px;
+			font-size: 15px;
+		}
+		.chat {
+			width: 48px;
+			height: 48px;
+			border-radius: $radius-button;
+			border: 1px solid $border-strong;
+		}
 	}
 
 	/* Doctors */

@@ -7,7 +7,8 @@ interface HomeSectionProps {
 	id: string;
 	title: string;
 	text: string;
-	link: { href: string; label: string };
+	/** Optional: a band whose page comes later (Community, F6) has no "See all". */
+	link?: { href: string; label: string };
 	/** Alternate the background so the sections read as bands. */
 	tone?: 'white' | 'tint';
 	children: ReactNode;
@@ -25,10 +26,12 @@ const HomeSection = (props: HomeSectionProps) => {
 						<h2 id={`${id}-title`}>{title}</h2>
 						<p>{text}</p>
 					</div>
-					<Link href={link.href} className={'see-all'}>
-						{link.label}
-						<ArrowForwardRoundedIcon />
-					</Link>
+					{link && (
+						<Link href={link.href} className={'see-all'}>
+							{link.label}
+							<ArrowForwardRoundedIcon />
+						</Link>
+					)}
 				</Box>
 				{children}
 			</Stack>

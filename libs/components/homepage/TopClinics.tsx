@@ -9,13 +9,14 @@ import { LikeGroup } from '../../enums/like.enum';
 import useLikeTarget from '../../hooks/useLikeTarget';
 import ClinicCard from '../clinic/ClinicCard';
 import HomeSection from './HomeSection';
+import HomeCarousel from './HomeCarousel';
 
 /**
- * nestar-next's TopProperties pattern: the public list, sorted, four of it — no new API.
+ * nestar-next's TopProperties pattern: the public list, sorted, eight of it in a carousel — no new API.
  * Sorted by clinicScore (the batch's RANK: rating weighed by how many reviews it stands on),
  * not by clinicRating, where one 5-star review would beat forty 4.8 ones.
  */
-const INPUT: ClinicsInquiry = { page: 1, limit: 4, sort: 'clinicScore', direction: Direction.DESC };
+const INPUT: ClinicsInquiry = { page: 1, limit: 8, sort: 'clinicScore', direction: Direction.DESC };
 
 const TopClinics = () => {
 	const { t } = useTranslation('common');
@@ -35,15 +36,23 @@ const TopClinics = () => {
 			text={t('Verified reviews, recent visits and followers together · every clinic reviewed by MedVia')}
 			link={{ href: '/clinics', label: t('See all clinics') }}
 		>
-			<Box className={'home-grid'}>
-				{list.length === 0
-					? Array.from({ length: 4 }).map((_, index) => <Skeleton key={index} variant={'rounded'} height={340} />)
-					: list.map((clinic, index) => (
-							<Box key={clinic._id} className={'mv-enter'} style={{ ['--mv-delay' as string]: `${index * 60}ms` }}>
-								<ClinicCard clinic={clinic} onLike={(id) => likeHandler(LikeGroup.CLINIC, id)} />
-							</Box>
-						))}
-			</Box>
+			{list.length === 0 ? (
+				<Box className={'home-grid'}>
+					{Array.from({ length: 4 }).map((_, index) => (
+						<Skeleton key={index} variant={'rounded'} height={340} />
+					))}
+				</Box>
+			) : (
+				<HomeCarousel
+					label={t('Recommended clinics')}
+					perView={4}
+					slideWidth={270}
+					items={list.map((clinic) => ({
+						key: clinic._id,
+						node: <ClinicCard clinic={clinic} onLike={(id) => likeHandler(LikeGroup.CLINIC, id)} />,
+					}))}
+				/>
+			)}
 		</HomeSection>
 	);
 };

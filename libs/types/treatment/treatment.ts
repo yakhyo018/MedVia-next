@@ -1,6 +1,7 @@
 import { Specialty } from '../../enums/clinic.enum';
+import { Doctor } from '../doctor/doctor';
 
-/** The treatment fields the client reads so far (the doctor page). Grows with the clinic page. */
+/** The treatment fields the client reads (the doctor and clinic pages). */
 export interface Treatment {
 	_id: string;
 	treatmentName: string;
@@ -12,6 +13,8 @@ export interface Treatment {
 	treatmentDesc?: string;
 	doctorIds?: string[];
 	clinicId?: string;
+	/** The doctors who perform it (only ACTIVE ones on public pages). */
+	doctors?: Pick<Doctor, '_id' | 'doctorName'>[];
 }
 
 export interface ClinicTreatmentsInquiry {
