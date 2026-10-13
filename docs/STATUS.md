@@ -3,9 +3,9 @@
 Where the frontend stands, what comes next, and how we work. A new session reads this first.
 Update it whenever a milestone closes.
 
-_Last updated: 2026-10-12 — **F0 closed: approved by the user, merged into `develop` and pushed.
-F1 in progress on `feature/f1-doctors`: the doctors list (`/doctors`) is built and checked in the
-browser, not committed — waiting for the user's check.**_
+_Last updated: 2026-10-13 — **F1 in progress on `feature/f1-doctors` (committed and pushed, not
+merged): home bands, `/clinics`, `/doctors`, `/doctors/detail` are built and checked in the
+browser. Next: the clinic page `/clinics/detail` — see "Next step" below.**_
 
 ## The project
 
@@ -19,7 +19,7 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 | # | Milestone | Status |
 | --- | --- | --- |
 | F0 | Skeleton — Next + MUI theme, 5 languages, Apollo + refresh, layouts, login/signup, alerts | done 2026-10-12 |
-| **F1** | **Public pages — home, doctors list (first), clinics (search, filters, Recommended), clinic / doctor / treatment pages** | **next** |
+| **F1** | **Public pages — home bands, clinics list, doctors list, doctor page, clinic page** | **in progress — clinic page left** |
 | F2 | Booking — slots → hold → questionnaire + consents → My Bookings | |
 | F3 | Chat + notifications — socket `/live`, bell, translations | |
 | F4 | MyPage — reviews, follows, settings, "who saw my medical data" | |
@@ -51,7 +51,20 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 - Not in F0: Google sign-in (needs `GOOGLE_CLIENT_ID`), clinic signup (F5).
 - Test account made during the check: `f0.feride@medvia.test` (local DB only).
 
-## F1 — clinics list + doctor page (2026-10-12, in progress)
+## Next step: the clinic page `/clinics/detail?id=` (F1, last page)
+
+Plan it with the user first (screen list review: mockups `MedVia-design/screens/01_Public_Site/
+04_Clinic_Detail_7.png` and `06_Clinics_Doctors_tab_3.png`). APIs already on the backend:
+`getClinic(clinicId)` (records a view), `getClinicTreatments({ clinicId })`,
+`getDoctors({ search: { clinicId } })`, `getReviews({ clinicId })` (with `summary`),
+`getNearbyClinics`, `likeTarget` (CLINIC), `followMember` (the clinic's `memberId`).
+Reuse: `ClinicCard`, `DoctorCard`, `RatingSummary`, `ReviewCard`, `Stars`, `useLikeTarget`,
+`useFollow` (typename 'Clinic'), the doctor page's layout classes (`detail-grid`, `side`).
+Cards on `/clinics`, the doctor page's clinic box and breadcrumbs already link here (404 today).
+Book / Chat buttons wait for F2 / F3. After the clinic page: LEARN.md F1 section, the user checks,
+merge `feature/f1-doctors` into `develop`, push.
+
+## F1 — clinics list + doctor page + home bands (2026-10-12 / 13)
 
 - Menu: Home · Clinics · Doctors. Both lists carry "Clinics N | Doctors M" tabs.
 - `/clinics`: sidebar filters (name or treatment, 7 districts, specialty, ₩ range, languages,
@@ -153,8 +166,11 @@ with `SEED_PASSWORD` from `~/Desktop/MedVia/.env`.
 - Google sign-in needs `GOOGLE_CLIENT_ID` (backend open item).
 - Before deploy (F9): copy the Unsplash photos into `public/img/` and re-check `yarn audit` for
   Next 14 (current advisories are mostly App Router / middleware / `next/image`).
-- Seed data (backend): every seeded doctor speaks only KO / EN, so the RU / UZ / KK language
-  filter finds nobody; and ~190 test doctors from Postman runs ("Assistant Test Clinic …") sit in
-  the dev DB. Both are backend seed / cleanup tasks.
+- `yarn build` was not run for the last two commits: a dev server the user started holds
+  `.next/` on :4000. Stop it, then `yarn build` before the F1 merge.
+- A test patient from the browser checks, `f1.feride@medvia.test`, stays until the backend's
+  `npm run clean:test -- --yes` (or the next `npm run test:api`) removes it.
+- The demo seed was rebuilt several times on 2026-10-12/13 (`--reset`): clinic and doctor ids
+  changed; old links with ids no longer resolve.
 - `hero.jpg` came from the design folder without a recorded source — confirm its licence before a
   public deploy. `MedVia-design/landing-with-photos/img/` also has treatment and clinic photos for F1.

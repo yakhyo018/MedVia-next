@@ -34,6 +34,10 @@ Decision / Why / Risks / Alternatives — one table per milestone.
 
 ## F1 — Public pages (2026-10-12, in progress)
 
+_State 2026-10-13: built — home bands (Recommended clinics, Trending treatments, Recommended
+doctors), `/clinics`, `/doctors`, `/doctors/detail`; left — `/clinics/detail`, LEARN.md F1, the
+user's check, the merge. Details and the clinic-page plan: STATUS.md → "Next step"._
+
 | Decision | Why | Risks | Alternatives |
 | --- | --- | --- | --- |
 | Filters and sort in the URL (readable keys), validated on read. | Back / forward and shared links keep the list; the query is user input. | Long URLs with many filters. | Component state only; one JSON `?input=` (nestar-next). |
