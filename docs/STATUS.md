@@ -3,9 +3,8 @@
 Where the frontend stands, what comes next, and how we work. A new session reads this first.
 Update it whenever a milestone closes.
 
-_Last updated: 2026-10-13 — **F1 closed (merged into `develop`). F2 in progress on
-`feature/f2-booking`: booking flow built and checked in the browser, not committed — waiting
-for the user's check.**_
+_Last updated: 2026-10-13 — **F2 closed: approved by the user, `feature/f2-booking` merged into
+`develop` and pushed. Next: F3 (chat + notifications) — start with the screen list review.**_
 
 ## The project
 
@@ -20,8 +19,8 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 | --- | --- | --- |
 | F0 | Skeleton — Next + MUI theme, 5 languages, Apollo + refresh, layouts, login/signup, alerts | done 2026-10-12 |
 | F1 | Public pages — home bands, clinics list, doctors list, doctor page, clinic page | done 2026-10-13 |
-| **F2** | **Booking — slots → hold → questionnaire + consents → My Bookings** | **next** |
-| F3 | Chat + notifications — socket `/live`, bell, translations | |
+| F2 | Booking — slots → hold → questionnaire + consents → My Bookings | done 2026-10-13 |
+| **F3** | **Chat + notifications — socket `/live`, bell, translations** | **next** |
 | F4 | MyPage — reviews, follows, settings, "who saw my medical data" | |
 | F5 | Clinic dashboard — schedule, requests, treatments, doctors | |
 | F6 | Community + CS — posts, FAQ, inquiries | |
@@ -51,7 +50,7 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 - Not in F0: Google sign-in (needs `GOOGLE_CLIENT_ID`), clinic signup (F5).
 - Test account made during the check: `f0.feride@medvia.test` (local DB only).
 
-## F2 — booking (2026-10-13, in progress)
+## F2 — booking (2026-10-13, done)
 
 - Screen list approved (option (a): My Bookings as its own page until MyPage in F4). Mobile drawn
   first on the MedVia Mobile canvas ("F2 — booking": Questionnaire, Review & consent, Request
