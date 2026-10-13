@@ -31,6 +31,12 @@ const withLayoutBasic = (Component: React.ComponentType<T>) => {
 				case '/clinics/detail':
 					title = 'Clinic';
 					break;
+				case '/booking':
+					title = 'Booking';
+					break;
+				case '/mypage/bookings':
+					title = 'My Bookings';
+					break;
 				case '/account/join':
 					title = 'Log in / Sign up';
 					break;

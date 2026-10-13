@@ -312,3 +312,67 @@ export const GET_ARTICLES = gql`
 		}
 	}
 `;
+
+/**************************
+ *        BOOKING         *
+ *************************/
+
+/** Free start times (UTC) of one treatment with one doctor on one Seoul day. Public. */
+export const GET_AVAILABLE_SLOTS = gql`
+	query GetAvailableSlots($input: AvailableSlotsInquiry!) {
+		getAvailableSlots(input: $input)
+	}
+`;
+
+/** "My Bookings": the patient's own bookings by tab. */
+export const GET_BOOKINGS = gql`
+	query GetBookings($input: BookingsInquiry!) {
+		getBookings(input: $input) {
+			list {
+				_id
+				bookingCode
+				bookingStatus
+				bookingDate
+				bookingPrice
+				bookingLang
+				bookingInterpreter
+				bookingDeclineReason
+				respondDeadline
+				completedAt
+				clinicId
+				doctorId
+				treatmentId
+				createdAt
+				clinicData {
+					_id
+					clinicName
+					clinicDistrict
+					clinicImages
+				}
+				doctorData {
+					_id
+					doctorName
+				}
+				treatmentData {
+					_id
+					treatmentName
+					treatmentDuration
+				}
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+/** Only the total — the My Bookings tab counters. */
+export const COUNT_BOOKINGS = gql`
+	query CountBookings($input: BookingsInquiry!) {
+		getBookings(input: $input) {
+			metaCounter {
+				total
+			}
+		}
+	}
+`;

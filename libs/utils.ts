@@ -92,3 +92,41 @@ export const openingHours = (hours: ClinicHour[] | undefined, locale = 'en'): st
 	}
 	return lines;
 };
+
+/** A moment as its Seoul calendar day: 2026-10-13T20:00Z → "2026-10-14" (the API's slot date). */
+export const seoulDateKey = (value: Date | string | number): string =>
+	new Intl.DateTimeFormat('en-CA', { timeZone: SEOUL_TIME_ZONE }).format(new Date(value));
+
+/** "14:00" in Seoul. */
+export const seoulClock = (value: Date | string | number): string =>
+	new Intl.DateTimeFormat('en-GB', {
+		hour: '2-digit',
+		minute: '2-digit',
+		hour12: false,
+		timeZone: SEOUL_TIME_ZONE,
+	}).format(new Date(value));
+
+export interface SeoulDay {
+	/** "2026-10-14" */
+	key: string;
+	/** "Wed" / "ср" */
+	weekday: string;
+	/** "14" */
+	day: string;
+	/** "October 2026" / "октябрь 2026 г." */
+	month: string;
+}
+
+/** The next `count` Seoul days from today, labelled in the reader's language (the date strip). */
+export const seoulDays = (count: number, locale = 'en', from: Date = new Date()): SeoulDay[] =>
+	Array.from({ length: count }, (_, index) => {
+		const date = new Date(from.getTime() + index * 24 * 60 * 60 * 1000);
+		const part = (options: Intl.DateTimeFormatOptions) =>
+			new Intl.DateTimeFormat(locale, { ...options, timeZone: SEOUL_TIME_ZONE }).format(date);
+		return {
+			key: seoulDateKey(date),
+			weekday: part({ weekday: 'short' }),
+			day: part({ day: 'numeric' }),
+			month: part({ month: 'long', year: 'numeric' }),
+		};
+	});

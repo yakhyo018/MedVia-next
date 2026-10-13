@@ -1,0 +1,616 @@
+/* Booking (F2): the clinic card's date and time pickers, /booking, /mypage/bookings */
+
+/* Clinic page booking card — date strip, time grid, interpreter switch */
+.booking-card {
+	.label-row {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		strong {
+			font-size: 13px;
+		}
+		span {
+			font-size: 12px;
+			color: $text-secondary;
+		}
+	}
+	.day-strip {
+		display: flex;
+		gap: 6px;
+		overflow-x: auto;
+		padding-bottom: 4px;
+		scrollbar-width: thin;
+		button {
+			flex: 0 0 52px;
+			height: 56px;
+			border: 1px solid $border-strong;
+			border-radius: 10px;
+			background: $surface;
+			font-family: $font;
+			color: $text;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 2px;
+			cursor: pointer;
+			span {
+				font-size: 11px;
+				color: $text-secondary;
+			}
+			strong {
+				font-size: 16px;
+			}
+			&.selected {
+				border-color: $primary;
+				background: $primary;
+				color: #fff;
+				span {
+					color: rgba(255, 255, 255, 0.85);
+				}
+			}
+		}
+	}
+	.time-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 6px;
+		button {
+			height: 40px;
+			border: 1px solid $border-strong;
+			border-radius: 10px;
+			background: $surface;
+			font-family: $font;
+			font-size: 14px;
+			font-weight: 600;
+			color: $text;
+			cursor: pointer;
+			&:hover {
+				border-color: $primary;
+			}
+			&.selected {
+				border: 1.5px solid $primary;
+				background: $primary-tint;
+				color: $primary;
+				font-weight: 700;
+			}
+		}
+	}
+	.times-state {
+		min-height: 48px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 8px;
+		border-radius: 10px;
+		border: 1px dashed $border-strong;
+		font-size: 13px;
+		color: $text-secondary;
+		text-align: center;
+	}
+	.interpreter.switch {
+		align-items: center;
+		cursor: pointer;
+		span {
+			flex: 1;
+		}
+	}
+}
+
+/* /booking */
+.booking-page {
+	padding: 24px 0 80px;
+	> .container {
+		flex-direction: column;
+		gap: 22px;
+	}
+	.detail-grid .main {
+		gap: 20px;
+	}
+}
+
+.booking-steps {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	display: flex;
+	gap: 8px;
+	li {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding-top: 10px;
+		border-top: 3px solid $border-strong;
+		font-size: 13px;
+		color: $text-secondary;
+		&.done,
+		&.current {
+			border-top-color: $primary;
+			color: $text;
+		}
+		&.current {
+			font-weight: 700;
+		}
+	}
+	.dot {
+		width: 24px;
+		height: 24px;
+		flex-shrink: 0;
+		border-radius: 50%;
+		background: $surface-alt;
+		font-size: 12px;
+		font-weight: 700;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		svg {
+			font-size: 16px;
+		}
+	}
+	.done .dot,
+	.current .dot {
+		background: $primary;
+		color: #fff;
+	}
+}
+
+.booking-step {
+	display: flex;
+	flex-direction: column;
+	gap: 22px;
+	padding: 28px;
+	border-radius: $radius-card;
+	border: 1px solid $border;
+	background: $surface;
+	.step-head {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		h1 {
+			font-size: 26px;
+			font-weight: 800;
+			letter-spacing: -0.4px;
+		}
+		p {
+			font-size: 14px;
+			color: $text-secondary;
+		}
+	}
+	.question {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		.label {
+			font-size: 15px;
+			font-weight: 700;
+			em {
+				font-style: normal;
+				font-weight: 500;
+				color: $text-muted;
+			}
+		}
+		.chips {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 8px;
+			button {
+				height: 38px;
+				padding: 0 16px;
+				border-radius: $radius-pill;
+				border: 1px solid $border-strong;
+				background: $surface;
+				font-family: $font;
+				font-size: 14px;
+				font-weight: 600;
+				color: $text;
+				cursor: pointer;
+				&.on {
+					border-color: $primary;
+					background: $primary-tint;
+					color: $primary;
+				}
+			}
+		}
+		.error {
+			font-size: 12px;
+			color: $danger;
+		}
+		&.missing .chips button {
+			border-color: $danger;
+		}
+	}
+	h2 {
+		font-size: 18px;
+		font-weight: 800;
+	}
+	.section-title {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.answers dl {
+		margin: 8px 0 0;
+		div {
+			padding: 12px 0;
+			border-top: 1px solid $border;
+		}
+		dt {
+			font-size: 12px;
+			color: $text-secondary;
+		}
+		dd {
+			margin: 2px 0 0;
+			font-size: 15px;
+			font-weight: 600;
+			white-space: pre-line;
+		}
+	}
+	.consents {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		.MuiFormControlLabel-root {
+			align-items: flex-start;
+			margin: 0;
+			gap: 4px;
+			.MuiCheckbox-root {
+				padding: 2px 6px 0 0;
+			}
+			span {
+				font-size: 14px;
+				line-height: 1.5;
+			}
+			em {
+				font-style: normal;
+				color: $text-muted;
+				&.required {
+					color: $danger;
+				}
+			}
+			&.missing .MuiCheckbox-root {
+				color: $danger;
+			}
+		}
+		.privacy {
+			display: flex;
+			gap: 8px;
+			padding: 12px;
+			border-radius: 10px;
+			background: $background;
+			font-size: 12px;
+			line-height: 1.5;
+			color: $text-secondary;
+			svg {
+				font-size: 18px;
+				color: $primary;
+			}
+		}
+	}
+}
+
+.booking-step.sent {
+	.sent-head {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 10px;
+		text-align: center;
+		h1 {
+			font-size: 26px;
+			font-weight: 800;
+		}
+		p {
+			max-width: 480px;
+			font-size: 15px;
+			line-height: 1.5;
+			color: $text-secondary;
+		}
+	}
+	.mark {
+		width: 64px;
+		height: 64px;
+		border-radius: 50%;
+		background: $success-bg;
+		color: $success;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		svg {
+			font-size: 34px;
+		}
+	}
+	.code {
+		padding: 4px 12px;
+		border-radius: $radius-pill;
+		background: $warning-bg;
+		color: $warning;
+		font-size: 12px;
+		font-weight: 700;
+	}
+	.timeline ol {
+		margin: 12px 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		li {
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+			padding-left: 26px;
+			&::before {
+				content: '';
+				position: absolute;
+				left: 0;
+				top: 3px;
+				width: 14px;
+				height: 14px;
+				border-radius: 50%;
+				background: $border-strong;
+			}
+			&.done::before {
+				background: $success;
+			}
+			&.now::before {
+				background: $warning;
+			}
+			strong {
+				font-size: 14px;
+			}
+			span {
+				font-size: 12px;
+				color: $text-secondary;
+			}
+		}
+	}
+	.muted {
+		font-size: 13px;
+		color: $text-secondary;
+	}
+	.sent-actions {
+		display: flex;
+		gap: 10px;
+		flex-wrap: wrap;
+	}
+}
+
+.booking-actions {
+	display: flex;
+	justify-content: space-between;
+	gap: 12px;
+	.MuiButton-root {
+		min-width: 120px;
+	}
+}
+
+.booking-summary {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	.clinic {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		> span:last-child {
+			display: flex;
+			flex-direction: column;
+			min-width: 0;
+		}
+		strong {
+			font-size: 15px;
+		}
+		em {
+			font-style: normal;
+			font-size: 12px;
+			color: $text-secondary;
+		}
+	}
+	.photo {
+		width: 56px;
+		height: 56px;
+		flex-shrink: 0;
+		border-radius: 12px;
+		overflow: hidden;
+		background: $primary-tint;
+		color: $primary;
+		font-weight: 800;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+	dl {
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		div {
+			display: flex;
+			justify-content: space-between;
+			gap: 12px;
+			padding: 9px 0;
+			border-top: 1px solid $border;
+		}
+		dt {
+			font-size: 13px;
+			color: $text-secondary;
+		}
+		dd {
+			margin: 0;
+			font-size: 13px;
+			font-weight: 700;
+			text-align: right;
+		}
+	}
+	.total {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		padding-top: 10px;
+		border-top: 1px solid $border;
+		span {
+			font-size: 14px;
+			color: $text-secondary;
+		}
+		strong {
+			font-size: 22px;
+			font-weight: 800;
+		}
+	}
+	.timer,
+	.status {
+		display: flex;
+		gap: 10px;
+		padding: 12px;
+		border-radius: 12px;
+		background: $warning-bg;
+		color: $warning;
+		font-size: 12px;
+		svg {
+			font-size: 20px;
+		}
+		span {
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+		}
+		strong {
+			font-size: 14px;
+		}
+	}
+	.status {
+		font-size: 13px;
+		font-weight: 700;
+	}
+}
+
+/* /mypage/bookings */
+.my-bookings-page {
+	padding: 32px 0 80px;
+	> .container {
+		flex-direction: column;
+		gap: 20px;
+		max-width: 920px;
+	}
+	.page-head {
+		h1 {
+			font-size: 32px;
+			font-weight: 800;
+			letter-spacing: -0.6px;
+		}
+		p {
+			margin-top: 4px;
+			font-size: 14px;
+			color: $text-secondary;
+		}
+	}
+	.booking-tabs {
+		align-self: flex-start;
+		display: flex;
+		gap: 4px;
+		padding: 4px;
+		border-radius: 12px;
+		border: 1px solid $border;
+		background: $surface;
+		button {
+			height: 38px;
+			padding: 0 18px;
+			border: 0;
+			border-radius: 9px;
+			background: transparent;
+			font-family: $font;
+			font-size: 14px;
+			font-weight: 600;
+			color: $text-secondary;
+			cursor: pointer;
+			&[aria-selected='true'] {
+				background: $primary-tint;
+				color: $primary;
+				font-weight: 700;
+			}
+		}
+	}
+	.booking-list {
+		gap: 12px;
+		.more {
+			align-self: center;
+		}
+	}
+}
+
+.booking-item {
+	display: flex;
+	align-items: flex-start;
+	gap: 16px;
+	padding: 18px;
+	border-radius: $radius-card;
+	border: 1px solid $border;
+	background: $surface;
+	.photo {
+		width: 72px;
+		height: 72px;
+		flex-shrink: 0;
+		border-radius: 12px;
+		overflow: hidden;
+		background: $primary-tint;
+		color: $primary;
+		font-weight: 800;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+	.body {
+		flex: 1;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+	.top {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px;
+	}
+	.code {
+		font-size: 12px;
+		color: $text-muted;
+	}
+	.title {
+		font-size: 16px;
+	}
+	.when {
+		font-size: 14px;
+		font-weight: 600;
+	}
+	.meta,
+	.hint {
+		font-size: 13px;
+		color: $text-secondary;
+	}
+	.hint {
+		color: $warning;
+		&.danger {
+			color: $danger;
+		}
+	}
+	.actions {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		.MuiButton-root {
+			white-space: nowrap;
+		}
+	}
+}

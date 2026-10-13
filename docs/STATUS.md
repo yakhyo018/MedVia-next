@@ -3,8 +3,9 @@
 Where the frontend stands, what comes next, and how we work. A new session reads this first.
 Update it whenever a milestone closes.
 
-_Last updated: 2026-10-13 — **F1 closed: approved by the user, `feature/f1-doctors` merged into
-`develop` and pushed. Next: F2 (booking) — start with the screen list review.**_
+_Last updated: 2026-10-13 — **F1 closed (merged into `develop`). F2 in progress on
+`feature/f2-booking`: booking flow built and checked in the browser, not committed — waiting
+for the user's check.**_
 
 ## The project
 
@@ -49,6 +50,31 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
   other tab turns guest; RU locale; 1440 px, 800 px and 375 px mobile (drawer).
 - Not in F0: Google sign-in (needs `GOOGLE_CLIENT_ID`), clinic signup (F5).
 - Test account made during the check: `f0.feride@medvia.test` (local DB only).
+
+## F2 — booking (2026-10-13, in progress)
+
+- Screen list approved (option (a): My Bookings as its own page until MyPage in F4). Mobile drawn
+  first on the MedVia Mobile canvas ("F2 — booking": Questionnaire, Review & consent, Request
+  sent, My Bookings).
+- Clinic page booking card: 14-day Seoul date strip, free times from `getAvailableSlots`
+  (`useAvailableSlots`; "any available doctor" asks each performing doctor and merges by time),
+  interpreter switch when the clinic has one for the site language, Request booking →
+  `holdSlots` (patients only; guests get the login prompt) → `/booking`.
+- `/booking` (steps 2–4 in one page): questionnaire per specialty (`libs/questionnaire.ts`,
+  question sent in English, answer as written), review + consents (SHARE_DATA and BOOKING_TERMS
+  required, AI_SUMMARY optional), `createBooking` → "Request sent" with `respondDeadline`.
+  The URL carries only ids, start, hold end and interpreter; answers stay in memory. A
+  countdown from `holdExpiresAt` sends the patient back to the clinic page when it ends.
+- `/mypage/bookings`: Upcoming / Past / Cancelled (`?tab=`), cancel a request or a confirmed
+  booking (not within 24 h, as the API rules), "Book again".
+- The clinic side (confirm / decline / complete in a UI) stays in F5 — the user chose to follow
+  the plan (2026-10-13). Until then a clinic answers with `updateBookingStatus` in the API's
+  GraphQL playground (AGENT token).
+- Cut (no API or later milestone): AI summary preview (the API writes it after sending, for the
+  doctor), photos, partner-offers consent, reschedule, visit-day queue, chat (F3), reviews (F4).
+- Checked: hold → questionnaire (required errors) → consents (required error) → booking
+  `#MV-2026-376929` → My Bookings → cancel → Cancelled tab; mobile sheet, /booking fixed actions,
+  My Bookings tabs; `build:check` 57 pages. The test booking was cancelled.
 
 ## F1 — home: the last three bands (2026-10-13, waiting for the user's check)
 
@@ -197,6 +223,16 @@ Demo accounts (backend seed): `feride@`, `yahyo@`, `clinic01@`, `doctor01@`, `ad
 with `SEED_PASSWORD` from `~/Desktop/MedVia/.env`.
 
 ## Open items
+
+- **Before deploy (F9) — richer demo data (the user's request, 2026-10-13).** Today the backend
+  seed is templated: 15 clinics share 8 distinct photos, one description pattern and the same
+  hours (Mon–Sat 09–19); 40 doctors have no photo, 4 bios and the same 3-line career. Before
+  deploy, in the backend repo (`feature/seed-variety`): photos for every clinic and doctor,
+  own descriptions, varied hours, bios and careers; three clinic names and the doctors /
+  patients made realistic. Rules agreed: photos only from licensed sources (Unsplash / Pexels
+  or Google Images filtered to Creative Commons, source recorded) — not arbitrary Google
+  results; names *realistic but fictional* — never a real Seoul clinic or a real doctor (the
+  site shows reviews and ratings for them). Until then the current seed is enough.
 
 - Google sign-in needs `GOOGLE_CLIENT_ID` (backend open item).
 - Before deploy (F9): copy the Unsplash photos into `public/img/` and re-check `yarn audit` for
