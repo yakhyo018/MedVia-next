@@ -418,5 +418,6 @@
   "{{clinicName}} didn't answer in time for {{when}}. The time was released.": "{{clinicName}}에서 {{when}} 요청에 제때 답하지 않았습니다. 시간이 해제되었습니다.",
   "{{treatmentName}} at {{clinicName}} · {{when}}": "{{clinicName}} {{treatmentName}} · {{when}}",
   "{{treatmentName}} on {{when}} was cancelled.": "{{when}} {{treatmentName}} 예약이 취소되었습니다.",
-  "Notifications, {{count}} unread_other": "알림, 읽지 않음 {{count}}개"
+  "Notifications, {{count}} unread_other": "알림, 읽지 않음 {{count}}개",
+  "I write in": "작성 언어"
 }

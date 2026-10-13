@@ -422,5 +422,6 @@
   "{{treatmentName}} at {{clinicName}} · {{when}}": "{{clinicName}} клиникасында {{treatmentName}} · {{when}}",
   "{{treatmentName}} on {{when}} was cancelled.": "{{when}} күнгі «{{treatmentName}}» болдырылмады.",
   "Notifications, {{count}} unread_one": "Хабарландырулар, {{count}} оқылмаған",
-  "Notifications, {{count}} unread_other": "Хабарландырулар, {{count}} оқылмаған"
+  "Notifications, {{count}} unread_other": "Хабарландырулар, {{count}} оқылмаған",
+  "I write in": "Мен жазатын тіл"
 }

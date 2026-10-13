@@ -422,5 +422,6 @@
   "{{treatmentName}} at {{clinicName}} · {{when}}": "{{treatmentName}} at {{clinicName}} · {{when}}",
   "{{treatmentName}} on {{when}} was cancelled.": "{{treatmentName}} on {{when}} was cancelled.",
   "Notifications, {{count}} unread_one": "Notifications, {{count}} unread",
-  "Notifications, {{count}} unread_other": "Notifications, {{count}} unread"
+  "Notifications, {{count}} unread_other": "Notifications, {{count}} unread",
+  "I write in": "I write in"
 }
