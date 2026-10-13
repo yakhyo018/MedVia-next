@@ -206,3 +206,81 @@ with a CSS slide width on a phone (one card and the edge of the next), `breakpoi
 5. **How do plural forms work across languages?** `Intl.PluralRules(locale).select(n)` returns
    a category (`one`, `few`, `many`, `other`); i18next appends it to the key. English has two
    categories, Russian four, Korean one.
+
+## F2 — Booking (2026-10-13)
+
+Clinic page date and time → hold → `/booking` (questionnaire, review and consent, sent) →
+`/mypage/bookings`. The clinic's answer (confirm / decline) is F5.
+
+### 1. Hold first, ask questions second
+
+**Problem.** Filling a questionnaire takes minutes; another patient could take the same time
+meanwhile, and the first patient would learn it only on "Send".
+
+**Alternatives.** Book at once and ask questions later (the clinic gets an empty request) ·
+check availability only on send (lost work) · **hold the slots for 10 minutes, then ask**
+(chosen — the backend's design).
+
+**Code.** "Request booking" calls `holdSlots`; the API reserves the treatment's consecutive
+slots in one transaction (a racing patient gets `SLOT_NOT_AVAILABLE`) and returns
+`holdExpiresAt`. `/booking` shows a countdown from that time (`BookingSummary`); at zero, or when
+`createBooking` answers `HOLD_EXPIRED` / `SLOT_NOT_AVAILABLE` / `SLOT_TOO_SOON`, the patient is
+sent back to the clinic page to pick again. The countdown runs on the server's timestamp, so
+the client never decides alone that a hold is still valid.
+
+### 2. "Any available doctor" without a backend change
+
+`getAvailableSlots` answers for one doctor. `useAvailableSlots` asks every doctor who performs the
+treatment (`Promise.all`), merges the answers by start time and remembers which doctor has each
+time. The chosen time decides the doctor ("With Dr. …"), and the hold is made for that doctor.
+A stale answer is ignored with a `cancelled` flag in the effect's cleanup — a fast date change
+must not show the previous day's times.
+
+### 3. Times and days are Seoul's
+
+The API stores UTC and takes a Seoul calendar day (`date: "2026-10-14"`). The date strip comes
+from `seoulDays()` and every time is printed with `seoulClock()` — both `Intl.DateTimeFormat` with
+`timeZone: 'Asia/Seoul'`. A patient in Tashkent sees 12:00 for a 12:00 Seoul visit, which is the
+time on the clinic's door.
+
+### 4. Medical answers never touch the URL
+
+The URL of `/booking` carries only what was held: ids, start, hold end, interpreter. The answers
+live in React state. URLs end up in history, logs, `Referer` headers and screenshots;
+`localStorage` is readable by any injected script. The cost: a reload empties the form — the
+hold is still there, the patient types again.
+
+### 5. Consents are explicit and versioned
+
+Three checkboxes, all unticked: `SHARE_DATA` and `BOOKING_TERMS` required, `AI_SUMMARY` optional.
+The client sends all three with `agreed: true|false`; the API stores each with its version
+(`share-v1`, `terms-v1`) and the time, and writes the Korean AI summary only when that consent
+is given — after the request, for the doctor. That is why the mockup's "AI summary preview" was
+cut: there is nothing to preview before sending.
+
+### 6. One mutation, a table of allowed moves
+
+`updateBookingStatus` serves the patient, the clinic and the admin. The backend keeps a
+transition table (PENDING → CONFIRMED / DECLINED by the clinic, → CANCELLED by the patient; a
+confirmed visit cancelled by the patient only 24 h ahead; a reason required for a decline). The
+client mirrors only what it must show: My Bookings offers "Cancel" when the move is allowed and
+explains when it is not; the server stays the judge.
+
+### Interview questions
+
+1. **Two patients press "Request booking" on the same slot at once. What happens?** Both holds
+   run in transactions that update the same slot documents; MongoDB commits one and gives the
+   other a write conflict, the retry no longer matches "free", and that patient gets
+   `SLOT_NOT_AVAILABLE` and picks another time.
+2. **Why does the countdown use `holdExpiresAt` from the API instead of "10 minutes from now"?**
+   The server owns the hold; the client clock can be wrong and the request took time. Showing
+   the server's deadline keeps both sides in agreement.
+3. **How do you merge results from several requests safely in a React effect?** Start them with
+   `Promise.all`, and in the cleanup set a `cancelled` flag so an answer for old inputs is
+   dropped instead of overwriting newer state.
+4. **Why not keep the questionnaire in localStorage so a reload keeps it?** It is health data.
+   Any XSS can read localStorage and it outlives the session on a shared computer; losing a form
+   on reload is the cheaper risk.
+5. **Where are booking rules enforced — client or server?** The server: the transition table,
+   the 24-hour rule and the required reason. The client only hides buttons that would fail and
+   shows the server's message when something still does.
