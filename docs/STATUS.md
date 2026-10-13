@@ -3,8 +3,8 @@
 Where the frontend stands, what comes next, and how we work. A new session reads this first.
 Update it whenever a milestone closes.
 
-_Last updated: 2026-10-13 — **F2 closed: approved by the user, `feature/f2-booking` merged into
-`develop` and pushed. Next: F3 (chat + notifications) — start with the screen list review.**_
+_Last updated: 2026-10-13 — **F3 closed: approved by the user, `feature/f3-chat` merged into
+`develop` and pushed. Next: F4 (MyPage) — start with the screen list review.**_
 
 ## The project
 
@@ -20,8 +20,8 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 | F0 | Skeleton — Next + MUI theme, 5 languages, Apollo + refresh, layouts, login/signup, alerts | done 2026-10-12 |
 | F1 | Public pages — home bands, clinics list, doctors list, doctor page, clinic page | done 2026-10-13 |
 | F2 | Booking — slots → hold → questionnaire + consents → My Bookings | done 2026-10-13 |
-| **F3** | **Chat + notifications — socket `/live`, bell, translations** | **next** |
-| F4 | MyPage — reviews, follows, settings, "who saw my medical data" | |
+| F3 | Chat + notifications — socket `/live`, bell, translations | done 2026-10-13 |
+| **F4** | **MyPage — reviews, follows, settings, "who saw my medical data"** | **next** |
 | F5 | Clinic dashboard — schedule, requests, treatments, doctors | |
 | F6 | Community + CS — posts, FAQ, inquiries | |
 | F7 | Admin — dashboard (one GraphQL request), moderation, audit | |
@@ -49,6 +49,32 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
   other tab turns guest; RU locale; 1440 px, 800 px and 375 px mobile (drawer).
 - Not in F0: Google sign-in (needs `GOOGLE_CLIENT_ID`), clinic signup (F5).
 - Test account made during the check: `f0.feride@medvia.test` (local DB only).
+
+## F3 — chat and notifications (2026-10-13, done)
+
+- Mobile drawn first ("F3 — chat and notifications": chat list, chat room, notifications).
+- `socket.io-client@4` (planned for F3; the API is Socket.IO): one socket per signed-in member
+  (`useLiveSocket`, mounted in `_app`), handshake `auth: { token }`; when the server cuts it at
+  token expiry ("io server disconnect") or refuses the handshake, refresh and reconnect.
+  Events go out on `liveEvents`; the hook itself bumps the unread count, evicts the
+  notification lists and refetches the room list.
+- Header bell (patients and every signed-in member): unread badge, desktop menu with the latest
+  5 and "Mark all as read", phone → `/notifications`. `/notifications`: All / Bookings / Chat,
+  Today / Earlier (Seoul day), texts rendered on the client from type + params
+  (`libs/notificationText.ts`) in the reader's language.
+- `/mypage/chat?room=`: rooms with search and unread counts, the room with cursor history,
+  socket messages and translations merged by `_id`, "Sent in Korean", "Translated from …
+  · Show original", "Translating…", neutral system lines; on a phone list and room are two
+  screens, the room full-screen. Translation needs the patient's AI consent — a banner turns it
+  on (`setAiConsent`). "Chat with clinic" (clinic page card and bar, Request sent, My Bookings)
+  opens the room (`openRoom`, patients only).
+- Also on this branch: "My Page" only for patients (others get their area in F5 / F7),
+  the signup phone sample is Korean (+82), logout always lands on the home page (every tab)
+  without first re-rendering the page as a guest (no "Please log in" flash — `leaveForHome`).
+- Checked: chat opened from the clinic page, AI consent on, a message sent and its Korean
+  translation arriving over the socket, room list updated live, empty notifications page and
+  bell menu, mobile chat. Not checked with data: notifications (the test patient has none —
+  they come when a clinic confirms or replies, F5 / playground).
 
 ## F2 — booking (2026-10-13, done)
 
@@ -232,6 +258,9 @@ with `SEED_PASSWORD` from `~/Desktop/MedVia/.env`.
   or Google Images filtered to Creative Commons, source recorded) — not arbitrary Google
   results; names *realistic but fictional* — never a real Seoul clinic or a real doctor (the
   site shows reviews and ratings for them). Until then the current seed is enough.
+  Images: the user prefers AI-generated ones via Hugging Face (e.g. FLUX.1-schnell, Apache 2.0) —
+  no real faces, no licence questions; needs the user's `HF_TOKEN` in the backend `.env`.
+  Clinic signup (the mockup's SignupClinic form) is planned for F5, with the Clinic Dashboard.
 
 - Google sign-in needs `GOOGLE_CLIENT_ID` (backend open item).
 - Before deploy (F9): copy the Unsplash photos into `public/img/` and re-check `yarn audit` for
