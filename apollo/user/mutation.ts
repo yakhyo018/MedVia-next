@@ -13,6 +13,7 @@ export const SIGN_UP = gql`
 			memberAuthType
 			memberEmail
 			memberMustChangePassword
+			memberAiConsentAt
 			memberFullName
 			memberPhone
 			memberImage
@@ -34,6 +35,7 @@ export const LOGIN = gql`
 			memberAuthType
 			memberEmail
 			memberMustChangePassword
+			memberAiConsentAt
 			memberFullName
 			memberPhone
 			memberImage
@@ -56,6 +58,7 @@ export const REFRESH_TOKEN = gql`
 			memberAuthType
 			memberEmail
 			memberMustChangePassword
+			memberAiConsentAt
 			memberFullName
 			memberPhone
 			memberImage
@@ -147,6 +150,74 @@ export const UPDATE_BOOKING_STATUS = gql`
 		updateBookingStatus(input: $input) {
 			_id
 			bookingStatus
+		}
+	}
+`;
+
+/**************************
+ *          CHAT          *
+ *************************/
+
+/** "Chat with clinic": the patient's room with this clinic, created on first use. */
+export const OPEN_ROOM = gql`
+	mutation OpenRoom($clinicId: String!) {
+		openRoom(clinicId: $clinicId) {
+			_id
+			clinicId
+			clinicName
+			unread
+			roomLastAt
+		}
+	}
+`;
+
+export const SEND_MESSAGE = gql`
+	mutation SendMessage($input: MessageSendInput!) {
+		sendMessage(input: $input) {
+			_id
+			messageType
+			senderType
+			messageText
+			messageLang
+			messageTranslations {
+				lang
+				text
+			}
+			messageTranslationStatus
+			displayText
+			roomId
+			senderId
+			createdAt
+		}
+	}
+`;
+
+export const MARK_ROOM_READ = gql`
+	mutation MarkRoomRead($roomId: String!) {
+		markRoomRead(roomId: $roomId) {
+			_id
+			unread
+		}
+	}
+`;
+
+/**************************
+ *      NOTIFICATION      *
+ *************************/
+
+/** No ids = mark all read. Returns how many changed. */
+export const MARK_NOTIFICATIONS_READ = gql`
+	mutation MarkNotificationsRead($input: NotificationsReadInput!) {
+		markNotificationsRead(input: $input)
+	}
+`;
+
+/** Allow AI processing — the chat's automatic translation needs it. */
+export const SET_AI_CONSENT = gql`
+	mutation SetAiConsent($agreed: Boolean!) {
+		setAiConsent(agreed: $agreed) {
+			_id
+			memberAiConsentAt
 		}
 	}
 `;

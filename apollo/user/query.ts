@@ -376,3 +376,90 @@ export const COUNT_BOOKINGS = gql`
 		}
 	}
 `;
+
+/**************************
+ *          CHAT          *
+ *************************/
+
+const CHAT_ROOM_FIELDS = `
+	_id
+	roomLastAt
+	unread
+	lastText
+	memberId
+	clinicId
+	clinicName
+	clinicLogo
+	patientName
+	patientLang
+`;
+
+export const CHAT_MESSAGE_FIELDS = `
+	_id
+	messageType
+	senderType
+	messageText
+	messageLang
+	messageTranslations {
+		lang
+		text
+	}
+	messageTranslationStatus
+	displayText
+	roomId
+	senderId
+	createdAt
+`;
+
+/** "Consultation Chat": the patient's rooms (a clinic sees its own — scoped by the token). */
+export const GET_MY_ROOMS = gql`
+	query GetMyRooms {
+		getMyRooms {
+			${CHAT_ROOM_FIELDS}
+		}
+	}
+`;
+
+/** One page of a room's history, newest first; `before` is the previous page's nextCursor. */
+export const GET_ROOM_MESSAGES = gql`
+	query GetRoomMessages($input: RoomMessagesInquiry!) {
+		getRoomMessages(input: $input) {
+			list {
+				${CHAT_MESSAGE_FIELDS}
+			}
+			nextCursor
+		}
+	}
+`;
+
+/**************************
+ *      NOTIFICATION      *
+ *************************/
+
+export const GET_MY_NOTIFICATIONS = gql`
+	query GetMyNotifications($input: NotificationsInquiry!) {
+		getMyNotifications(input: $input) {
+			list {
+				_id
+				notificationType
+				notificationStatus
+				notificationGroup
+				notificationTitle
+				notificationDesc
+				notificationParamsJson
+				notificationCount
+				notificationRefId
+				createdAt
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+export const GET_UNREAD_NOTIFICATION_COUNT = gql`
+	query GetUnreadNotificationCount {
+		getUnreadNotificationCount
+	}
+`;

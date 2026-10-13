@@ -35,6 +35,7 @@ interface BookingCardProps {
 	onTreatmentChange: (treatmentId: string) => void;
 	onDoctorChange: (doctorId: string) => void;
 	onRequest: (request: BookingRequest) => void;
+	onChat: () => void;
 }
 
 /**
@@ -54,6 +55,7 @@ const BookingCard = (props: BookingCardProps) => {
 		onTreatmentChange,
 		onDoctorChange,
 		onRequest,
+		onChat,
 	} = props;
 	const router = useRouter();
 	const { t } = useTranslation('common');
@@ -248,7 +250,7 @@ const BookingCard = (props: BookingCardProps) => {
 				{t('Request booking')}
 			</Button>
 			<p className={'note'}>{t('We hold the time for 10 minutes while you answer a few questions.')}</p>
-			<Button variant={'outlined'} fullWidth disabled endIcon={<ChatBubbleOutlineRoundedIcon />}>
+			<Button variant={'outlined'} fullWidth endIcon={<ChatBubbleOutlineRoundedIcon />} onClick={onChat}>
 				{t('Chat with clinic')}
 			</Button>
 			<p className={'note'}>{t('Messages are translated automatically')}</p>

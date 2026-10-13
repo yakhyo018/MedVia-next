@@ -4,6 +4,7 @@ import { useTranslation } from 'next-i18next';
 import { Box, Button } from '@mui/material';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import { Booking } from '../../types/booking/booking';
+import useOpenChat from '../../hooks/useOpenChat';
 import { seoulClock, seoulTime } from '../../utils';
 
 interface SentStepProps {
@@ -17,6 +18,7 @@ const SentStep = (props: SentStepProps) => {
 	const { booking, clinicName, clinicId } = props;
 	const router = useRouter();
 	const { t } = useTranslation('common');
+	const { openChat, opening } = useOpenChat();
 	const when = (value: Date) => `${seoulTime(value, router.locale, false)} · ${seoulClock(value)}`;
 	const steps = [
 		{ title: t('Request sent'), text: when(booking.createdAt), state: 'done' },
@@ -66,7 +68,10 @@ const SentStep = (props: SentStepProps) => {
 				<Button variant={'contained'} LinkComponent={Link} href={'/mypage/bookings'}>
 					{t('View My Bookings')}
 				</Button>
-				<Button variant={'outlined'} LinkComponent={Link} href={`/clinics/detail?id=${clinicId}`}>
+				<Button variant={'outlined'} disabled={opening} onClick={() => openChat(clinicId)}>
+					{t('Open chat')}
+				</Button>
+				<Button variant={'text'} LinkComponent={Link} href={`/clinics/detail?id=${clinicId}`}>
 					{t('Back to the clinic')}
 				</Button>
 			</div>

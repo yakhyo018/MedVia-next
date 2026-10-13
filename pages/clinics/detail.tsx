@@ -35,6 +35,7 @@ import ReviewCard from '../../libs/components/review/ReviewCard';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import useLikeTarget from '../../libs/hooks/useLikeTarget';
 import useFollow from '../../libs/hooks/useFollow';
+import useOpenChat from '../../libs/hooks/useOpenChat';
 import {
 	GET_CLINIC,
 	GET_CLINIC_TREATMENTS,
@@ -78,6 +79,7 @@ const ClinicDetail: NextPage = () => {
 	const { t } = useTranslation('common');
 	const likeHandler = useLikeTarget();
 	const followHandler = useFollow();
+	const { openChat } = useOpenChat();
 	const [reviewLimit, setReviewLimit] = useState<number>(REVIEWS_STEP);
 	const [pickedTreatmentId, setPickedTreatmentId] = useState<string>('');
 	const [pickedDoctorId, setPickedDoctorId] = useState<string | null>(null);
@@ -283,6 +285,7 @@ const ClinicDetail: NextPage = () => {
 			onDoctorChange={setPickedDoctorId}
 			requesting={requesting}
 			onRequest={requestBookingHandler}
+			onChat={() => openChat(clinic._id)}
 		/>
 	);
 
@@ -548,7 +551,7 @@ const ClinicDetail: NextPage = () => {
 						<Button variant={'contained'} endIcon={<ArrowForwardRoundedIcon />} onClick={() => setSheetOpen(true)}>
 							{t('Book')}
 						</Button>
-						<IconButton className={'chat'} aria-label={t('Chat with clinic')} disabled>
+						<IconButton className={'chat'} aria-label={t('Chat with clinic')} onClick={() => openChat(clinic._id)}>
 							<ChatBubbleOutlineRoundedIcon />
 						</IconButton>
 					</div>

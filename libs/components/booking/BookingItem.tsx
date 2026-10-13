@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { Box, Button } from '@mui/material';
 import StatusChip from '../common/StatusChip';
+import useOpenChat from '../../hooks/useOpenChat';
 import { Booking } from '../../types/booking/booking';
 import { BookingStatus } from '../../enums/booking.enum';
 import { LANGUAGES, REACT_APP_API_URL } from '../../config';
@@ -21,6 +22,7 @@ const BookingItem = (props: BookingItemProps) => {
 	const { booking, cancelling, onCancel } = props;
 	const router = useRouter();
 	const { t } = useTranslation('common');
+	const { openChat, opening } = useOpenChat();
 	const clinic = booking.clinicData;
 	const photo = clinic?.clinicImages?.[0];
 	const pending = booking.bookingStatus === BookingStatus.PENDING;
@@ -66,6 +68,11 @@ const BookingItem = (props: BookingItemProps) => {
 				<Button variant={'outlined'} size={'small'} LinkComponent={Link} href={clinicHref}>
 					{pending || confirmed ? t('Clinic page') : t('Book again')}
 				</Button>
+				{(pending || confirmed) && (
+					<Button variant={'outlined'} size={'small'} disabled={opening} onClick={() => openChat(booking.clinicId)}>
+						{t('Chat with clinic')}
+					</Button>
+				)}
 				{(pending || (confirmed && !lateToCancel)) && (
 					<Button
 						variant={'outlined'}
