@@ -1,25 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
-import { Box, Button, InputAdornment, Skeleton, Stack, TextField } from '@mui/material';
+import { Box, Button, InputAdornment, Skeleton, TextField } from '@mui/material';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import TranslateRoundedIcon from '@mui/icons-material/TranslateRounded';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import EmptyState from '../../libs/components/common/EmptyState';
+import MyPageFrame from '../../libs/components/mypage/MyPageFrame';
 import ChatConversation from '../../libs/components/chat/ChatConversation';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import { GET_MY_ROOMS } from '../../apollo/user/query';
 import { SET_AI_CONSENT } from '../../apollo/user/mutation';
-import { sessionReadyVar, userVar } from '../../apollo/store';
+import { userVar } from '../../apollo/store';
 import { ChatRoom } from '../../libs/types/chat/chat';
 import { Language } from '../../libs/enums/common.enum';
 import { MemberType } from '../../libs/enums/member.enum';
-import { ClientMessages, localeToLanguage } from '../../libs/config';
-import { sweetLoginConfirmAlert, sweetMixinErrorAlert } from '../../libs/sweetAlert';
+import { localeToLanguage } from '../../libs/config';
+import { sweetMixinErrorAlert } from '../../libs/sweetAlert';
 import { initials, seoulClock, seoulDateKey, seoulTime } from '../../libs/utils';
 import { T } from '../../libs/types/common';
 
@@ -32,13 +33,13 @@ export const getStaticProps = async ({ locale }: T) => ({
 /**
  * "Consultation Chat" (F3): the patient's rooms with clinics, one open at a time (`?room=`).
  * On a phone the list and the room are two screens. The clinic's side of the chat is F5.
+ * Since F4 it sits in the MyPage frame, which also asks a guest to log in.
  */
 const ChatPage: NextPage = () => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const { t } = useTranslation('common');
 	const user = useReactiveVar(userVar);
-	const sessionReady = useReactiveVar(sessionReadyVar);
 	const [search, setSearch] = useState<string>('');
 	const isPatient = user.memberType === MemberType.USER;
 	const roomId = typeof router.query.room === 'string' ? router.query.room : '';
@@ -54,15 +55,6 @@ const ChatPage: NextPage = () => {
 	const rooms: ChatRoom[] = data?.getMyRooms ?? [];
 	const room = rooms.find((item) => item._id === roomId);
 	const shown = rooms.filter((item) => (item.clinicName ?? '').toLowerCase().includes(search.trim().toLowerCase()));
-
-	/** LIFECYCLES **/
-	useEffect(() => {
-		if (!sessionReady || user._id) return;
-		sweetLoginConfirmAlert(ClientMessages.LOGIN_REQUIRED).then((login) =>
-			router.replace(login ? { pathname: '/account/join', query: { referrer: router.asPath } } : '/'),
-		);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [sessionReady, user._id]);
 
 	/** HANDLERS **/
 	const openRoomHandler = async (id: string) => {
@@ -142,9 +134,7 @@ const ChatPage: NextPage = () => {
 	);
 
 	let body: React.ReactNode;
-	if (user._id && !isPatient) {
-		body = <EmptyState title={t('The clinic chat opens with the Clinic Dashboard.')} text={''} />;
-	} else if (error) {
+	if (error) {
 		body = (
 			<EmptyState
 				title={t('Something went wrong')}
@@ -186,18 +176,15 @@ const ChatPage: NextPage = () => {
 	}
 
 	return (
-		<Stack className={`chat-page ${mobile && room ? 'in-room' : ''}`}>
-			<Stack className={'container'}>
-				{!(mobile && room) && (
-					<div className={'page-head'}>
-						<h1>{t('Consultation Chat')}</h1>
-						<p>{t('Messages are translated between your language and Korean')}</p>
-					</div>
-				)}
-				{consentBanner}
-				{body}
-			</Stack>
-		</Stack>
+		<MyPageFrame
+			title={t('Consultation Chat')}
+			text={t('Messages are translated between your language and Korean')}
+			className={`chat-page ${mobile && room ? 'in-room' : ''}`}
+			bare={mobile && !!room}
+		>
+			{consentBanner}
+			{body}
+		</MyPageFrame>
 	);
 };
 

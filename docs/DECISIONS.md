@@ -47,3 +47,16 @@ user's check, the merge. Details and the clinic-page plan: STATUS.md → "Next s
 | Seed clinics use the landing sample's photos; seed doctors get a career with generic places. | Real-looking cards and doctor pages; fictional doctors are never tied to real institutions. | Four photos repeat across 15 clinics. | Unsplash per clinic; no career section. |
 | Landing "Recommended clinics / doctors" reuse `getClinics` / `getDoctors` with `limit: 4` and the batch score (nestar-next's TopProperties pattern); titled "Recommended", not "Highly rated". | No new API; the score already weighs a rating by its reviews. The score also counts visits and followers, so "Highly rated" would promise something it does not sort by. | — | Sort by raw rating (one review wins); a new "top rated" query. |
 
+
+## F4 — MyPage (2026-10-14)
+
+| Decision | Why | Risks | Alternatives |
+| --- | --- | --- | --- |
+| One page per section (`/mypage/favorites`, `/mypage/reviews`, …) inside a shared `MyPageFrame` (band + side menu on a computer, back link on a phone). | My Bookings and Chat were already their own routes; each section has its own title, URL and code-split bundle. The frame also holds the login guard once. | Every section re-mounts the frame on navigation. | nestar-next's single `/mypage?category=` page switching components. |
+| "Medical data & consent" shows only the AI consent and the access log — no medical profile form. | The API keeps no medical profile: answers live in each booking's questionnaire; a form that saves nowhere would lie. | The mockup's blood type / allergies blocks are cut. | Add a `medicalProfile` to the backend first (user chose (a), 2026-10-14). |
+| Review tabs (Published / In review) filter the loaded list on the client. | `getMyReviews` has no status filter; a patient writes a handful. | Beyond 50 reviews the tabs would miss some. | A status filter in the API. |
+| "Show more" lists stop at 50 (`LIST_MAX`); the access log pages with `Pagination`. | Every list inquiry has `@Max(50)`; growing `limit` past it fails validation. An audit log must stay fully reachable. | Recently visited / favorites show the latest 50 only. | `fetchMore` with page merging in the cache. |
+| Favorites queries leave out `meLiked`; unliked cards hide by a local id list, then refetch. | The API returns `meLiked: null` there; writing it would overwrite `true` on the same Clinic / Doctor in the shared cache. | A failed unlike leaves the card hidden until reload. | Ask the API to fill `meLiked` on favorites. |
+| Images upload over REST with `fetch` + `FormData` (`useUpload`), refresh-and-retry once on 401. | The API's upload is REST; no `apollo-upload-client` (banned). | Two auth paths to keep in step. | GraphQL multipart upload. |
+| `changePassword` lives in `libs/auth` and swaps the access token. | The API revokes every access token, this one too, and returns a fresh one; only the auth module may hold the token. | — | Call the mutation from the page and refresh afterwards (one failed request first). |
+| A profile with an emptied phone keeps the old phone. | The API validates `memberPhone` against the pattern, so `''` is refused. | The patient cannot remove a phone. | An explicit "remove phone" in the API. |

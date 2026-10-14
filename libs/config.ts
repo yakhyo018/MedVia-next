@@ -13,6 +13,13 @@ export const PASSWORD_MAX = 72;
 export const FULL_NAME_MIN = 2;
 export const FULL_NAME_MAX = 60;
 export const PHONE_PATTERN = /^\+?[0-9][0-9 ()-]{5,19}$/;
+/** The API's largest page (`@Max(50)` on every list inquiry): a "Show more" list stops there. */
+export const LIST_MAX = 50;
+
+/** The API takes a review up to 30 days after the visit was completed, once per booking. */
+export const REVIEW_WINDOW_DAYS = 30;
+export const REVIEW_MIN = 10;
+export const REVIEW_MAX = 2000;
 export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /** Server texts: the same strings as the backend's `Messages` enum (only those the client checks). */
@@ -43,6 +50,10 @@ export enum ClientMessages {
 	PHONE_INVALID = 'Please enter a valid phone number!',
 	TERMS_REQUIRED = 'Please accept the Terms of Use and Privacy Policy!',
 	PATIENTS_ONLY = 'Only patient accounts can do this!',
+	IMAGE_TYPE = 'Please choose a JPG, PNG or WEBP image!',
+	IMAGE_TOO_BIG = 'The image must be 5 MB or smaller!',
+	UPLOAD_FAILED = 'Upload failed, please try again!',
+	PASSWORDS_DIFFERENT = 'The two passwords are different!',
 }
 
 /** The GraphQL error code the API returns for a missing, expired or revoked access token. */

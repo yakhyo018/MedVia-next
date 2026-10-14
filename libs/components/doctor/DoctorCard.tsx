@@ -11,10 +11,12 @@ import { formatCount, imageUrl, initials } from '../../utils';
 
 interface DoctorCardProps {
 	doctor: Doctor;
+	/** When given, the likes counter is a button (My Favorites: tap the heart to remove). */
+	onLike?: (doctorId: string) => void;
 }
 
 const DoctorCard = (props: DoctorCardProps) => {
-	const { doctor } = props;
+	const { doctor, onLike } = props;
 	const { t } = useTranslation('common');
 	const href = { pathname: '/doctors/detail', query: { id: doctor._id } };
 	const hasRating = Boolean(doctor.doctorReviews);
@@ -52,10 +54,23 @@ const DoctorCard = (props: DoctorCardProps) => {
 						t('New')
 					)}
 				</span>
-				<span title={t('Likes')}>
-					{doctor.meLiked ? <FavoriteRoundedIcon className={'liked'} /> : <FavoriteBorderRoundedIcon />}
-					{formatCount(doctor.doctorLikes)}
-				</span>
+				{onLike ? (
+					<button
+						type={'button'}
+						className={'like-stat'}
+						title={t('Like')}
+						aria-pressed={Boolean(doctor.meLiked)}
+						onClick={() => onLike(doctor._id)}
+					>
+						{doctor.meLiked ? <FavoriteRoundedIcon className={'liked'} /> : <FavoriteBorderRoundedIcon />}
+						{formatCount(doctor.doctorLikes)}
+					</button>
+				) : (
+					<span title={t('Likes')}>
+						{doctor.meLiked ? <FavoriteRoundedIcon className={'liked'} /> : <FavoriteBorderRoundedIcon />}
+						{formatCount(doctor.doctorLikes)}
+					</span>
+				)}
 				<span title={t('Views')}>
 					<VisibilityOutlinedIcon />
 					{formatCount(doctor.doctorViews)}

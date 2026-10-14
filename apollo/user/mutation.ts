@@ -221,3 +221,76 @@ export const SET_AI_CONSENT = gql`
 		}
 	}
 `;
+
+/**************************
+ *         MYPAGE         *
+ *************************/
+
+export const UPDATE_MEMBER = gql`
+	mutation UpdateMember($input: MemberUpdate!) {
+		updateMember(input: $input) {
+			_id
+			memberFullName
+			memberPhone
+			memberImage
+			memberCountry
+			memberLang
+			memberNotify {
+				bookingUpdates
+				visitReminders
+				chatMessages
+			}
+			updatedAt
+		}
+	}
+`;
+
+/** Revokes every access token and the other devices' sessions; returns a fresh access token. */
+export const CHANGE_PASSWORD = gql`
+	mutation ChangePassword($input: ChangePasswordInput!) {
+		changePassword(input: $input) {
+			_id
+			memberMustChangePassword
+			accessToken
+		}
+	}
+`;
+
+export const CREATE_REVIEW = gql`
+	mutation CreateReview($input: ReviewCreateInput!) {
+		createReview(input: $input) {
+			_id
+			reviewStatus
+		}
+	}
+`;
+
+export const UPDATE_REVIEW = gql`
+	mutation UpdateReview($input: ReviewUpdate!) {
+		updateReview(input: $input) {
+			_id
+			reviewStatus
+			reviewRating
+			reviewTags
+			reviewContent
+			reviewLang
+			reviewNote
+			submittedAt
+		}
+	}
+`;
+
+export const REMOVE_REVIEW = gql`
+	mutation RemoveReview($reviewId: String!) {
+		removeReview(reviewId: $reviewId) {
+			_id
+			reviewStatus
+		}
+	}
+`;
+
+export const CLEAR_RECENTLY_VISITED = gql`
+	mutation ClearRecentlyVisited {
+		clearRecentlyVisited
+	}
+`;

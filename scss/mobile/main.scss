@@ -761,20 +761,6 @@
 	&:has(.booking-actions) #footer {
 		padding-bottom: 84px;
 	}
-	.my-bookings-page {
-		padding: 20px 0 48px;
-		.page-head h1 {
-			font-size: 26px;
-		}
-		.booking-tabs {
-			align-self: stretch;
-			display: grid;
-			grid-template-columns: repeat(3, minmax(0, 1fr));
-			button {
-				padding: 0 6px;
-			}
-		}
-	}
 	.booking-item {
 		flex-wrap: wrap;
 		padding: 16px;
@@ -793,13 +779,193 @@
 		}
 	}
 
+	/* MyPage (F4): no band, no side menu — the overview lists the sections */
+	.my-page {
+		> .container.my-page-body {
+			padding-top: 16px;
+			padding-bottom: 48px;
+		}
+		.my-page-main {
+			gap: 14px;
+		}
+		.page-head {
+			flex-wrap: wrap;
+			h1 {
+				font-size: 26px;
+			}
+			p {
+				font-size: 13px;
+			}
+		}
+		.booking-tabs {
+			align-self: stretch;
+			display: grid;
+			grid-auto-columns: minmax(0, 1fr);
+			grid-auto-flow: column;
+			button {
+				padding: 0 4px;
+				font-size: 13px;
+			}
+		}
+		.card {
+			padding: 16px;
+		}
+		.form-actions {
+			position: sticky;
+			bottom: 0;
+			z-index: 5;
+			margin: 0 -16px -48px;
+			padding: 12px 16px;
+			background: $surface;
+			border-top: 1px solid $border;
+			.MuiButton-root {
+				flex: 1;
+			}
+		}
+	}
+	.my-menu.list {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		section {
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
+		h2 {
+			padding-left: 4px;
+			font-size: 12px;
+			font-weight: 700;
+			letter-spacing: 0.5px;
+			text-transform: uppercase;
+			color: $text-muted;
+		}
+		.group {
+			border-radius: $radius-card;
+			border: 1px solid $border;
+			background: $surface;
+			overflow: hidden;
+		}
+		.my-menu-item {
+			width: 100%;
+			min-height: 56px;
+			padding: 0 14px;
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			border: 0;
+			background: $surface;
+			font-family: $font;
+			font-size: 15px;
+			font-weight: 600;
+			color: $text;
+			text-align: left;
+			&:not(:last-child) {
+				border-bottom: 1px solid $border;
+			}
+			.icon {
+				width: 36px;
+				height: 36px;
+				flex-shrink: 0;
+				border-radius: 10px;
+				background: $primary-tint;
+				color: $primary;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				svg {
+					font-size: 19px;
+				}
+			}
+			.label {
+				flex: 1;
+			}
+			.badge {
+				padding: 2px 8px;
+				border-radius: $radius-pill;
+				background: $primary-tint;
+				color: $primary;
+				font-size: 12px;
+				font-weight: 700;
+			}
+			.chevron {
+				color: $text-muted;
+			}
+			&.logout {
+				color: $danger;
+				.icon {
+					background: $danger-bg;
+					color: $danger;
+				}
+			}
+		}
+	}
+	.my-row {
+		padding: 12px 14px;
+	}
+	.next-visit {
+		flex-direction: column !important;
+		align-items: stretch;
+		.main {
+			align-items: flex-start;
+		}
+		.date {
+			width: 56px;
+			height: 60px;
+		}
+		.actions {
+			flex-direction: row;
+			.MuiButton-root {
+				flex: 1;
+			}
+		}
+	}
+	.my-overview .no-visit {
+		flex-direction: column;
+		align-items: stretch;
+	}
+	.review-prompt {
+		flex-wrap: wrap;
+		padding: 16px;
+		align-items: flex-start;
+		.MuiButton-root {
+			width: 100%;
+		}
+	}
+	.my-review {
+		padding: 16px;
+		.actions .MuiButton-root {
+			flex: 1;
+		}
+	}
+	.write-review-form {
+		gap: 14px;
+		.visit .head {
+			align-items: flex-start;
+		}
+		.rating button svg {
+			font-size: 32px;
+		}
+	}
+	.profile-form .fields {
+		grid-template-columns: 1fr;
+	}
+	.profile-form .security-row {
+		flex-wrap: wrap;
+	}
+	.following-btn {
+		min-width: 0;
+	}
+
 	/* Chat and notifications (F3) */
-	/* An open chat room is a full screen: no footer under the composer */
+	/* An open chat room is a full screen: no footer under the composer, no frame padding */
+	.my-page > .container.my-page-body:has(.chat-page.in-room) {
+		padding: 0;
+	}
 	&:has(.chat-page.in-room) #footer {
 		display: none;
 	}
-	.notifications-page,
-	.chat-page {
+	.notifications-page {
 		padding: 20px 0 32px;
 		.page-head h1 {
 			font-size: 26px;
@@ -828,11 +994,7 @@
 			}
 		}
 		&.in-room {
-			padding: 0;
-			> .container {
-				padding: 0;
-				gap: 0;
-			}
+			gap: 0;
 			.chat-conversation {
 				height: calc(100dvh - 64px);
 				background: $surface;

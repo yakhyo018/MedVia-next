@@ -339,6 +339,7 @@ export const GET_BOOKINGS = gql`
 				bookingDeclineReason
 				respondDeadline
 				completedAt
+				bookingReviewed
 				clinicId
 				doctorId
 				treatmentId
@@ -348,6 +349,9 @@ export const GET_BOOKINGS = gql`
 					clinicName
 					clinicDistrict
 					clinicImages
+					clinicLocation {
+						coordinates
+					}
 				}
 				doctorData {
 					_id
@@ -461,5 +465,235 @@ export const GET_MY_NOTIFICATIONS = gql`
 export const GET_UNREAD_NOTIFICATION_COUNT = gql`
 	query GetUnreadNotificationCount {
 		getUnreadNotificationCount
+	}
+`;
+
+/**************************
+ *         MYPAGE         *
+ *************************/
+
+/**
+ * The favorites lists leave out `meLiked`: the API does not fill it there (everything listed is
+ * liked), and an empty value would overwrite the cards' `true` in the shared cache.
+ */
+const CLINIC_CARD_FIELDS = `
+	_id
+	memberId
+	clinicName
+	clinicNameKo
+	clinicSpecialty
+	clinicDistrict
+	clinicLangs
+	clinicInterpreterLangs
+	clinicImages
+	clinicMinPrice
+	clinicRating
+	clinicReviews
+	clinicLikes
+`;
+
+const DOCTOR_CARD_FIELDS = `
+	_id
+	memberId
+	doctorName
+	doctorNameKo
+	doctorSpecialty
+	doctorExperience
+	doctorLangs
+	doctorImage
+	doctorLikes
+	doctorViews
+	doctorRating
+	doctorReviews
+	clinicData {
+		_id
+		clinicName
+		clinicNameKo
+		clinicDistrict
+	}
+`;
+
+/** One completed visit for "Write a verified review". */
+export const GET_BOOKING = gql`
+	query GetBooking($bookingId: String!) {
+		getBooking(bookingId: $bookingId) {
+			_id
+			bookingCode
+			bookingStatus
+			bookingDate
+			bookingLang
+			bookingReviewed
+			completedAt
+			clinicId
+			clinicData {
+				_id
+				clinicName
+			}
+			doctorData {
+				_id
+				doctorName
+			}
+			treatmentData {
+				_id
+				treatmentName
+			}
+		}
+	}
+`;
+
+export const GET_FAVORITE_CLINICS = gql`
+	query GetFavoriteClinics($input: OrdinaryInquiry!) {
+		getFavoriteClinics(input: $input) {
+			list {
+				${CLINIC_CARD_FIELDS}
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+export const GET_FAVORITE_DOCTORS = gql`
+	query GetFavoriteDoctors($input: OrdinaryInquiry!) {
+		getFavoriteDoctors(input: $input) {
+			list {
+				${DOCTOR_CARD_FIELDS}
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+export const GET_RECENTLY_VISITED = gql`
+	query GetRecentlyVisited($input: OrdinaryInquiry!) {
+		getRecentlyVisited(input: $input) {
+			list {
+				_id
+				viewGroup
+				viewRefId
+				visitedAt
+				clinic {
+					_id
+					clinicName
+					clinicSpecialty
+					clinicDistrict
+					clinicImages
+				}
+				doctor {
+					_id
+					doctorName
+					doctorSpecialty
+					doctorImage
+					clinicData {
+						_id
+						clinicName
+					}
+				}
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+export const GET_MY_FOLLOWINGS = gql`
+	query GetMyFollowings($input: FollowingsInquiry!) {
+		getMyFollowings(input: $input) {
+			list {
+				_id
+				followingId
+				followingType
+				createdAt
+				followingMember {
+					_id
+					memberType
+					memberDisplayName
+					memberImage
+				}
+				followingClinic {
+					_id
+					memberId
+					clinicName
+					clinicSpecialty
+					clinicDistrict
+					clinicImages
+				}
+				followingDoctor {
+					_id
+					memberId
+					doctorName
+					doctorSpecialty
+					doctorImage
+					clinicData {
+						_id
+						clinicName
+					}
+				}
+			}
+			metaCounter {
+				total
+			}
+			typeCounts {
+				followingType
+				total
+			}
+		}
+	}
+`;
+
+export const GET_MY_REVIEWS = gql`
+	query GetMyReviews($input: OrdinaryInquiry!) {
+		getMyReviews(input: $input) {
+			list {
+				_id
+				reviewStatus
+				reviewRating
+				reviewTags
+				reviewContent
+				reviewLang
+				reviewNote
+				reviewReply {
+					replyContent
+					replyLang
+					replierType
+					repliedAt
+				}
+				submittedAt
+				bookingId
+				clinicId
+				clinicName
+				doctorName
+				treatmentName
+				visitDate
+				createdAt
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+/** "Who opened my data": every read of the patient's answers or AI summary. */
+export const GET_MY_ACCESS_LOGS = gql`
+	query GetMyAccessLogs($input: OrdinaryInquiry!) {
+		getMyAccessLogs(input: $input) {
+			list {
+				_id
+				accessType
+				bookingId
+				bookingCode
+				readerType
+				readerName
+				createdAt
+			}
+			metaCounter {
+				total
+			}
+		}
 	}
 `;

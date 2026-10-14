@@ -219,10 +219,25 @@
 		justify-content: space-between;
 		font-size: 13px;
 		color: $text-secondary;
-		span {
+		span,
+		.like-stat {
 			display: flex;
 			align-items: center;
 			gap: 4px;
+		}
+		.like-stat {
+			margin: -6px;
+			padding: 6px;
+			border: 0;
+			border-radius: $radius-pill;
+			background: none;
+			font: inherit;
+			color: inherit;
+			cursor: pointer;
+			&:hover {
+				background: $danger-bg;
+				color: $danger;
+			}
 		}
 		svg {
 			font-size: 17px;

@@ -3,8 +3,8 @@
 Where the frontend stands, what comes next, and how we work. A new session reads this first.
 Update it whenever a milestone closes.
 
-_Last updated: 2026-10-13 — **F3 closed: approved by the user, `feature/f3-chat` merged into
-`develop` and pushed. Next: F4 (MyPage) — start with the screen list review.**_
+_Last updated: 2026-10-14 — **F4 closed: approved by the user, `feature/f4-mypage` merged into
+`develop` and pushed. Next: F5 (Clinic dashboard) — start with the screen list review.**_
 
 ## The project
 
@@ -21,8 +21,8 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 | F1 | Public pages — home bands, clinics list, doctors list, doctor page, clinic page | done 2026-10-13 |
 | F2 | Booking — slots → hold → questionnaire + consents → My Bookings | done 2026-10-13 |
 | F3 | Chat + notifications — socket `/live`, bell, translations | done 2026-10-13 |
-| **F4** | **MyPage — reviews, follows, settings, "who saw my medical data"** | **next** |
-| F5 | Clinic dashboard — schedule, requests, treatments, doctors | |
+| F4 | MyPage — reviews, follows, settings, "who saw my medical data" | done 2026-10-14 |
+| **F5** | **Clinic dashboard — schedule, requests, treatments, doctors** | **next** |
 | F6 | Community + CS — posts, FAQ, inquiries | |
 | F7 | Admin — dashboard (one GraphQL request), moderation, audit | |
 | F8 | Assistant UI — chat panel, cards, Confirm button | |
@@ -49,6 +49,32 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
   other tab turns guest; RU locale; 1440 px, 800 px and 375 px mobile (drawer).
 - Not in F0: Google sign-in (needs `GOOGLE_CLIENT_ID`), clinic signup (F5).
 - Test account made during the check: `f0.feride@medvia.test` (local DB only).
+
+## F4 — MyPage (2026-10-14, done)
+
+- Screen list approved with option (a) for the medical page: the API keeps no medical profile,
+  so "Medical data & consent" = AI consent switch + "Who opened my data" (`getMyAccessLogs`).
+  Mobile drawn first on the MedVia Mobile canvas ("F4 — My Page", 8 artboards), approved.
+- `MyPageFrame` + `MyMenu`: band and sticky side menu on a computer, "‹ My Page" on a phone, the
+  overview lists the sections there with counters. The frame owns the login guard (removed from
+  My Bookings and Chat, which now sit inside it). Header "My Page" → `/mypage`.
+- Pages: `/mypage` (greeting, search, next visit with Chat / Directions, review prompt, recently
+  viewed), `/mypage/favorites` (`?tab=doctors`), `/mypage/recent` (Today / Yesterday / Earlier,
+  Clear history), `/mypage/followings` (All / Clinics / Doctors / Members, unfollow),
+  `/mypage/reviews` (+ prompts for reviewable visits, edit / delete, admin note),
+  `/mypage/reviews/write?booking=|?review=`, `/mypage/profile` (photo upload, fields, three
+  notification switches, change password dialog, log out), `/mypage/medical`.
+- New: `useUpload` (REST upload, refresh-and-retry), `changePassword` in `libs/auth`,
+  `isReviewable` (the API's 30-day rule), `LIST_MAX = 50` (the API's `@Max(50)`; also fixes My
+  Bookings' "Show more" past 50), `StatusChip label`, optional like button on `DoctorCard`.
+  131 i18n keys × 5 languages.
+- Cut (no API): medical profile fields, retention / research consents, Promotions switch,
+  Delete account, Google connect, review photos, articles in Recently Visited, clearing a phone.
+- Checked with test patient `f4.patient@medvia.test` (local; `npm run clean:test -- --yes`
+  removes it): full review life cycle, favorites, followings, recent, AI consent on/off, photo
+  upload, profile save, password change; desktop 1440 + phone 375, RU; `build:check` passes.
+- Dev note: after editing locale JSON, a client-side locale switch can show the old strings
+  until a full page load (dev only).
 
 ## F3 — chat and notifications (2026-10-13, done)
 

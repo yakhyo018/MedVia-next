@@ -34,8 +34,32 @@ const withLayoutBasic = (Component: React.ComponentType<T>) => {
 				case '/booking':
 					title = 'Booking';
 					break;
+				case '/mypage':
+					title = 'My Page';
+					break;
 				case '/mypage/bookings':
 					title = 'My Bookings';
+					break;
+				case '/mypage/medical':
+					title = 'Medical data & consent';
+					break;
+				case '/mypage/favorites':
+					title = 'My Favorites';
+					break;
+				case '/mypage/recent':
+					title = 'Recently Visited';
+					break;
+				case '/mypage/followings':
+					title = 'My Followings';
+					break;
+				case '/mypage/reviews':
+					title = 'My Reviews';
+					break;
+				case '/mypage/reviews/write':
+					title = 'Write a verified review';
+					break;
+				case '/mypage/profile':
+					title = 'My Profile';
 					break;
 				case '/mypage/chat':
 					title = 'Consultation Chat';
