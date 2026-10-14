@@ -521,3 +521,103 @@ export const UPDATE_MY_DOCTOR_PROFILE = gql`
 		}
 	}
 `;
+
+/**************************
+ *       COMMUNITY        *
+ *************************/
+
+export const CREATE_ARTICLE = gql`
+	mutation CreateArticle($input: ArticleInput!) {
+		createArticle(input: $input) {
+			_id
+			articleCategory
+		}
+	}
+`;
+
+export const UPDATE_ARTICLE = gql`
+	mutation UpdateArticle($input: ArticleUpdate!) {
+		updateArticle(input: $input) {
+			_id
+			articleTitle
+			articleContent
+			articleLang
+			updatedAt
+		}
+	}
+`;
+
+export const REMOVE_ARTICLE = gql`
+	mutation RemoveArticle($articleId: String!) {
+		removeArticle(articleId: $articleId) {
+			_id
+			articleStatus
+		}
+	}
+`;
+
+export const CREATE_COMMENT = gql`
+	mutation CreateComment($input: CommentInput!) {
+		createComment(input: $input) {
+			_id
+		}
+	}
+`;
+
+export const UPDATE_COMMENT = gql`
+	mutation UpdateComment($input: CommentUpdate!) {
+		updateComment(input: $input) {
+			_id
+			commentContent
+			commentLang
+			updatedAt
+		}
+	}
+`;
+
+export const REMOVE_COMMENT = gql`
+	mutation RemoveComment($commentId: String!) {
+		removeComment(commentId: $commentId) {
+			_id
+		}
+	}
+`;
+
+/** A post or comment reported as spam, advertising, …; five reports hide it until the admin decides. */
+export const REPORT_CONTENT = gql`
+	mutation ReportContent($input: ReportInput!) {
+		reportContent(input: $input) {
+			_id
+			reportStatus
+		}
+	}
+`;
+
+/**************************
+ *           CS           *
+ *************************/
+
+export const CREATE_INQUIRY = gql`
+	mutation CreateInquiry($input: InquiryInput!) {
+		createInquiry(input: $input) {
+			_id
+			inquiryStatus
+		}
+	}
+`;
+
+export const ADD_INQUIRY_MESSAGE = gql`
+	mutation AddInquiryMessage($input: InquiryMessageInput!) {
+		addInquiryMessage(input: $input) {
+			_id
+			inquiryStatus
+			inquiryMessages {
+				senderType
+				text
+				lang
+				createdAt
+			}
+			updatedAt
+		}
+	}
+`;

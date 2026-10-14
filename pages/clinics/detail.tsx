@@ -34,6 +34,7 @@ import RatingSummary from '../../libs/components/review/RatingSummary';
 import ReviewCard from '../../libs/components/review/ReviewCard';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import useLikeTarget from '../../libs/hooks/useLikeTarget';
+import useShare from '../../libs/hooks/useShare';
 import useFollow from '../../libs/hooks/useFollow';
 import useOpenChat from '../../libs/hooks/useOpenChat';
 import {
@@ -54,7 +55,7 @@ import { Review, Reviews } from '../../libs/types/review/review';
 import { LikeGroup } from '../../libs/enums/like.enum';
 import { Language } from '../../libs/enums/common.enum';
 import { ClientMessages, LANGUAGES, REACT_APP_API_URL } from '../../libs/config';
-import { sweetLoginConfirmAlert, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
+import { sweetLoginConfirmAlert, sweetMixinErrorAlert } from '../../libs/sweetAlert';
 import { formatCount, formatKrw, imageUrl, initials, isObjectId, openingHours } from '../../libs/utils';
 import { T } from '../../libs/types/common';
 
@@ -77,6 +78,7 @@ const ClinicDetail: NextPage = () => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const { t } = useTranslation('common');
+	const share = useShare();
 	const likeHandler = useLikeTarget();
 	const followHandler = useFollow();
 	const { openChat } = useOpenChat();
@@ -162,21 +164,7 @@ const ClinicDetail: NextPage = () => {
 		});
 	};
 
-	const shareHandler = async () => {
-		try {
-			const url = window.location.href;
-			if (navigator.share) {
-				await navigator.share({ title: clinic?.clinicName, url });
-				return;
-			}
-			await navigator.clipboard.writeText(url);
-			await sweetTopSmallSuccessAlert(t('Link copied'), 1500);
-		} catch (err) {
-			// Closing the share sheet is not an error.
-			if ((err as Error).name === 'AbortError') return;
-			await sweetMixinErrorAlert((err as Error).message);
-		}
-	};
+	const shareHandler = () => share(clinic?.clinicName);
 
 	const treatmentChangeHandler = (id: string) => {
 		setPickedTreatmentId(id);

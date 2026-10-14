@@ -953,3 +953,167 @@ export const GET_MY_DOCTOR_PROFILE = gql`
 		}
 	}
 `;
+
+/**************************
+ *       COMMUNITY        *
+ *************************/
+
+/** One post with its body; a signed-in reader also gets `meLiked`. Each open counts a view. */
+export const GET_ARTICLE = gql`
+	query GetArticle($articleId: String!) {
+		getArticle(articleId: $articleId) {
+			_id
+			articleCategory
+			articleStatus
+			articleTitle
+			articleContent
+			articleLang
+			articleAnswered
+			articleLikes
+			articleViews
+			articleComments
+			memberId
+			createdAt
+			updatedAt
+			authorName
+			authorType
+			meLiked
+		}
+	}
+`;
+
+/** The community lists: like GET_ARTICLES plus the author id and a short body for the card. */
+export const GET_BOARD_ARTICLES = gql`
+	query GetBoardArticles($input: ArticlesInquiry!) {
+		getArticles(input: $input) {
+			list {
+				_id
+				articleCategory
+				articleTitle
+				articleContent
+				articleLang
+				articleAnswered
+				articleLikes
+				articleViews
+				articleComments
+				memberId
+				createdAt
+				authorName
+				authorType
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+export const GET_COMMENTS = gql`
+	query GetComments($input: CommentsInquiry!) {
+		getComments(input: $input) {
+			list {
+				_id
+				commentContent
+				commentLang
+				articleId
+				memberId
+				createdAt
+				updatedAt
+				authorName
+				authorType
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+/**************************
+ *           CS           *
+ *************************/
+
+/** Notices or FAQ, with the text in `lang` when a translation exists (`display…`). Public. */
+export const GET_NOTICES = gql`
+	query GetNotices($input: NoticesInquiry!) {
+		getNotices(input: $input) {
+			list {
+				_id
+				noticeCategory
+				noticeFaqCategory
+				noticePinned
+				noticeTitle
+				noticeViews
+				publishedAt
+				createdAt
+				displayTitle
+				displayContent
+				displayLang
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+/** A signed-in reader gets their profile language (the API's rule); `lang` serves a guest. */
+export const GET_NOTICE = gql`
+	query GetNotice($noticeId: String!, $lang: Language) {
+		getNotice(noticeId: $noticeId, lang: $lang) {
+			_id
+			noticeCategory
+			noticePinned
+			noticeTitle
+			noticeContent
+			noticeViews
+			publishedAt
+			createdAt
+			displayTitle
+			displayContent
+			displayLang
+		}
+	}
+`;
+
+const INQUIRY_FIELDS = `
+	_id
+	inquiryCategory
+	inquiryStatus
+	inquiryTitle
+	inquiryContent
+	inquiryLang
+	inquiryReplyLang
+	inquiryMessages {
+		senderType
+		text
+		lang
+		createdAt
+	}
+	resolvedAt
+	bookingId
+	bookingCode
+	createdAt
+	updatedAt
+`;
+
+export const GET_MY_INQUIRIES = gql`
+	query GetMyInquiries($input: OrdinaryInquiry!) {
+		getMyInquiries(input: $input) {
+			list {
+				${INQUIRY_FIELDS}
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+export const GET_INQUIRY = gql`
+	query GetInquiry($inquiryId: String!) {
+		getInquiry(inquiryId: $inquiryId) {
+			${INQUIRY_FIELDS}
+		}
+	}
+`;

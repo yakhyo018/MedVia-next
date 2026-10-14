@@ -71,6 +71,24 @@ export const notificationView = (notification: Notification, t: TFunction, clini
 				desc: params.preview ?? notification.notificationDesc,
 				action: { href: `${clinic ? '/dashboard/chat' : '/mypage/chat'}?room=${refId}`, label: t('Reply') },
 			};
+		case NotificationType.ARTICLE_COMMENT:
+			return {
+				title: t('New comment on your post'),
+				desc: `${params.commenterName ?? ''} · ${params.articleTitle ?? ''}`,
+				action: { href: `/community/detail?id=${refId}`, label: t('Open the post') },
+			};
+		case NotificationType.DOCTOR_ANSWERED:
+			return {
+				title: t('A doctor answered your question'),
+				desc: `${params.doctorName ?? ''} · ${params.articleTitle ?? ''}`,
+				action: { href: `/community/detail?id=${refId}`, label: t('Read the answer') },
+			};
+		case NotificationType.INQUIRY_ANSWERED:
+			return {
+				title: t('Your inquiry was answered'),
+				desc: params.inquiryTitle ?? notification.notificationDesc,
+				action: { href: `/cs/inquiry?id=${refId}`, label: t('Read the answer') },
+			};
 		default:
 			return { title: notification.notificationTitle, desc: notification.notificationDesc };
 	}

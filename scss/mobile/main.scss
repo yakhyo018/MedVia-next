@@ -1181,6 +1181,147 @@
 		flex-wrap: wrap;
 	}
 
+	/* Community and Help center (F6) */
+	.community-page > .container,
+	.cs-page > .container {
+		padding-top: 16px;
+		gap: 14px;
+	}
+	.board-tabs {
+		flex-wrap: nowrap;
+		margin: 0 -16px;
+		padding: 0 16px;
+		overflow-x: auto;
+		scrollbar-width: none;
+		button {
+			flex-shrink: 0;
+			height: 36px;
+			padding: 0 14px;
+			font-size: 13px;
+		}
+	}
+	.board-head {
+		flex-wrap: wrap;
+		h2 {
+			font-size: 20px;
+		}
+		.MuiButton-root {
+			width: 100%;
+		}
+	}
+	.board-tools {
+		flex-wrap: wrap;
+		.search {
+			flex: 1 1 100%;
+		}
+		.booking-tabs {
+			flex: 1;
+		}
+	}
+	.article-card {
+		padding: 14px;
+		.foot {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 6px;
+		}
+	}
+	.review-grid {
+		grid-template-columns: 1fr;
+	}
+	.article-page,
+	.write-page {
+		padding-top: 12px;
+		.crumbs {
+			display: none;
+		}
+		.back-link {
+			display: inline-flex;
+			align-items: center;
+			align-self: flex-start;
+			font-size: 13px;
+			font-weight: 700;
+			color: $primary;
+			svg {
+				font-size: 20px;
+				margin-left: -6px;
+			}
+		}
+		h1 {
+			font-size: 22px;
+		}
+		.card {
+			padding: 16px;
+		}
+	}
+	.article-body .actions .MuiButton-root {
+		flex: 1;
+		&.report {
+			flex: 0 0 auto;
+		}
+	}
+	.comments .comment {
+		padding: 14px;
+	}
+	.comments .comment-gate {
+		flex-direction: column !important;
+		align-items: stretch;
+	}
+	.comment-tools {
+		flex-wrap: wrap;
+		.MuiTextField-root {
+			flex: 1;
+		}
+	}
+	.write-layout,
+	.cs-columns {
+		flex-direction: column;
+		.guidelines,
+		.cs-side {
+			position: static;
+			width: 100%;
+		}
+	}
+	.cs-page {
+		.cs-tabs {
+			align-self: stretch;
+			button {
+				flex: 1;
+				padding: 0 4px;
+				font-size: 13px;
+			}
+		}
+		.pair {
+			grid-template-columns: 1fr;
+		}
+		.form-actions {
+			flex-direction: column;
+			align-items: stretch;
+		}
+	}
+	.faq-filter {
+		flex-wrap: nowrap;
+		margin: 0 -16px;
+		padding: 0 16px;
+		overflow-x: auto;
+		scrollbar-width: none;
+		button {
+			flex-shrink: 0;
+		}
+	}
+	.inquiry-thread {
+		.head {
+			flex-direction: column;
+		}
+		.message {
+			max-width: 92%;
+		}
+		.reply {
+			flex-direction: column;
+			align-items: stretch;
+		}
+	}
+
 	/* Chat and notifications (F3) */
 	/* An open chat room is a full screen: no footer under the composer, no frame padding */
 	.my-page > .container.my-page-body:has(.chat-page.in-room) {
