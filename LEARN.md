@@ -367,3 +367,89 @@ Seoul calendar day, like every date on the site.
 5. **Why push only, and not write through the socket?** GraphQL already has validation, auth
    guards and errors per field; a second write path would duplicate them. With push-only, a
    missed event is fixed by the next query — the socket can be lossy without losing data.
+
+## F4 — MyPage (2026-10-14)
+
+**Problem.** A patient needs one place for what happens after booking: the next visit, saved
+clinics and doctors, follows, reviews, their profile, and proof of who opened their medical
+answers. Seven new screens, two old ones (My Bookings, Chat) moved inside.
+
+### 1. A frame instead of a mega-page
+
+nestar-next renders all of My Page in one route and switches components by `?category=`.
+MedVia already had `/mypage/bookings` and `/mypage/chat`, so every section stays a route and
+wraps itself in `MyPageFrame`:
+- computer: the teal band with breadcrumbs (`Home › My Page › My Reviews`), the sticky side
+  menu (`MyMenu variant="side"`), the section's page head;
+- phone: no band or side menu — a "‹ My Page" link, and the overview lists every section
+  (`MyMenu variant="list"`, with counters: upcoming bookings, unread chat, reviews to write);
+- the guard: a guest gets the login prompt (and comes back via `referrer`), a clinic / doctor /
+  admin account gets "My Page is for patient accounts"; while the session is being restored a
+  skeleton keeps the page height.
+
+Moving the guard into the frame removed the copies in My Bookings and Chat.
+
+### 2. Reviews: the API's rules, mirrored — not invented
+
+`isReviewable(booking)` repeats the backend's `checkCanReview`: COMPLETED, not reviewed before
+(even a deleted review counts), within 30 days of `completedAt`. The "Write a review" button
+(My Bookings → Past, the overview, My Reviews) only appears when the API would accept it. One
+form serves both cases: `?booking=` creates (`ownVisitConfirmed` required), `?review=` edits
+(prefilled; any edit goes back to moderation). The admin's "request changes" note is shown on
+the card in amber; deleting asks with the red confirm and warns that the visit cannot be
+reviewed again.
+
+### 3. Lists and the API's page limit
+
+Every list inquiry has `@Max(50)`. A "Show more" that grows `limit` would fail at 60, so
+`LIST_MAX` stops it at 50 (My Bookings had this latent bug since F2). The access log is an
+audit trail — every entry must stay reachable — so it pages with `Pagination`.
+
+### 4. A cache trap: `meLiked: null`
+
+`getFavoriteClinics` returns `meLiked: null` (everything there is liked). Requesting the field
+would write `null` over the `true` that `/clinics` cached for the same `Clinic:<id>`. The
+favorites fragments leave it out; an unliked card leaves the list through a local id list, then
+the lists are read again for the counters.
+
+### 5. Upload and password: the auth edges
+
+- `useUpload`: `fetch` + `FormData` to `POST /upload/image?target=member`, the in-memory token in
+  `Authorization`, one refresh-and-retry on 401 — the same rule as the Apollo error link.
+- `changePassword` (in `libs/auth`): the API revokes every access token including the current
+  one and returns a fresh token, keeping this device's refresh cookie. The auth module swaps the
+  token, so the next request works and other devices are signed out.
+
+### 6. "Who opened my data"
+
+`getMyAccessLogs` lists each read of the patient's questionnaire answers or AI summary (reader,
+what, booking code, Seoul time). The AI consent switch (`setAiConsent(true|false)`) sits above
+it; turning it off asks first, because chat messages then stay untranslated.
+
+### Checked
+
+Test patient `f4.patient@medvia.test` (local DB; `npm run clean:test -- --yes` removes it): a
+booking made, confirmed, moved into the past (`devShiftBookingTime`) and completed through the
+API; the clinic opened the answers (one access-log row). In the browser: write review (empty
+submit → three field errors; filled → "In review"), admin's "request changes" → amber note →
+edit → In review → delete; unlike a clinic (card leaves, counters update); unfollow; recent
+visits; AI consent on / off; photo upload (header, menu and profile update); profile save with
+a phone error first; password change (wrong current → server error, mismatch → field error,
+correct → still signed in). Desktop 1440 and phone 375 without horizontal scroll, RU strings,
+`build:check` (95 prerendered routes).
+
+### Interview questions
+
+1. **Why does the frame, not each page, own the login guard?** One place decides who may see
+   patient pages; a new section cannot forget it, and two prompts never stack.
+2. **How do you keep a "Write review" button honest?** Mirror the server's rule on the client
+   (status, already reviewed, 30-day window) for the UI, and still let the server refuse — the
+   client copy is for display, the server is the authority.
+3. **Why can a `null` field from one query break another page?** Apollo normalises by
+   `__typename:_id`; two queries reading the same entity share fields, so the last writer wins.
+   Leave out a field the API does not fill in that query.
+4. **Why does changing the password return a new access token?** The API revokes all access
+   tokens to sign out other devices — including this one. Without a fresh token the very next
+   request would fail and need a refresh round-trip.
+5. **Why paginate the access log but "Show more" the favorites?** An audit log must be fully
+   reachable; a convenience list can stop at the API's page limit.
