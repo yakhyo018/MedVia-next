@@ -492,50 +492,6 @@
 
 /* /mypage/bookings */
 .my-bookings-page {
-	padding: 32px 0 80px;
-	> .container {
-		flex-direction: column;
-		gap: 20px;
-		max-width: 920px;
-	}
-	.page-head {
-		h1 {
-			font-size: 32px;
-			font-weight: 800;
-			letter-spacing: -0.6px;
-		}
-		p {
-			margin-top: 4px;
-			font-size: 14px;
-			color: $text-secondary;
-		}
-	}
-	.booking-tabs {
-		align-self: flex-start;
-		display: flex;
-		gap: 4px;
-		padding: 4px;
-		border-radius: 12px;
-		border: 1px solid $border;
-		background: $surface;
-		button {
-			height: 38px;
-			padding: 0 18px;
-			border: 0;
-			border-radius: 9px;
-			background: transparent;
-			font-family: $font;
-			font-size: 14px;
-			font-weight: 600;
-			color: $text-secondary;
-			cursor: pointer;
-			&[aria-selected='true'] {
-				background: $primary-tint;
-				color: $primary;
-				font-weight: 700;
-			}
-		}
-	}
 	.booking-list {
 		gap: 12px;
 		.more {

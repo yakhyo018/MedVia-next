@@ -7,7 +7,7 @@ import useOpenChat from '../../hooks/useOpenChat';
 import { Booking } from '../../types/booking/booking';
 import { BookingStatus } from '../../enums/booking.enum';
 import { LANGUAGES, REACT_APP_API_URL } from '../../config';
-import { formatKrw, imageUrl, initials, seoulClock, seoulTime } from '../../utils';
+import { formatKrw, imageUrl, initials, isReviewable, seoulClock, seoulTime } from '../../utils';
 
 /** The API allows a patient to cancel a confirmed booking up to 24 hours before the visit. */
 const CANCEL_BEFORE_MS = 24 * 60 * 60 * 1000;
@@ -68,6 +68,16 @@ const BookingItem = (props: BookingItemProps) => {
 				<Button variant={'outlined'} size={'small'} LinkComponent={Link} href={clinicHref}>
 					{pending || confirmed ? t('Clinic page') : t('Book again')}
 				</Button>
+				{isReviewable(booking) && (
+					<Button
+						variant={'contained'}
+						size={'small'}
+						LinkComponent={Link}
+						href={`/mypage/reviews/write?booking=${booking._id}`}
+					>
+						{t('Write a review')}
+					</Button>
+				)}
 				{(pending || confirmed) && (
 					<Button variant={'outlined'} size={'small'} disabled={opening} onClick={() => openChat(booking.clinicId)}>
 						{t('Chat with clinic')}

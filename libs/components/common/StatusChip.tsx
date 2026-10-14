@@ -23,17 +23,19 @@ const TONES: Record<string, Tone> = {
 interface StatusChipProps {
 	status: string;
 	size?: 'small' | 'medium';
+	/** The entity's own word for the status (a review is "Published", not "Active"). */
+	label?: string;
 }
 
 const StatusChip = (props: StatusChipProps) => {
-	const { status, size = 'medium' } = props;
+	const { status, size = 'medium', label } = props;
 	const { t } = useTranslation('common');
 	const tone = TONES[status] ?? 'neutral';
 
 	return (
 		<span className={`mv-status-chip ${tone} ${size}`}>
 			<i />
-			{t(`status.${status}`)}
+			{label ?? t(`status.${status}`)}
 		</span>
 	);
 };

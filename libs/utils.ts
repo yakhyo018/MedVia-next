@@ -1,4 +1,4 @@
-import { SEOUL_TIME_ZONE } from './config';
+import { REVIEW_WINDOW_DAYS, SEOUL_TIME_ZONE } from './config';
 import { ClinicHour } from './types/clinic/clinic';
 
 /** 99000 → "₩99,000". KRW has no minor unit. */
@@ -130,3 +130,14 @@ export const seoulDays = (count: number, locale = 'en', from: Date = new Date())
 			month: part({ month: 'long', year: 'numeric' }),
 		};
 	});
+
+/** A completed visit the patient may still review (the API's rule, so the button never lies). */
+export const isReviewable = (booking: {
+	bookingStatus: string;
+	bookingReviewed?: boolean | null;
+	completedAt?: Date | string | null;
+}): boolean =>
+	booking.bookingStatus === 'COMPLETED' &&
+	!booking.bookingReviewed &&
+	!!booking.completedAt &&
+	Date.now() - new Date(booking.completedAt).getTime() <= REVIEW_WINDOW_DAYS * 24 * 60 * 60 * 1000;

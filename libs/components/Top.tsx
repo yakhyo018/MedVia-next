@@ -35,11 +35,10 @@ const Top = () => {
 	/**
 	 * Each role's own area under its own name: "My Page" only for patients. A clinic, doctor or
 	 * admin gets "Clinic Dashboard" / "Doctor Panel" / "Admin" when that area exists (F5, F7);
-	 * until then nothing, rather than a link to a patient page. /mypage itself arrives in F4,
-	 * so a patient lands on My Bookings for now.
+	 * until then nothing, rather than a link to a patient page.
 	 */
 	const workspace: { href: string; label: string } | null =
-		user.memberType === MemberType.USER ? { href: '/mypage/bookings', label: t('My Page') } : null;
+		user.memberType === MemberType.USER ? { href: '/mypage', label: t('My Page') } : null;
 	const menu = [
 		{ href: '/', label: t('Home') },
 		{ href: '/clinics', label: t('Clinics') },

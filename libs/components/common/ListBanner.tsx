@@ -6,13 +6,15 @@ import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 interface ListBannerProps {
 	/** The breadcrumb's last item. */
 	crumb: string;
+	/** An optional middle item, e.g. My Page above "My Reviews". */
+	parent?: { href: string; label: string };
 	title: string;
-	text: string;
+	text?: string;
 }
 
 /** The teal band on top of the public lists, with the logo's heart beating faintly on the right. */
 const ListBanner = (props: ListBannerProps) => {
-	const { crumb, title, text } = props;
+	const { crumb, parent, title, text } = props;
 	const { t } = useTranslation('common');
 
 	return (
@@ -21,10 +23,16 @@ const ListBanner = (props: ListBannerProps) => {
 				<nav className={'crumbs'} aria-label={t('Breadcrumb')}>
 					<Link href={'/'}>{t('Home')}</Link>
 					<ChevronRightRoundedIcon />
+					{parent && (
+						<>
+							<Link href={parent.href}>{parent.label}</Link>
+							<ChevronRightRoundedIcon />
+						</>
+					)}
 					<span>{crumb}</span>
 				</nav>
 				<h1>{title}</h1>
-				<p>{text}</p>
+				{text && <p>{text}</p>}
 			</Stack>
 		</Stack>
 	);

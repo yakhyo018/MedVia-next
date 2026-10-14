@@ -1,0 +1,878 @@
+/* MyPage (F4) — the frame, the side menu and every section. #mobile-wrap overrides in mobile/main.scss */
+
+/** FRAME **/
+.my-page {
+	.list-banner {
+		margin-bottom: 0;
+		padding: 36px 0 44px;
+	}
+	> .container.my-page-body {
+		flex-direction: row;
+		align-items: flex-start;
+		gap: 28px;
+		padding-top: 32px;
+		padding-bottom: 80px;
+	}
+	.my-page-main {
+		flex: 1;
+		min-width: 0;
+		gap: 20px;
+	}
+	.page-head {
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: 16px;
+		h1 {
+			font-size: 28px;
+			font-weight: 800;
+			letter-spacing: -0.5px;
+		}
+		p {
+			margin-top: 4px;
+			font-size: 14px;
+			line-height: 1.5;
+			color: $text-secondary;
+		}
+	}
+	.my-page-back {
+		align-self: flex-start;
+		display: flex;
+		align-items: center;
+		margin-bottom: -8px;
+		font-size: 13px;
+		font-weight: 700;
+		color: $primary;
+		svg {
+			font-size: 20px;
+			margin-left: -6px;
+		}
+	}
+
+	/* The segmented tabs of every section (My Bookings had them first). */
+	.booking-tabs {
+		align-self: flex-start;
+		display: flex;
+		gap: 4px;
+		padding: 4px;
+		border-radius: 12px;
+		border: 1px solid $border;
+		background: $surface;
+		button {
+			height: 38px;
+			padding: 0 18px;
+			border: 0;
+			border-radius: 9px;
+			background: transparent;
+			font-family: $font;
+			font-size: 14px;
+			font-weight: 600;
+			color: $text-secondary;
+			white-space: nowrap;
+			cursor: pointer;
+			&[aria-selected='true'] {
+				background: $primary-tint;
+				color: $primary;
+				font-weight: 700;
+			}
+		}
+	}
+
+	.card {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		padding: 20px;
+		border-radius: $radius-card;
+		border: 1px solid $border;
+		background: $surface;
+		h2 {
+			font-size: 17px;
+			font-weight: 800;
+		}
+	}
+	.hint {
+		font-size: 12px;
+		line-height: 1.5;
+		color: $text-secondary;
+	}
+	.more {
+		align-self: center;
+	}
+	.my-note {
+		font-size: 12px;
+		color: $text-secondary;
+		text-align: center;
+		&.left {
+			text-align: left;
+			font-size: 14px;
+		}
+	}
+	.section-head {
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: 12px;
+		margin-bottom: -6px;
+		h2 {
+			font-size: 17px;
+			font-weight: 800;
+		}
+		a {
+			font-size: 13px;
+			font-weight: 700;
+			color: $primary;
+		}
+		span {
+			font-size: 12px;
+			color: $text-muted;
+		}
+	}
+	.switch-row {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		cursor: pointer;
+		.text {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+			strong {
+				font-size: 14px;
+			}
+			span {
+				font-size: 12px;
+				line-height: 1.45;
+				color: $text-secondary;
+			}
+		}
+	}
+	.form-actions {
+		display: flex;
+		justify-content: flex-end;
+		gap: 10px;
+	}
+	.field-error {
+		margin-top: -6px;
+		font-size: 12px;
+		color: $danger;
+	}
+}
+
+/** SIDE MENU **/
+.my-menu.side {
+	position: sticky;
+	top: calc(#{$header-height} + 20px);
+	width: 280px;
+	flex-shrink: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	padding: 12px;
+	border-radius: $radius-card;
+	border: 1px solid $border;
+	background: $surface;
+	.who {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 6px;
+		padding: 14px 0 10px;
+		text-align: center;
+		.avatar {
+			width: 76px;
+			height: 76px;
+			margin-bottom: 4px;
+			border-radius: 50%;
+			overflow: hidden;
+			background: $primary-tint;
+			color: $primary;
+			font-size: 26px;
+			font-weight: 800;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+		}
+		strong {
+			font-size: 17px;
+			font-weight: 800;
+		}
+		span {
+			font-size: 13px;
+			color: $text-secondary;
+		}
+	}
+	h2 {
+		padding: 14px 12px 4px;
+		font-size: 11px;
+		font-weight: 700;
+		letter-spacing: 1.2px;
+		text-transform: uppercase;
+		color: $text-muted;
+	}
+	.group {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+	.my-menu-item {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 10px 12px;
+		border: 0;
+		border-radius: 10px;
+		background: none;
+		font-family: $font;
+		font-size: 15px;
+		font-weight: 500;
+		color: $text;
+		text-align: left;
+		cursor: pointer;
+		transition: background-color 0.15s ease;
+		.icon {
+			display: flex;
+			color: $text-muted;
+			svg {
+				font-size: 20px;
+			}
+		}
+		.label {
+			flex: 1;
+		}
+		&:hover {
+			background: $background;
+		}
+		&.active {
+			background: $primary-tint;
+			color: $primary;
+			font-weight: 700;
+			.icon {
+				color: $primary;
+			}
+		}
+		&.logout {
+			margin-top: 8px;
+			color: $danger;
+			.icon {
+				color: $danger;
+			}
+		}
+	}
+}
+
+/** LISTS: grouped rows (recently visited, followings, the overview) **/
+.my-group {
+	gap: 8px;
+	h2 {
+		padding-left: 4px;
+		font-size: 12px;
+		font-weight: 700;
+		letter-spacing: 0.5px;
+		text-transform: uppercase;
+		color: $text-muted;
+	}
+}
+.my-rows {
+	border-radius: $radius-card;
+	border: 1px solid $border;
+	background: $surface;
+	overflow: hidden;
+}
+.my-row {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 12px 16px;
+	&:not(:last-child) {
+		border-bottom: 1px solid $border;
+	}
+	.main {
+		flex: 1;
+		min-width: 0;
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		color: $text;
+	}
+	a.main:hover strong {
+		color: $primary;
+	}
+	.photo {
+		width: 44px;
+		height: 44px;
+		flex-shrink: 0;
+		border-radius: 12px;
+		overflow: hidden;
+		background: $primary-tint;
+		color: $primary;
+		font-size: 15px;
+		font-weight: 800;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		&.round {
+			border-radius: 50%;
+		}
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+	.text {
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 3px;
+		strong {
+			font-size: 15px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			transition: color 0.15s ease;
+		}
+	}
+	.sub {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		font-size: 12px;
+		color: $text-secondary;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+	.end {
+		flex-shrink: 0;
+		time {
+			font-size: 12px;
+			color: $text-muted;
+			white-space: nowrap;
+		}
+	}
+}
+/* "Clinic" / "Doctor" / "AI summary": small chips inside rows */
+.my-page .kind {
+	display: inline-flex;
+	align-items: center;
+	height: 20px;
+	padding: 0 8px;
+	border-radius: $radius-pill;
+	background: $surface-alt;
+	color: $text-secondary;
+	font-size: 11px;
+	font-weight: 700;
+	white-space: nowrap;
+	&.clinic {
+		background: $primary-tint;
+		color: $primary;
+	}
+	&.answers {
+		background: $success-bg;
+		color: $success;
+	}
+}
+/* "Following" turns into "Unfollow" under the pointer */
+.following-btn {
+	min-width: 104px;
+	.off {
+		display: none;
+	}
+	&:hover {
+		border-color: $danger !important;
+		color: $danger !important;
+		.on {
+			display: none;
+		}
+		.off {
+			display: inline;
+		}
+	}
+}
+
+/** FAVORITES **/
+.my-page .favorite-grid {
+	&.clinic-grid {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		@media (max-width: 1280px) {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+	&.doctor-grid {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		@media (max-width: 1180px) {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+}
+
+/** OVERVIEW **/
+.my-overview {
+	.my-search {
+		display: flex;
+		gap: 10px;
+		.MuiOutlinedInput-root {
+			background: $surface;
+		}
+		.MuiButton-root {
+			height: auto;
+			padding: 0 28px;
+		}
+	}
+	.my-section-title {
+		margin-bottom: -6px;
+		font-size: 17px;
+		font-weight: 800;
+	}
+	.no-visit {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		span {
+			font-size: 14px;
+			color: $text-secondary;
+		}
+	}
+}
+.next-visit {
+	flex-direction: row !important;
+	align-items: center;
+	justify-content: space-between;
+	.main {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		min-width: 0;
+	}
+	.date {
+		width: 60px;
+		height: 64px;
+		flex-shrink: 0;
+		border-radius: 12px;
+		background: $primary;
+		color: #fff;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		span {
+			font-size: 11px;
+			font-weight: 700;
+			letter-spacing: 0.06em;
+			text-transform: uppercase;
+		}
+		strong {
+			font-size: 24px;
+			font-weight: 800;
+			line-height: 1.1;
+		}
+	}
+	.text {
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+	.when {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		font-size: 14px;
+	}
+	.title {
+		font-size: 16px;
+		line-height: 1.35;
+	}
+	.meta {
+		font-size: 13px;
+		color: $text-secondary;
+	}
+	.actions {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		flex-shrink: 0;
+	}
+}
+.review-prompt {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	padding: 18px 20px;
+	border-radius: $radius-card;
+	border: 1px solid $primary-soft;
+	background: $primary-tint;
+	.icon {
+		width: 40px;
+		height: 40px;
+		flex-shrink: 0;
+		border-radius: 12px;
+		background: $surface;
+		color: $primary;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.text {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		strong {
+			font-size: 15px;
+			line-height: 1.35;
+		}
+		span {
+			font-size: 13px;
+			line-height: 1.45;
+			color: $text-secondary;
+		}
+	}
+	.MuiButton-root {
+		flex-shrink: 0;
+	}
+}
+
+/** REVIEWS **/
+.my-review-list {
+	gap: 12px;
+}
+.my-review {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	padding: 18px 20px;
+	border-radius: $radius-card;
+	border: 1px solid $border;
+	background: $surface;
+	.top {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px;
+		time {
+			font-size: 12px;
+			color: $text-muted;
+		}
+	}
+	.content {
+		font-size: 14px;
+		line-height: 1.6;
+		white-space: pre-line;
+	}
+	.note {
+		padding: 10px 12px;
+		border-radius: 10px;
+		background: $warning-bg;
+		color: $warning;
+		font-size: 13px;
+		line-height: 1.45;
+		&.danger {
+			background: $danger-bg;
+			color: $danger;
+		}
+	}
+	.reply {
+		padding: 12px 14px;
+		border-radius: 12px;
+		background: $background;
+		strong {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			margin-bottom: 4px;
+			font-size: 13px;
+			color: $primary;
+		}
+		p {
+			font-size: 14px;
+			color: $text-secondary;
+		}
+	}
+	.what {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 4px 8px;
+		font-size: 13px;
+		color: $text-secondary;
+		a {
+			color: $text-secondary;
+			&:hover {
+				color: $primary;
+			}
+		}
+	}
+	.verified {
+		display: inline-flex;
+		align-items: center;
+		gap: 2px;
+		font-weight: 700;
+		color: $success;
+		svg {
+			font-size: 16px;
+		}
+	}
+	.actions {
+		display: flex;
+		gap: 8px;
+	}
+}
+
+/** WRITE A REVIEW **/
+.write-review-form {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	max-width: 760px;
+	.visit {
+		gap: 6px;
+		.head {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 12px;
+			strong {
+				font-size: 16px;
+			}
+		}
+		.verified {
+			display: inline-flex;
+			align-items: center;
+			gap: 2px;
+			height: 26px;
+			padding: 0 10px;
+			border-radius: $radius-pill;
+			background: $success-bg;
+			color: $success;
+			font-size: 12px;
+			font-weight: 700;
+			white-space: nowrap;
+			svg {
+				font-size: 15px;
+			}
+		}
+		.meta {
+			font-size: 13px;
+			color: $text-secondary;
+		}
+	}
+	.label {
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.rating {
+		display: flex;
+		align-items: center;
+		gap: 2px;
+		margin-top: -6px;
+		button {
+			width: 44px;
+			height: 44px;
+			padding: 0;
+			border: 0;
+			background: none;
+			color: $border-strong;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: transform 0.12s ease;
+			svg {
+				font-size: 36px;
+			}
+			&.on {
+				color: $star;
+			}
+			&:hover {
+				transform: scale(1.1);
+			}
+		}
+		.word {
+			margin-left: 8px;
+			font-size: 14px;
+			font-weight: 700;
+		}
+	}
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		button {
+			height: 36px;
+			padding: 0 16px;
+			border-radius: $radius-pill;
+			border: 1px solid $border-strong;
+			background: $surface;
+			font-family: $font;
+			font-size: 13px;
+			font-weight: 600;
+			color: $text;
+			cursor: pointer;
+			&[aria-pressed='true'] {
+				border-color: $primary;
+				background: $primary-tint;
+				color: $primary;
+			}
+		}
+	}
+	.counter {
+		display: flex;
+		justify-content: space-between;
+		margin-top: -8px;
+		font-size: 12px;
+		color: $text-secondary;
+	}
+	.confirm {
+		margin: 0;
+		.MuiFormControlLabel-label {
+			font-size: 14px;
+		}
+	}
+}
+
+/** MEDICAL DATA & CONSENT **/
+.my-medical {
+	.info {
+		flex-direction: row;
+		align-items: flex-start;
+		gap: 12px;
+		svg {
+			flex-shrink: 0;
+			color: $primary;
+		}
+		p {
+			font-size: 13px;
+			line-height: 1.55;
+			color: $text-secondary;
+			strong {
+				color: $text;
+			}
+		}
+	}
+	.pager {
+		align-self: center;
+	}
+	.access-row {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		padding: 12px 16px;
+		&:not(:last-child) {
+			border-bottom: 1px solid $border;
+		}
+		.line {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 8px;
+			strong {
+				font-size: 14px;
+			}
+			time {
+				font-size: 12px;
+				color: $text-muted;
+				white-space: nowrap;
+			}
+			&.tags {
+				justify-content: flex-start;
+				flex-wrap: wrap;
+				gap: 6px;
+			}
+		}
+		.code {
+			font-size: 12px;
+			color: $text-secondary;
+		}
+	}
+}
+
+/** PROFILE **/
+.profile-form {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	.photo-row {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		.avatar {
+			width: 72px;
+			height: 72px;
+			flex-shrink: 0;
+			border-radius: 50%;
+			overflow: hidden;
+			background: $primary-tint;
+			color: $primary;
+			font-size: 24px;
+			font-weight: 800;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+		}
+		.photo-text {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 8px;
+			span {
+				font-size: 13px;
+				color: $text-secondary;
+			}
+		}
+	}
+	.fields {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 18px 16px;
+	}
+	.read-only .MuiOutlinedInput-root {
+		background: $background;
+		color: $text-secondary;
+	}
+	.switches .switch-row {
+		padding: 10px 0;
+		&:not(:last-child) {
+			border-bottom: 1px solid $border;
+		}
+	}
+	.security-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		.text {
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+			strong {
+				font-size: 14px;
+			}
+			span {
+				font-size: 12px;
+				color: $text-secondary;
+			}
+		}
+	}
+	.logout {
+		align-self: flex-start;
+	}
+}
+.password-dialog .fields {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	padding-top: 8px !important;
+}

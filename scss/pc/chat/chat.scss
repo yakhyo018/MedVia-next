@@ -85,9 +85,8 @@
 	}
 }
 
-/* /notifications and /mypage/chat share the page head and tabs of My Bookings */
-.notifications-page,
-.chat-page {
+/* /notifications shares the page head and tabs of My Bookings (MyPage sections get theirs from the frame) */
+.notifications-page {
 	padding: 32px 0 80px;
 	> .container {
 		flex-direction: column;

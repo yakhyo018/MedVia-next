@@ -2,7 +2,7 @@ import Router from 'next/router';
 import { ApolloError } from '@apollo/client';
 import { initializeApollo } from '../../apollo/client';
 import { EMPTY_USER, sessionReadyVar, userVar } from '../../apollo/store';
-import { LOGIN, LOGOUT, REFRESH_TOKEN, SIGN_UP } from '../../apollo/user/mutation';
+import { CHANGE_PASSWORD, LOGIN, LOGOUT, REFRESH_TOKEN, SIGN_UP } from '../../apollo/user/mutation';
 import { GET_MY_PROFILE } from '../../apollo/user/query';
 import { Member } from '../types/member/member';
 import { MemberInput } from '../types/member/member.input';
@@ -159,6 +159,22 @@ const refetchViewerQueries = async () => {
 /**************************
  *        PROFILE         *
  *************************/
+
+/**
+ * The API revokes every access token (this one too) and the other devices' sessions, keeps this
+ * device's refresh cookie and returns a fresh access token — which replaces the old one here.
+ */
+export const changePassword = async (newPassword: string, currentPassword?: string): Promise<void> => {
+	const apolloClient = initializeApollo();
+	const result = await apolloClient.mutate({
+		mutation: CHANGE_PASSWORD,
+		variables: { input: { newPassword, ...(currentPassword ? { currentPassword } : {}) } },
+		fetchPolicy: 'no-cache',
+	});
+	const token: string | undefined = result?.data?.changePassword?.accessToken;
+	if (token) setJwtToken(token);
+	userVar({ ...userVar(), memberMustChangePassword: false });
+};
 
 /** After the member changes their profile: read it again from the API. */
 export const updateUserInfo = async (): Promise<void> => {

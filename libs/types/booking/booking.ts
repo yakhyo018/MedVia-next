@@ -34,7 +34,7 @@ export interface Booking {
 	doctorId: string;
 	treatmentId: string;
 	createdAt: Date;
-	clinicData?: Pick<Clinic, '_id' | 'clinicName' | 'clinicDistrict' | 'clinicImages'>;
+	clinicData?: Pick<Clinic, '_id' | 'clinicName' | 'clinicDistrict' | 'clinicImages' | 'clinicLocation'>;
 	doctorData?: Pick<Doctor, '_id' | 'doctorName'>;
 	treatmentData?: Pick<Treatment, '_id' | 'treatmentName' | 'treatmentDuration'>;
 }
