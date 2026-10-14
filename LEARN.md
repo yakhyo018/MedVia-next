@@ -453,3 +453,84 @@ correct → still signed in). Desktop 1440 and phone 375 without horizontal scro
    request would fail and need a refresh round-trip.
 5. **Why paginate the access log but "Show more" the favorites?** An audit log must be fully
    reachable; a convenience list can stop at the API's page limit.
+
+## F5 — Clinic Dashboard + Doctor Panel (2026-10-14)
+
+**Problem.** The other side of the marketplace: a clinic must answer booking requests, keep
+its doctors' time slots, chat with patients in Korean, run its catalog (treatments, doctors) and
+reply to reviews; a doctor must keep their own profile and reply to reviews of their visits.
+Nine clinic screens, two doctor screens, clinic sign-up.
+
+### 1. One frame for every signed-in area
+
+`MyPageFrame` grew into `WorkspaceFrame` (`libs/components/layout`): the band with breadcrumbs,
+the side menu, the phone's back link or section tabs, a notice slot, and the guard (guest → login
+and back; another account type → "This area is for … accounts"). `MyPageFrame`, `ClinicFrame` and
+`DoctorFrame` only say whose area it is and what the menu holds. `ClinicFrame` also reads the
+clinic once (`getMyClinic`) for the menu card and the review notice (PENDING / CHANGES_REQUESTED /
+REJECTED / SUSPENDED with the admin's note).
+
+### 2. A booking card that only offers legal moves
+
+`ClinicBookingCard` mirrors the API's transition table:
+- PENDING in time → Approve, Decline (a reason is required: the patient reads it);
+- CONFIRMED before the start → Cancel (reason), Chat; after the start → Completed, No-show;
+- EXPIRED / DECLINED / CANCELLED / COMPLETED → nothing to do.
+
+The patient's answers and the Korean AI summary load only when the card opens
+(`getBooking` decrypts them for this clinic — and writes an access-log row the patient sees in
+"Who opened my data", F4). "Respond within 1 h 38 min" counts down to `respondDeadline`.
+
+### 3. Schedule: one query, two layouts
+
+`getClinicSchedule(dateFrom)` returns a week of slots (with the booking's patient and treatment).
+A computer gets a grid (rows = start times used that week, columns = 7 Seoul days); a phone gets
+a day strip and a list. Open and blocked slots are picked (functional `setState`, so quick clicks
+don't overwrite each other) and changed in one `setSlotsBlocked` call. "Add slots" fills one
+doctor's dates and hours (HH:00 / HH:30, ≤ 31 days, weekdays optional) and reports
+"17 new slots of 186" — the API keeps existing ones.
+
+### 4. The same chat, the other side
+
+`ChatConversation` got `side: 'patient' | 'clinic'`. On the clinic side "mine" is a CLINIC
+message, the language picker disappears (the API stores a clinic message as Korean whatever is
+sent), and a sent message says "Patient sees it in Русский" once its translation exists.
+
+### 5. Catalog and accounts
+
+- Treatments: a live treatment's name / category / price / description / photos change through
+  a draft that waits for MedVia; the table shows "A change is waiting for review" and offers
+  "Drop change"; a never-live one is withdrawn (deleted).
+- Doctors: the clinic creates the doctor's login (email + temporary password), hides / shows,
+  changes the specialty, resets the password, removes. The doctor sees "You are signed in with a
+  temporary password" until they set their own (`memberMustChangePassword`).
+- Clinic profile: logo and photos over REST upload, hours (7 rows), languages; name, signboard,
+  district and address are locked once verified (the API refuses them).
+- Clinic sign-up: "I am a: Patient / Clinic" on the sign-up tab (`?as=clinic`); `signUpClinic`
+  in `libs/auth` starts the session; the clinic lands on its dashboard "in review".
+
+### Checked
+
+Clinic `clinic03@seed` (Hanbit Dental): dashboard stats and today; two requests from the F4 test
+patient — approve one, decline the other (empty reason → error); cancel with a reason; all four
+tabs and search; schedule grid, block 2 slots with a note, open them again, add slots; chat
+reply in Korean; treatment create (errors first) → In review → withdraw; hide / show a live one;
+edit prefill; doctor create (errors first), hide / show, specialty change, password reset;
+review reply; profile save (Sunday opened and closed again). Test doctor `f5.doctor@medvia.test`:
+panel, temporary-password notice → own password, profile with a career row; removed afterwards.
+Test clinic `f5.clinic@medvia.test`: sign-up → dashboard "in review" → admin asked for changes →
+"Send for review again". Phone 375 px on every clinic page (no sideways scroll), `build:check`
+162 pages. `npm run clean:test -- --yes` removes the test accounts and their clinic.
+
+### Interview questions
+
+1. **Why does the client repeat the server's transition rules?** To show only buttons that will
+   work — the server stays the authority and still refuses anything else.
+2. **How does one chat component serve two sides?** The room is the same; only "who am I" (which
+   sender type is mine), the reader's language and the composer's language differ — a `side` prop.
+3. **Why load the patient's answers only when the card opens?** Every read is logged as an
+   access to medical data the patient can see; reading less is both cheaper and more private.
+4. **Why a functional `setState` for picking slots?** Two clicks in one tick both read the same
+   stale `picked`; `setPicked((current) => …)` applies them in order.
+5. **What does a frame component buy you here?** One guard and one layout for three roles — a new
+   area (Admin, F7) is a wrapper, not a copy.

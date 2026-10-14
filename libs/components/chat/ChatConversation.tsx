@@ -29,18 +29,23 @@ const langLabel = (code: Language) => LANGUAGES.find((lang) => lang.code === cod
 
 interface ChatConversationProps {
 	room: ChatRoom;
-	/** The patient's chat language (their profile language, not the site's). */
+	/** The reader's chat language: the patient's profile language; Korean for the clinic. */
 	myLang: Language;
+	/** Whose screen this is. The clinic always writes Korean (the API's rule) and reads Korean. */
+	side?: 'patient' | 'clinic';
 	onBack?: () => void;
 }
 
 /**
  * One room: history by cursor (newest first from the API, shown oldest at the top), new and
  * translated messages from the socket, and the composer. The patient writes in their language;
- * the clinic reads Korean, the patient reads their own — the API translates both ways.
+ * the clinic reads Korean, the patient reads their own — the API translates both ways. The same
+ * room serves both sides (`side`).
  */
 const ChatConversation = (props: ChatConversationProps) => {
-	const { room, myLang, onBack } = props;
+	const { room, myLang, side = 'patient', onBack } = props;
+	const clinicSide = side === 'clinic';
+	const mySender = clinicSide ? SenderType.CLINIC : SenderType.PATIENT;
 	const router = useRouter();
 	const { t } = useTranslation('common');
 	const client = useApolloClient();
@@ -103,7 +108,7 @@ const ChatConversation = (props: ChatConversationProps) => {
 			if (String(message?.roomId) !== room._id) return;
 			setMessages((current) => merge(current, [message]));
 			// Reading it here means it is read: keep the room's unread at zero.
-			if (message.senderType !== SenderType.PATIENT) {
+			if (message.senderType !== mySender) {
 				markRoomRead({ variables: { roomId: room._id } }).catch(() => undefined);
 			}
 		};
@@ -146,7 +151,9 @@ const ChatConversation = (props: ChatConversationProps) => {
 		try {
 			setSending(true);
 			const result = await sendMessage({
-				variables: { input: { roomId: room._id, messageText: body, messageLang: inputLang } },
+				variables: {
+					input: { roomId: room._id, messageText: body, ...(clinicSide ? {} : { messageLang: inputLang }) },
+				},
 			});
 			setMessages((current) => merge(current, [result.data.sendMessage]));
 			setText('');
@@ -165,7 +172,9 @@ const ChatConversation = (props: ChatConversationProps) => {
 			return next;
 		});
 
-	const otherLang = Language.KO;
+	// What the other side reads: Korean for the clinic, the patient's chat language for the patient.
+	const otherLang = clinicSide ? (room.patientLang ?? Language.EN) : Language.KO;
+	const writeLang = clinicSide ? Language.KO : inputLang;
 
 	return (
 		<Box className={'chat-conversation'}>
@@ -175,14 +184,18 @@ const ChatConversation = (props: ChatConversationProps) => {
 						<ArrowBackRoundedIcon />
 					</IconButton>
 				)}
-				<span className={'avatar'}>{initials(room.clinicName)}</span>
+				<span className={'avatar'}>{initials(clinicSide ? room.patientName : room.clinicName)}</span>
 				<span className={'who'}>
-					<strong>{room.clinicName}</strong>
-					<Link href={`/clinics/detail?id=${room.clinicId}`}>{t('Clinic page')}</Link>
+					<strong>{clinicSide ? room.patientName : room.clinicName}</strong>
+					{clinicSide ? (
+						<span>{t('Writes in {{lang}}', { lang: langLabel(otherLang) })}</span>
+					) : (
+						<Link href={`/clinics/detail?id=${room.clinicId}`}>{t('Clinic page')}</Link>
+					)}
 				</span>
-				{/* Follows the message box: the language the patient is writing in now, and Korean */}
-				<span className={'pair'} title={`${langLabel(inputLang)} ↔ ${langLabel(otherLang)}`}>
-					{inputLang} ↔ {otherLang}
+				{/* Follows the message box: the language written in now, and the other side's */}
+				<span className={'pair'} title={`${langLabel(writeLang)} ↔ ${langLabel(otherLang)}`}>
+					{writeLang} ↔ {otherLang}
 				</span>
 			</header>
 
@@ -197,7 +210,9 @@ const ChatConversation = (props: ChatConversationProps) => {
 						<CircularProgress size={24} />
 					</div>
 				) : messages.length === 0 ? (
-					<div className={'chat-state'}>{t('Write your first message — the clinic reads it in Korean.')}</div>
+					<div className={'chat-state'}>
+						{clinicSide ? t('No messages yet.') : t('Write your first message — the clinic reads it in Korean.')}
+					</div>
 				) : (
 					messages.map((message) => {
 						const when = `${seoulTime(message.createdAt, router.locale, false)} · ${seoulClock(message.createdAt)}`;
@@ -208,9 +223,9 @@ const ChatConversation = (props: ChatConversationProps) => {
 								</div>
 							);
 						}
-						const mine = message.senderType === SenderType.PATIENT;
+						const mine = message.senderType === mySender;
 						const pending = message.messageTranslationStatus === TranslationStatus.PENDING;
-						const korean = message.messageTranslations?.find((item) => item.lang === otherLang)?.text;
+						const otherText = message.messageTranslations?.find((item) => item.lang === otherLang)?.text;
 						const shown = textFor(message, myLang);
 						const translated = !mine && message.messageLang !== myLang && shown !== message.messageText;
 						const showOriginal = originals.has(message._id);
@@ -218,10 +233,13 @@ const ChatConversation = (props: ChatConversationProps) => {
 							<div key={message._id} className={`bubble ${mine ? 'mine' : 'theirs'}`}>
 								<p>{showOriginal ? message.messageText : shown}</p>
 								<span className={'meta'}>
-									{mine && korean && (
+									{mine && otherText && !clinicSide && (
 										<>
-											{t('Sent in Korean')}: {korean} ·{' '}
+											{t('Sent in Korean')}: {otherText} ·{' '}
 										</>
+									)}
+									{mine && clinicSide && otherText && (
+										<>{t('Patient sees it in {{lang}}', { lang: langLabel(otherLang) })} · </>
 									)}
 									{pending && <em className={'translating'}>{t('Translating…')} · </em>}
 									{translated && (
@@ -243,26 +261,28 @@ const ChatConversation = (props: ChatConversationProps) => {
 			</div>
 
 			<form className={'chat-compose'} onSubmit={sendHandler}>
-				<Select
-					size={'small'}
-					className={'input-lang'}
-					value={inputLang}
-					onChange={(event) => setInputLang(event.target.value as Language)}
-					inputProps={{ 'aria-label': t('I write in') }}
-					renderValue={(value) => value}
-				>
-					{LANGUAGES.map((lang) => (
-						<MenuItem key={lang.code} value={lang.code}>
-							{lang.label}
-						</MenuItem>
-					))}
-				</Select>
+				{!clinicSide && (
+					<Select
+						size={'small'}
+						className={'input-lang'}
+						value={inputLang}
+						onChange={(event) => setInputLang(event.target.value as Language)}
+						inputProps={{ 'aria-label': t('I write in') }}
+						renderValue={(value) => value}
+					>
+						{LANGUAGES.map((lang) => (
+							<MenuItem key={lang.code} value={lang.code}>
+								{lang.label}
+							</MenuItem>
+						))}
+					</Select>
+				)}
 				<TextField
 					fullWidth
 					multiline
 					maxRows={4}
 					value={text}
-					placeholder={t('Write in {{lang}}…', { lang: langLabel(inputLang) })}
+					placeholder={t('Write in {{lang}}…', { lang: langLabel(writeLang) })}
 					inputProps={{ maxLength: MESSAGE_MAX, 'aria-label': t('Message') }}
 					onChange={(event) => setText(event.target.value)}
 					onKeyDown={(event) => {

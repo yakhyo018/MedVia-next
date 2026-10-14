@@ -92,7 +92,7 @@ const MyPage: NextPage = () => {
 
 	return (
 		<MyPageFrame
-			title={user._id ? t(greeting(), { name: firstName }) : t('My Page')}
+			title={isPatient ? t(greeting(), { name: firstName }) : t('My Page')}
 			text={t('Your visits, conversations and saved clinics in one place.')}
 			className={'my-overview'}
 		>

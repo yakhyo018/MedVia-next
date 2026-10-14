@@ -294,3 +294,230 @@ export const CLEAR_RECENTLY_VISITED = gql`
 		clearRecentlyVisited
 	}
 `;
+
+/**************************
+ *    CLINIC DASHBOARD    *
+ *************************/
+
+/** "I am a clinic": the account and its clinic (PENDING review); signs the new account in. */
+export const SIGNUP_CLINIC = gql`
+	mutation SignupClinic($input: ClinicSignupInput!) {
+		signupClinic(input: $input) {
+			_id
+			memberType
+			memberStatus
+			memberAuthType
+			memberEmail
+			memberMustChangePassword
+			memberAiConsentAt
+			memberFullName
+			memberPhone
+			memberImage
+			memberCountry
+			memberLang
+			createdAt
+			updatedAt
+			accessToken
+		}
+	}
+`;
+
+export const UPDATE_MY_CLINIC = gql`
+	mutation UpdateMyClinic($input: ClinicUpdate!) {
+		updateMyClinic(input: $input) {
+			_id
+			clinicStatus
+			clinicReviewNote
+		}
+	}
+`;
+
+/** After the admin asked for changes: send the clinic back to review. */
+export const RESUBMIT_CLINIC = gql`
+	mutation ResubmitClinic {
+		resubmitClinic {
+			_id
+			clinicStatus
+			clinicReviewNote
+		}
+	}
+`;
+
+/** Returns how many slots were made and how many the range allowed (existing ones are kept). */
+export const CREATE_SLOTS = gql`
+	mutation CreateSlots($input: SlotsCreateInput!) {
+		createSlots(input: $input) {
+			created
+			planned
+		}
+	}
+`;
+
+export const SET_SLOTS_BLOCKED = gql`
+	mutation SetSlotsBlocked($input: SlotsBlockInput!) {
+		setSlotsBlocked(input: $input) {
+			_id
+			slotStatus
+			slotBlockReason
+		}
+	}
+`;
+
+export const CREATE_TREATMENT = gql`
+	mutation CreateTreatment($input: TreatmentCreateInput!) {
+		createTreatment(input: $input) {
+			_id
+			treatmentStatus
+		}
+	}
+`;
+
+export const UPDATE_TREATMENT = gql`
+	mutation UpdateTreatment($input: TreatmentUpdate!) {
+		updateTreatment(input: $input) {
+			_id
+			treatmentStatus
+		}
+	}
+`;
+
+export const RESUBMIT_TREATMENT = gql`
+	mutation ResubmitTreatment($treatmentId: String!) {
+		resubmitTreatment(treatmentId: $treatmentId) {
+			_id
+			treatmentStatus
+			treatmentReviewNote
+		}
+	}
+`;
+
+export const CANCEL_TREATMENT_REVIEW = gql`
+	mutation CancelTreatmentReview($treatmentId: String!) {
+		cancelTreatmentReview(treatmentId: $treatmentId) {
+			_id
+			treatmentStatus
+			treatmentReviewNote
+		}
+	}
+`;
+
+export const HIDE_TREATMENT = gql`
+	mutation HideTreatment($treatmentId: String!) {
+		hideTreatment(treatmentId: $treatmentId) {
+			_id
+			treatmentStatus
+			treatmentReviewNote
+		}
+	}
+`;
+
+export const SHOW_TREATMENT = gql`
+	mutation ShowTreatment($treatmentId: String!) {
+		showTreatment(treatmentId: $treatmentId) {
+			_id
+			treatmentStatus
+			treatmentReviewNote
+		}
+	}
+`;
+
+export const REMOVE_TREATMENT = gql`
+	mutation RemoveTreatment($treatmentId: String!) {
+		removeTreatment(treatmentId: $treatmentId) {
+			_id
+			treatmentStatus
+			treatmentReviewNote
+		}
+	}
+`;
+
+/** The clinic makes the doctor's account; it works at once with this email and password. */
+export const CREATE_DOCTOR = gql`
+	mutation CreateDoctor($input: DoctorCreateInput!) {
+		createDoctor(input: $input) {
+			_id
+			doctorName
+		}
+	}
+`;
+
+export const UPDATE_DOCTOR_BY_CLINIC = gql`
+	mutation UpdateDoctorByClinic($input: DoctorClinicUpdate!) {
+		updateDoctorByClinic(input: $input) {
+			_id
+			doctorSpecialty
+		}
+	}
+`;
+
+export const HIDE_DOCTOR = gql`
+	mutation HideDoctor($doctorId: String!) {
+		hideDoctor(doctorId: $doctorId) {
+			_id
+			doctorStatus
+		}
+	}
+`;
+
+export const SHOW_DOCTOR = gql`
+	mutation ShowDoctor($doctorId: String!) {
+		showDoctor(doctorId: $doctorId) {
+			_id
+			doctorStatus
+		}
+	}
+`;
+
+export const REMOVE_DOCTOR = gql`
+	mutation RemoveDoctor($doctorId: String!) {
+		removeDoctor(doctorId: $doctorId) {
+			_id
+			doctorStatus
+		}
+	}
+`;
+
+export const RESET_DOCTOR_PASSWORD = gql`
+	mutation ResetDoctorPassword($input: DoctorPasswordReset!) {
+		resetDoctorPassword(input: $input)
+	}
+`;
+
+/** The clinic's or the doctor's public reply. Writing again replaces it. */
+export const REPLY_TO_REVIEW = gql`
+	mutation ReplyToReview($input: ReviewReplyInput!) {
+		replyToReview(input: $input) {
+			_id
+			reviewReply {
+				replyContent
+				replyLang
+				replierType
+				repliedAt
+			}
+		}
+	}
+`;
+
+/**************************
+ *      DOCTOR PANEL      *
+ *************************/
+
+export const UPDATE_MY_DOCTOR_PROFILE = gql`
+	mutation UpdateMyDoctorProfile($input: DoctorProfileUpdate!) {
+		updateMyDoctorProfile(input: $input) {
+			_id
+			doctorName
+			doctorNameKo
+			doctorImage
+			doctorExperience
+			doctorLangs
+			doctorBio
+			doctorCareer {
+				title
+				place
+				from
+				to
+			}
+		}
+	}
+`;

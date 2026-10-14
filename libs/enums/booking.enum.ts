@@ -24,3 +24,11 @@ export enum BookingTab {
 	PAST = 'PAST',
 	CANCELLED = 'CANCELLED',
 }
+
+/** A doctor's 30-minute slot. HELD = reserved for 10 minutes while a patient fills the request. */
+export enum SlotStatus {
+	OPEN = 'OPEN',
+	HELD = 'HELD',
+	BOOKED = 'BOOKED',
+	BLOCKED = 'BLOCKED',
+}

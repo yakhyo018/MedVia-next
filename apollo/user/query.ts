@@ -697,3 +697,259 @@ export const GET_MY_ACCESS_LOGS = gql`
 		}
 	}
 `;
+
+/**************************
+ *    CLINIC DASHBOARD    *
+ *************************/
+
+const MY_CLINIC_FIELDS = `
+	_id
+	clinicStatus
+	clinicName
+	clinicNameKo
+	clinicSpecialty
+	clinicDistrict
+	clinicAddress
+	clinicPhone
+	clinicHours {
+		day
+		open
+		close
+		closed
+	}
+	clinicLangs
+	clinicInterpreterLangs
+	clinicLogo
+	clinicImages
+	clinicDesc
+	clinicReviewNote
+	clinicLikes
+	clinicFollowers
+	clinicViews
+	clinicRating
+	clinicReviews
+	memberId
+	submittedAt
+	verifiedAt
+`;
+
+export const GET_MY_CLINIC = gql`
+	query GetMyClinic {
+		getMyClinic {
+			${MY_CLINIC_FIELDS}
+		}
+	}
+`;
+
+const CLINIC_BOOKING_FIELDS = `
+	_id
+	bookingCode
+	bookingStatus
+	bookingDate
+	bookingPrice
+	bookingLang
+	bookingInterpreter
+	bookingDeclineReason
+	respondDeadline
+	completedAt
+	patientName
+	memberId
+	clinicId
+	doctorId
+	treatmentId
+	createdAt
+	doctorData {
+		_id
+		doctorName
+		doctorImage
+	}
+	treatmentData {
+		_id
+		treatmentName
+		treatmentDuration
+	}
+`;
+
+/** The clinic's bookings: requests, upcoming, past, cancelled (`getBookings` scopes to the clinic). */
+export const GET_CLINIC_BOOKINGS = gql`
+	query GetClinicBookings($input: BookingsInquiry!) {
+		getBookings(input: $input) {
+			list {
+				${CLINIC_BOOKING_FIELDS}
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+/** One booking with what the clinic needs to decide: the answers and the Korean AI summary. */
+export const GET_CLINIC_BOOKING = gql`
+	query GetClinicBooking($bookingId: String!) {
+		getBooking(bookingId: $bookingId) {
+			${CLINIC_BOOKING_FIELDS}
+			bookingAiSummary
+			bookingQuestionnaire {
+				originalLang
+				answers {
+					question
+					answer
+				}
+			}
+			bookingHistory {
+				status
+				reason
+				changedAt
+			}
+		}
+	}
+`;
+
+export const GET_CLINIC_SCHEDULE = gql`
+	query GetClinicSchedule($input: ClinicScheduleInquiry!) {
+		getClinicSchedule(input: $input) {
+			_id
+			slotStatus
+			slotStart
+			slotBlockReason
+			holdExpiresAt
+			doctorId
+			bookingId
+			bookingData {
+				bookingCode
+				bookingStatus
+				patientName
+				treatmentName
+			}
+		}
+	}
+`;
+
+export const GET_MY_CLINIC_TREATMENTS = gql`
+	query GetMyClinicTreatments {
+		getMyClinicTreatments {
+			_id
+			treatmentStatus
+			treatmentName
+			treatmentCategory
+			treatmentDuration
+			treatmentPrice
+			treatmentPriceNote
+			treatmentDesc
+			treatmentAftercare
+			treatmentLangs
+			treatmentImages
+			treatmentReviewNote
+			treatmentBookingsMonth
+			doctorIds
+			treatmentDraft {
+				treatmentName
+				treatmentCategory
+				treatmentPrice
+				treatmentPriceNote
+				treatmentDesc
+				treatmentImages
+				submittedAt
+			}
+			doctors {
+				_id
+				doctorName
+				doctorImage
+			}
+		}
+	}
+`;
+
+export const GET_MY_CLINIC_DOCTORS = gql`
+	query GetMyClinicDoctors {
+		getMyClinicDoctors {
+			_id
+			doctorStatus
+			doctorName
+			doctorNameKo
+			doctorSpecialty
+			doctorExperience
+			doctorLangs
+			doctorImage
+			doctorRating
+			doctorReviews
+			memberId
+		}
+	}
+`;
+
+/** Reviews of the clinic or of one doctor, with the "Needs reply" filter of the dashboards. */
+export const GET_REPLY_REVIEWS = gql`
+	query GetReplyReviews($input: ReviewsInquiry!) {
+		getReviews(input: $input) {
+			list {
+				_id
+				reviewRating
+				reviewTags
+				reviewContent
+				reviewLang
+				reviewReply {
+					replyContent
+					replyLang
+					replierType
+					repliedAt
+				}
+				patientName
+				clinicName
+				doctorName
+				treatmentName
+				visitDate
+				createdAt
+			}
+			metaCounter {
+				total
+			}
+			summary {
+				rating
+				reviews
+				distribution {
+					stars
+					count
+				}
+			}
+		}
+	}
+`;
+
+/**************************
+ *      DOCTOR PANEL      *
+ *************************/
+
+export const GET_MY_DOCTOR_PROFILE = gql`
+	query GetMyDoctorProfile {
+		getMyDoctorProfile {
+			_id
+			doctorStatus
+			doctorName
+			doctorNameKo
+			doctorSpecialty
+			doctorExperience
+			doctorLangs
+			doctorBio
+			doctorImage
+			doctorCareer {
+				title
+				place
+				from
+				to
+			}
+			doctorLikes
+			doctorViews
+			doctorFollowers
+			doctorRating
+			doctorReviews
+			clinicId
+			memberId
+			clinicData {
+				_id
+				clinicName
+			}
+		}
+	}
+`;

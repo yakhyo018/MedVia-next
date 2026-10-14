@@ -2,10 +2,11 @@ import Router from 'next/router';
 import { ApolloError } from '@apollo/client';
 import { initializeApollo } from '../../apollo/client';
 import { EMPTY_USER, sessionReadyVar, userVar } from '../../apollo/store';
-import { CHANGE_PASSWORD, LOGIN, LOGOUT, REFRESH_TOKEN, SIGN_UP } from '../../apollo/user/mutation';
+import { CHANGE_PASSWORD, LOGIN, LOGOUT, REFRESH_TOKEN, SIGNUP_CLINIC, SIGN_UP } from '../../apollo/user/mutation';
 import { GET_MY_PROFILE } from '../../apollo/user/query';
 import { Member } from '../types/member/member';
 import { MemberInput } from '../types/member/member.input';
+import { ClinicSignupInput } from '../types/clinic/clinic';
 import { UNAUTHENTICATED } from '../config';
 
 /**
@@ -78,6 +79,18 @@ export const signUp = async (input: MemberInput): Promise<void> => {
 		fetchPolicy: 'no-cache',
 	});
 	startSession(result?.data?.signup);
+	storage.set(LOGIN_EVENT, Date.now().toString());
+};
+
+/** "I am a clinic": the account and its clinic in one step; the clinic waits for MedVia's review. */
+export const signUpClinic = async (input: ClinicSignupInput): Promise<void> => {
+	const apolloClient = initializeApollo();
+	const result = await apolloClient.mutate({
+		mutation: SIGNUP_CLINIC,
+		variables: { input },
+		fetchPolicy: 'no-cache',
+	});
+	startSession(result?.data?.signupClinic);
 	storage.set(LOGIN_EVENT, Date.now().toString());
 };
 

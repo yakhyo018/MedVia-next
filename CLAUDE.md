@@ -10,6 +10,7 @@ Portfolio project: no SMS, no outgoing email, no payments.
   how we work. Update it whenever a milestone closes.
 - `LEARN.md` — why each mechanism exists, trade-offs, interview Q&A. Update after every milestone.
 - `docs/DECISIONS.md` — Decision / Why / Risks / Alternatives.
+- `docs/COMMANDS.md` — every terminal command (run, checks, seed, cleanup). Add new ones there.
 - The backend's rules and API: `~/Desktop/MedVia/CLAUDE.md`, `~/Desktop/MedVia/docs/STATUS.md`,
   schemas in `~/Desktop/MedVia/apps/medvia-api/src/libs/dto` (the GraphQL contract).
 

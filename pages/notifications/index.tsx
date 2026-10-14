@@ -16,6 +16,7 @@ import { notificationView } from '../../libs/notificationText';
 import { ClientMessages } from '../../libs/config';
 import { sweetLoginConfirmAlert, sweetMixinErrorAlert } from '../../libs/sweetAlert';
 import { seoulClock, seoulDateKey, seoulTime } from '../../libs/utils';
+import { MemberType } from '../../libs/enums/member.enum';
 import { T } from '../../libs/types/common';
 
 export const getStaticProps = async ({ locale }: T) => ({
@@ -147,7 +148,7 @@ const Notifications: NextPage = () => {
 							<section key={section.title}>
 								<h2>{section.title}</h2>
 								{section.items.map((notification) => {
-									const view = notificationView(notification, t);
+									const view = notificationView(notification, t, user.memberType === MemberType.AGENT);
 									const unread = notification.notificationStatus === NotificationStatus.WAIT;
 									return (
 										<article
