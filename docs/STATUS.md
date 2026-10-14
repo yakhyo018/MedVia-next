@@ -3,9 +3,9 @@
 Where the frontend stands, what comes next, and how we work. A new session reads this first.
 Update it whenever a milestone closes.
 
-_Last updated: 2026-10-14 — **F5 closed: Clinic Dashboard + Doctor Panel approved by the user,
-`feature/f5-clinic` merged into `develop` and pushed. Next: F6 (Community + CS) — start with the
-screen list review.**_
+_Last updated: 2026-10-14 — **F6 closed: Community + Help center approved by the user,
+`feature/f6-community` merged into `develop` and pushed. Next: F7 (Admin) — start with the screen
+list review.**_
 
 ## The project
 
@@ -24,8 +24,8 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 | F3 | Chat + notifications — socket `/live`, bell, translations | done 2026-10-13 |
 | F4 | MyPage — reviews, follows, settings, "who saw my medical data" | done 2026-10-14 |
 | F5 | Clinic dashboard — schedule, requests, treatments, doctors (+ Doctor Panel) | done 2026-10-14 |
-| **F6** | **Community + CS — posts, FAQ, inquiries** | **next** |
-| F7 | Admin — dashboard (one GraphQL request), moderation, audit | |
+| F6 | Community + CS — posts, FAQ, inquiries | done 2026-10-14 |
+| **F7** | **Admin — dashboard (one GraphQL request), moderation, audit** | **next** |
 | F8 | Assistant UI — chat panel, cards, Confirm button | |
 | F9 | Deploy — `medvia.uz` + `api.medvia.uz`, backend `develop` → `main` | |
 
@@ -50,6 +50,23 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
   other tab turns guest; RU locale; 1440 px, 800 px and 375 px mobile (drawer).
 - Not in F0: Google sign-in (needs `GOOGLE_CLIENT_ID`), clinic signup (F5).
 - Test account made during the check: `f0.feride@medvia.test` (local DB only).
+
+## F6 — Community + Help center (2026-10-14, done)
+
+- Screen list approved; "Treatment reviews" = the verified reviews (read-only). Mobile drawn
+  first ("F6 — Community and CS": list, post, Help center).
+- `/community?board=qna|reviews|tips|free` (+ `answered`, `text`, `sort`, `page`),
+  `/community/detail?id=` (like, share, report, own Edit / Delete, `CommentList`),
+  `/community/write?board=|id=` (boards by role, guidelines).
+- `/cs?tab=faq|notice|inquiry`, `/cs/notice?id=`, `/cs/inquiry?id=` (thread, add message).
+- Doctor Panel: Q&A Answers (`/doctor-panel/qna`, answer inline), My Articles
+  (`/doctor-panel/articles`). Home Community board links to posts and "See all".
+- Notifications: ARTICLE_COMMENT, DOCTOR_ANSWERED, INQUIRY_ANSWERED with links.
+- `useShare` hook (clinic page + posts). 136 i18n keys × 5 languages.
+- Cut (no API): post photos / tags / drafts / "in review", comment replies, author stats,
+  inquiry attachments, translation of posts and answers, questions by specialty.
+- Test data: the F4 test patient's inquiry stays (cleaned by `clean:test`); the test question,
+  its answer and the doctor's test tip were removed.
 
 ## F5 — Clinic Dashboard + Doctor Panel (2026-10-14, done)
 

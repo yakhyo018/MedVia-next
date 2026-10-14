@@ -534,3 +534,67 @@ Test clinic `f5.clinic@medvia.test`: sign-up → dashboard "in review" → admin
    stale `picked`; `setPicked((current) => …)` applies them in order.
 5. **What does a frame component buy you here?** One guard and one layout for three roles — a new
    area (Admin, F7) is a wrapper, not a copy.
+
+## F6 — Community + Help center (2026-10-14)
+
+**Problem.** Patients want to ask before they book and to read what others went through; MedVia
+needs FAQ, notices and a support channel; doctors need to answer questions and write tips.
+
+### 1. Who writes where — the API decides, the UI follows
+
+`POSTERS` in the API: Q and A and the free board are for patients, health tips for doctors and the
+MedVia team; clinics never post or comment (it would be advertising). The client mirrors it
+(`libs/components/community/boards.ts`): the "Ask a question" / "Write a tip" button appears only
+for the right role, the board picker on the write page offers only allowed boards, and a clinic
+sees why it can't comment instead of a form that would fail.
+
+### 2. A doctor's comment is an answer
+
+Comments are flat and in their author's language. A doctor's comment on a question sets
+`articleAnswered` (the "Doctor answered" chip) and notifies the asker (`DOCTOR_ANSWERED`); deleting
+it recomputes the flag. The Doctor Panel's Q&A Answers lists questions by `answered: false / true`
+and answers inline; the comment list highlights doctors with a badge.
+
+### 3. Reports and hiding
+
+Readers report a post or comment with a reason (spam, advertising, wrong medical information,
+personal data, abuse, other). At five reports the API hides it until the admin decides (F7);
+the client then shows "Post not found — it may have been hidden after reports".
+
+### 4. Help center
+
+FAQ by topic (MUI Accordion), notices with "Important" (pinned) first, and 1:1 inquiries: a
+form (topic, optional booking, reply language) and a thread page. The admin's answer arrives as
+`INQUIRY_ANSWERED` under the bell with a link to the thread. Notices come in the reader's profile
+language when signed in (the API's rule), the site language for a guest.
+
+### 5. Small reuse
+
+`useShare` (share sheet or copy link) now serves the clinic page and posts; `ListBanner`,
+`EmptyState`, `StatusChip`, `PromptDialog`-style dialogs and the `booking-tabs` segmented control
+carry the look across.
+
+### Checked
+
+As a clinic: no write buttons, the comment box explains why. As the F4 test patient: ask a
+question (errors first), comment, edit the comment, like; FAQ by topic, notices, notice page;
+send an inquiry → the admin answers through the API → "Answered" in the thread and under the
+bell. As `doctor01@seed`: Q&A Answers (Waiting 4 → 3), answer inline → the question shows
+"Doctor answered" with the doctor badge; write a health tip → My Articles → delete. The test
+answer and question were removed afterwards. Phone 375 px on every page without sideways
+scroll, `build:check` 202 pages.
+
+### Interview questions
+
+1. **Why does the client hide the write button instead of letting the API refuse?** The API is
+   the authority, but a button that always fails for clinics is a bad screen; the client mirrors
+   the same table (`POSTERS`) to decide what to show.
+2. **How is "Doctor answered" kept true?** The server recomputes the flag inside the comment's
+   transaction on create and delete — the client never sets it.
+3. **Why are posts not translated like chat?** Chat is a two-party conversation the API
+   translates per room; community posts are one-to-many and the API stores only the author's
+   language, so the client labels the language instead of pretending.
+4. **Where do list filters live, and why?** In the URL (`?board=&answered=&text=&sort=&page=`):
+   back / forward and shared links restore the same list; the inputs are validated on read.
+5. **What happens at the fifth report?** The API hides the post or comment in the same request
+   that records the report; readers stop seeing it until the admin restores or keeps it hidden.
