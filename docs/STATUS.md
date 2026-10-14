@@ -3,8 +3,9 @@
 Where the frontend stands, what comes next, and how we work. A new session reads this first.
 Update it whenever a milestone closes.
 
-_Last updated: 2026-10-14 — **F4 closed: approved by the user, `feature/f4-mypage` merged into
-`develop` and pushed. Next: F5 (Clinic dashboard) — start with the screen list review.**_
+_Last updated: 2026-10-14 — **F5 closed: Clinic Dashboard + Doctor Panel approved by the user,
+`feature/f5-clinic` merged into `develop` and pushed. Next: F6 (Community + CS) — start with the
+screen list review.**_
 
 ## The project
 
@@ -22,8 +23,8 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 | F2 | Booking — slots → hold → questionnaire + consents → My Bookings | done 2026-10-13 |
 | F3 | Chat + notifications — socket `/live`, bell, translations | done 2026-10-13 |
 | F4 | MyPage — reviews, follows, settings, "who saw my medical data" | done 2026-10-14 |
-| **F5** | **Clinic dashboard — schedule, requests, treatments, doctors** | **next** |
-| F6 | Community + CS — posts, FAQ, inquiries | |
+| F5 | Clinic dashboard — schedule, requests, treatments, doctors (+ Doctor Panel) | done 2026-10-14 |
+| **F6** | **Community + CS — posts, FAQ, inquiries** | **next** |
 | F7 | Admin — dashboard (one GraphQL request), moderation, audit | |
 | F8 | Assistant UI — chat panel, cards, Confirm button | |
 | F9 | Deploy — `medvia.uz` + `api.medvia.uz`, backend `develop` → `main` | |
@@ -49,6 +50,32 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
   other tab turns guest; RU locale; 1440 px, 800 px and 375 px mobile (drawer).
 - Not in F0: Google sign-in (needs `GOOGLE_CLIENT_ID`), clinic signup (F5).
 - Test account made during the check: `f0.feride@medvia.test` (local DB only).
+
+## F5 — Clinic Dashboard + Doctor Panel (2026-10-14, done)
+
+- The user chose one branch for all of F5; Doctor Panel (profile + review replies) included;
+  mobile drawn for Dashboard, Schedule and Bookings on the MedVia Mobile canvas ("F5 — Clinic
+  dashboard").
+- `WorkspaceFrame` (generalised from MyPageFrame) → `MyPageFrame`, `ClinicFrame`, `DoctorFrame`.
+  Header: patient "My Page", clinic "Clinic Dashboard" (`/dashboard`), doctor "Doctor Panel"
+  (`/doctor-panel`).
+- Clinic pages: `/dashboard` (stats, requests with AI summary / answers, today),
+  `/dashboard/bookings` (Requests / Upcoming / Past / Cancelled, search, doctor filter),
+  `/dashboard/schedule` (week grid / phone day list, block / open, Add slots),
+  `/dashboard/chat` (`ChatConversation side="clinic"`, booking card above),
+  `/dashboard/treatments` + `/edit` (draft review flow, photos, preview),
+  `/dashboard/doctors` (create, hide / show, specialty, password reset, remove),
+  `/dashboard/reviews` (`ReplyReviews`), `/dashboard/profile` (logo, photos, hours, languages,
+  locked fields once verified, resubmit, notifications).
+- Doctor Panel: `/doctor-panel` (profile, career, password; temporary-password notice),
+  `/doctor-panel/reviews`. Clinic sign-up on `/account/join?mode=signup&as=clinic`.
+- Notifications: clinic links lead into `/dashboard`; BOOKING_REQUESTED rendered in 5 languages.
+- 268 i18n keys × 5 languages (ru plurals for reviews / views / min / yrs / slots).
+- Cut: change assigned doctor, average response time, visit queue, map pin, "New review"
+  switch, Doctor Q&A / Articles (F6).
+- Test accounts (local): `f5.clinic@medvia.test` (PENDING clinic), `f5.doctor@medvia.test`
+  (removed from Hanbit); F4's `f4.patient@medvia.test` made the requests. The seed clinic
+  Hanbit got 17 extra open slots and one public reply (to Fazilat Z.'s review).
 
 ## F4 — MyPage (2026-10-14, done)
 
@@ -260,6 +287,8 @@ The full rules are in `CLAUDE.md`. The ones a new session must not miss:
 
 ## How to run
 
+Every command (run, checks, seed, cleanup, git hygiene) is collected in `docs/COMMANDS.md`.
+
 ```bash
 cd ~/Desktop/MedVia && npm run start:dev          # API on :3000 (Atlas + local Redis)
 cd ~/Desktop/MedVia && npm run start:dev:batch    # batch on :3001 (only for batch features)
@@ -288,6 +317,14 @@ with `SEED_PASSWORD` from `~/Desktop/MedVia/.env`.
   no real faces, no licence questions; needs the user's `HF_TOKEN` in the backend `.env`.
   Clinic signup (the mockup's SignupClinic form) is planned for F5, with the Clinic Dashboard.
 
+- **F9 deploy plan (the user's choices, 2026-10-14):**
+  - Server: Hostinger VPS **KVM 1** (1 vCPU, 4 GB RAM, 50 GB NVMe) is enough — API + batch +
+    `next start` + Redis + Nginx ≈ 1–1.2 GB; MongoDB stays on Atlas. `next build` peaks at
+    1–2 GB: add 2 GB swap, or build on the laptop / GitHub Actions and ship the result. KVM 2 only
+    if building on the server must be fast. Check the renewal price before paying.
+  - **A new, strong `SEED_PASSWORD` in production** (and a new admin password): today's seed
+    password is a weak demo one, and the demo accounts (`feride@`, `clinic01@`, `doctor01@`,
+    `admin@seed.medvia.test`) will be reachable on the public site.
 - Google sign-in needs `GOOGLE_CLIENT_ID` (backend open item).
 - Before deploy (F9): copy the Unsplash photos into `public/img/` and re-check `yarn audit` for
   Next 14 (current advisories are mostly App Router / middleware / `next/image`).

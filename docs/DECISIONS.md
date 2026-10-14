@@ -60,3 +60,18 @@ user's check, the merge. Details and the clinic-page plan: STATUS.md → "Next s
 | Images upload over REST with `fetch` + `FormData` (`useUpload`), refresh-and-retry once on 401. | The API's upload is REST; no `apollo-upload-client` (banned). | Two auth paths to keep in step. | GraphQL multipart upload. |
 | `changePassword` lives in `libs/auth` and swaps the access token. | The API revokes every access token, this one too, and returns a fresh one; only the auth module may hold the token. | — | Call the mutation from the page and refresh afterwards (one failed request first). |
 | A profile with an emptied phone keeps the old phone. | The API validates `memberPhone` against the pattern, so `''` is refused. | The patient cannot remove a phone. | An explicit "remove phone" in the API. |
+
+## F5 — Clinic Dashboard + Doctor Panel (2026-10-14)
+
+| Decision | Why | Risks | Alternatives |
+| --- | --- | --- | --- |
+| One branch for all of F5 (the user's choice), Doctor Panel included. | The doctor account had no area at all; the clinic and doctor share the review-reply UI. | A large review for the user. | F5a / F5b with a merge after each. |
+| `WorkspaceFrame` serves My Page, the Clinic Dashboard and the Doctor Panel; each area is a thin wrapper (home link, allowed member type, side menu, phone tabs, notice). | One guard and one layout for every signed-in area; F7 Admin can reuse it. | A change to the frame touches three areas. | Three copies of the frame. |
+| Routes `/dashboard/*` (clinic) and `/doctor-panel/*`. | `/clinic` and `/doctor` would sit next to the public `/clinics` and `/doctors` and read like typos. | — | `/clinic/*`; nestar-next's `?category=` single page. |
+| `ChatConversation` takes `side`; the clinic writes Korean only (no language picker). | The API fixes a clinic message to Korean (`senderLang`); the same room serves both sides. | — | A second chat component for the clinic. |
+| The clinic cannot start a chat; "Chat with patient" opens the patient's room if one exists, else says so. | `openRoom` is patient-only in the API. | A clinic with a question waits for the patient to write. | An API change to let a clinic open a room. |
+| Booking moves follow the API's table: Approve / Decline (reason) for requests, Cancel (reason) before the visit, Completed / No-show after it starts. | The buttons never offer a move the API would refuse. | — | Every button always, with server errors. |
+| A verified clinic's name, signboard name, district and address are read-only. | The API refuses to change them after verification (`CLINIC_FIELDS_LOCKED`). | A real move needs support. | Editable fields that fail on save. |
+| Schedule: a week grid on a computer, a day list on a phone; open and blocked slots are picked, then blocked / opened in one call. | `setSlotsBlocked` takes many ids; picking matches how a clinic blocks an afternoon. | Weeks with many doctors make tall cells (the doctor filter helps). | Click-to-toggle each slot (one request per slot). |
+| Notification links follow the reader: a clinic's lead into `/dashboard`, a patient's into `/mypage`. | The same types (new message, cancelled) reach both sides. | — | Separate notification texts per side. |
+| Cut: change the assigned doctor, average response time, visit-day queue, map pin editing, a "New review" notification switch, Q&A / Articles in the Doctor Panel (F6). | No API (or a later milestone). | — | — |
