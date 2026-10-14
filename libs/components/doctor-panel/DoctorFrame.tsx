@@ -6,6 +6,8 @@ import { useQuery, useReactiveVar } from '@apollo/client';
 import { Button } from '@mui/material';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 import ReplyRoundedIcon from '@mui/icons-material/ReplyRounded';
+import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
+import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import WorkspaceFrame, { WorkspaceFrameProps } from '../layout/WorkspaceFrame';
 import ChangePasswordDialog from '../mypage/ChangePasswordDialog';
@@ -18,12 +20,16 @@ import { REACT_APP_API_URL } from '../../config';
 import { formatCount, imageUrl, initials } from '../../utils';
 
 const DOCTOR_MENU = [
-	{ href: '/doctor-panel', label: 'My Profile', icon: <PersonOutlineRoundedIcon /> },
-	{ href: '/doctor-panel/reviews', label: 'Review Replies', icon: <ReplyRoundedIcon /> },
+	{ group: 'Community', href: '/doctor-panel/qna', label: 'Q&A Answers', icon: <QuestionAnswerOutlinedIcon /> },
+	{ group: 'Community', href: '/doctor-panel/articles', label: 'My Articles', icon: <ArticleOutlinedIcon /> },
+	{ group: 'Patients', href: '/doctor-panel/reviews', label: 'Review Replies', icon: <ReplyRoundedIcon /> },
+	{ group: 'Account', href: '/doctor-panel', label: 'My Profile', icon: <PersonOutlineRoundedIcon /> },
 ];
+const GROUPS = ['Community', 'Patients', 'Account'];
 
 /**
- * The Doctor Panel: a doctor's own profile and replies to the reviews of their visits. Bookings,
+ * The Doctor Panel: answers to patients' questions, health tips, replies to the reviews of their
+ * visits and the doctor's own profile. Bookings,
  * slots and chat belong to the clinic account. A doctor still on the clinic's temporary
  * password is asked to set their own.
  */
@@ -70,10 +76,12 @@ const DoctorFrame = (props: WorkspaceFrameProps) => {
 						{clinicName && ` · ${clinicName}`}
 					</span>
 				</div>
-				<div className={'group'}>
-					<h2>{t('Account')}</h2>
-					{DOCTOR_MENU.map((entry) => item(entry, true))}
-				</div>
+				{GROUPS.map((group) => (
+					<div key={group} className={'group'}>
+						<h2>{t(group)}</h2>
+						{DOCTOR_MENU.filter((entry) => entry.group === group).map((entry) => item(entry, true))}
+					</div>
+				))}
 				<button type={'button'} className={'my-menu-item logout'} onClick={() => logOut()}>
 					<span className={'icon'}>
 						<LogoutRoundedIcon />

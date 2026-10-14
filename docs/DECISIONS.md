@@ -75,3 +75,17 @@ user's check, the merge. Details and the clinic-page plan: STATUS.md → "Next s
 | Schedule: a week grid on a computer, a day list on a phone; open and blocked slots are picked, then blocked / opened in one call. | `setSlotsBlocked` takes many ids; picking matches how a clinic blocks an afternoon. | Weeks with many doctors make tall cells (the doctor filter helps). | Click-to-toggle each slot (one request per slot). |
 | Notification links follow the reader: a clinic's lead into `/dashboard`, a patient's into `/mypage`. | The same types (new message, cancelled) reach both sides. | — | Separate notification texts per side. |
 | Cut: change the assigned doctor, average response time, visit-day queue, map pin editing, a "New review" notification switch, Q&A / Articles in the Doctor Panel (F6). | No API (or a later milestone). | — | — |
+
+## F6 — Community + Help center (2026-10-14)
+
+| Decision | Why | Risks | Alternatives |
+| --- | --- | --- | --- |
+| "Treatment reviews" in the Community is the list of verified reviews (read-only); writing one stays in My Reviews. | The API has no review post type: a review belongs to a completed booking. | Two places show reviews. | Drop the tab. |
+| Boards follow the API's POSTERS: patients ask (Q and A) and talk (Free board), doctors and MedVia write Health tips, clinics don't post or comment. | A clinic posting would be advertising; a medical tip from an anonymous account is what medical-ad rules worry about. | — | Let everyone post and moderate later. |
+| Posts and comments stay in the language they were written in, labelled "Written in …". | The API stores `articleLang` / `commentLang` and translates neither. | A Russian question may get an English answer. | Machine translation per post (cost, a new API). |
+| One `/community` page with `?board=`, `?answered=`, `?text=`, `?sort=`, `?page=`; `/community/detail?id=`, `/community/write?board=|id=`. | nestar-next's community shape; filters survive back / forward and sharing. | — | A route per board. |
+| `/cs?tab=faq|notice|inquiry`, `/cs/notice?id=`, `/cs/inquiry?id=`. | nestar-next's CS tabs; an inquiry is a thread with its own URL (the notification links to it). | — | — |
+| Notices and FAQ come in the reader's profile language when signed in, the site language for a guest. | The API's rule (`readerLang`). | A signed-in reader on the English site may see Russian notices. | Always the site language (needs an API change). |
+| Doctor Panel → Q&A Answers lists every waiting question, not only the doctor's specialty. | Questions carry no specialty in the API. | Doctors see questions outside their field. | Tag questions by specialty (API change). |
+| `useShare` hook for "Share" (clinic page and posts). | One copy of "share sheet or copy link". | — | — |
+| Cut: post photos and tags, drafts, articles "in review", comment replies, author stats, inquiry attachments, translating doctors' answers. | No API. | — | — |

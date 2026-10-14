@@ -659,8 +659,18 @@
 	border-radius: $radius-card;
 	border: 1px solid $border;
 	background: $surface;
-	h3 {
+	.board-column-head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 		padding: 12px 20px;
+		a {
+			font-size: 13px;
+			font-weight: 700;
+			color: $primary;
+		}
+	}
+	h3 {
 		font-size: 17px;
 		font-weight: 800;
 	}
@@ -675,9 +685,14 @@
 		gap: 6px;
 		padding: 14px 20px;
 		border-top: 1px solid $border;
-		strong {
+		.post-link {
 			font-size: 15px;
+			font-weight: 700;
 			line-height: 1.4;
+			color: $text;
+			&:hover {
+				color: $primary;
+			}
 		}
 		&.empty {
 			font-size: 14px;

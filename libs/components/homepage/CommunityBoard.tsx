@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useQuery } from '@apollo/client';
@@ -12,9 +13,14 @@ import { formatCount } from '../../utils';
 import HomeSection from './HomeSection';
 
 /** Two columns on desktop; on mobile the tabs show one at a time (CSS, both lists are loaded). */
-const BOARDS: { category: BoardArticleCategory; label: string; replies: string }[] = [
-	{ category: BoardArticleCategory.QNA, label: 'Q and A', replies: '{{count}} answers' },
-	{ category: BoardArticleCategory.HEALTH_TIP, label: 'Health tips', replies: '{{count}} comments' },
+const BOARDS: { category: BoardArticleCategory; label: string; replies: string; href: string }[] = [
+	{ category: BoardArticleCategory.QNA, label: 'Q and A', replies: '{{count}} answers', href: '/community' },
+	{
+		category: BoardArticleCategory.HEALTH_TIP,
+		label: 'Health tips',
+		replies: '{{count}} comments',
+		href: '/community?board=tips',
+	},
 ];
 
 const inquiry = (category: BoardArticleCategory): ArticlesInquiry => ({
@@ -29,11 +35,12 @@ interface BoardColumnProps {
 	category: BoardArticleCategory;
 	label: string;
 	replies: string;
+	href: string;
 	active: boolean;
 }
 
 const BoardColumn = (props: BoardColumnProps) => {
-	const { category, label, replies, active } = props;
+	const { category, label, replies, href, active } = props;
 	const { t } = useTranslation('common');
 	const { data, loading } = useQuery(GET_ARTICLES, {
 		variables: { input: inquiry(category) },
@@ -43,7 +50,10 @@ const BoardColumn = (props: BoardColumnProps) => {
 
 	return (
 		<div className={`board-column ${active ? 'active' : ''}`} role={'tabpanel'} id={`board-${category}`}>
-			<h3>{t(label)}</h3>
+			<div className={'board-column-head'}>
+				<h3>{t(label)}</h3>
+				<Link href={href}>{t('See all')}</Link>
+			</div>
 			<ul>
 				{loading && list.length === 0
 					? Array.from({ length: 4 }).map((_, index) => (
@@ -52,9 +62,10 @@ const BoardColumn = (props: BoardColumnProps) => {
 							</li>
 						))
 					: list.map((article) => (
-							// Posts open with the community pages (F6); until then the list is read-only.
 							<li key={article._id}>
-								<strong>{article.articleTitle}</strong>
+								<Link href={`/community/detail?id=${article._id}`} className={'post-link'}>
+									{article.articleTitle}
+								</Link>
 								<span className={'meta'}>
 									<span>
 										{article.authorName}
@@ -104,7 +115,9 @@ const CommunityBoard = () => {
 					<BoardColumn key={board.category} {...board} active={tab === board.category} />
 				))}
 			</Box>
-			<p className={'board-note'}>{t('The full community opens soon')}</p>
+			<p className={'board-note'}>
+				<Link href={'/community'}>{t('Open the community')}</Link>
+			</p>
 		</HomeSection>
 	);
 };

@@ -97,6 +97,30 @@ const withLayoutBasic = (Component: React.ComponentType<T>) => {
 				case '/doctor-panel/reviews':
 					title = 'Review Replies';
 					break;
+				case '/community':
+					title = 'Community';
+					break;
+				case '/community/detail':
+					title = 'Community';
+					break;
+				case '/community/write':
+					title = 'Write a post';
+					break;
+				case '/cs':
+					title = 'Help center';
+					break;
+				case '/cs/notice':
+					title = 'Notices';
+					break;
+				case '/cs/inquiry':
+					title = '1:1 Inquiry';
+					break;
+				case '/doctor-panel/qna':
+					title = 'Q&A Answers';
+					break;
+				case '/doctor-panel/articles':
+					title = 'My Articles';
+					break;
 				case '/notifications':
 					title = 'Notifications';
 					break;
