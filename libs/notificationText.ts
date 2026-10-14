@@ -13,8 +13,9 @@ export interface NotificationView {
  * The API renders an English title and description; the client renders the same notification
  * in the reader's language from its type and params (`notificationParamsJson`), and falls back
  * to the server's text for a type it does not know. `when` arrives formatted in Seoul time.
+ * A clinic account's links lead into the Clinic Dashboard, a patient's into My Page.
  */
-export const notificationView = (notification: Notification, t: TFunction): NotificationView => {
+export const notificationView = (notification: Notification, t: TFunction, clinic = false): NotificationView => {
 	let params: Record<string, string> = {};
 	try {
 		params = JSON.parse(notification.notificationParamsJson || '{}');
@@ -22,9 +23,15 @@ export const notificationView = (notification: Notification, t: TFunction): Noti
 		params = {};
 	}
 	const refId = notification.notificationRefId ?? '';
-	const bookings = { href: '/mypage/bookings', label: t('View booking') };
+	const bookings = { href: clinic ? '/dashboard/bookings' : '/mypage/bookings', label: t('View booking') };
 
 	switch (notification.notificationType) {
+		case NotificationType.BOOKING_REQUESTED:
+			return {
+				title: t('New booking request'),
+				desc: t('{{patientName}} · {{treatmentName}} · {{when}}', params),
+				action: { href: '/dashboard', label: t('Answer the request') },
+			};
 		case NotificationType.BOOKING_CONFIRMED:
 			return {
 				title: t('Booking confirmed'),
@@ -41,7 +48,10 @@ export const notificationView = (notification: Notification, t: TFunction): Noti
 			return {
 				title: t('Booking cancelled'),
 				desc: t('{{treatmentName}} on {{when}} was cancelled.', params),
-				action: { href: '/mypage/bookings?tab=cancelled', label: t('View booking') },
+				action: {
+					href: clinic ? '/dashboard/bookings?tab=cancelled' : '/mypage/bookings?tab=cancelled',
+					label: t('View booking'),
+				},
 			};
 		case NotificationType.BOOKING_EXPIRED:
 			return {
@@ -59,7 +69,7 @@ export const notificationView = (notification: Notification, t: TFunction): Noti
 			return {
 				title: t('New message from {{senderName}}', params),
 				desc: params.preview ?? notification.notificationDesc,
-				action: { href: `/mypage/chat?room=${refId}`, label: t('Reply') },
+				action: { href: `${clinic ? '/dashboard/chat' : '/mypage/chat'}?room=${refId}`, label: t('Reply') },
 			};
 		default:
 			return { title: notification.notificationTitle, desc: notification.notificationDesc };

@@ -64,6 +64,39 @@ const withLayoutBasic = (Component: React.ComponentType<T>) => {
 				case '/mypage/chat':
 					title = 'Consultation Chat';
 					break;
+				case '/dashboard':
+					title = 'Clinic Dashboard';
+					break;
+				case '/dashboard/bookings':
+					title = 'Bookings';
+					break;
+				case '/dashboard/schedule':
+					title = 'Schedule & Slots';
+					break;
+				case '/dashboard/chat':
+					title = 'Consultations';
+					break;
+				case '/dashboard/treatments':
+					title = 'Treatments';
+					break;
+				case '/dashboard/treatments/edit':
+					title = 'Treatments';
+					break;
+				case '/dashboard/doctors':
+					title = 'Doctors';
+					break;
+				case '/dashboard/reviews':
+					title = 'Reviews';
+					break;
+				case '/dashboard/profile':
+					title = 'Clinic Profile';
+					break;
+				case '/doctor-panel':
+					title = 'Doctor Panel';
+					break;
+				case '/doctor-panel/reviews':
+					title = 'Review Replies';
+					break;
 				case '/notifications':
 					title = 'Notifications';
 					break;

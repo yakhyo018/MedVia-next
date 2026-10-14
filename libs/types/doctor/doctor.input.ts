@@ -23,3 +23,32 @@ export interface DoctorsInquiry {
 	direction?: Direction;
 	search?: DISearch;
 }
+
+/** The clinic creates a doctor's account; the doctor logs in with this email and password. */
+export interface DoctorCreateInput {
+	memberEmail: string;
+	memberPassword: string;
+	doctorName: string;
+	doctorNameKo?: string;
+	doctorSpecialty: Specialty;
+	doctorLangs?: Language[];
+	doctorExperience?: number;
+}
+
+export interface CareerItemInput {
+	title: string;
+	place?: string;
+	from?: string;
+	to?: string;
+}
+
+/** The doctor's own profile (Doctor Panel). The clinic changes only the specialty. */
+export interface DoctorProfileUpdate {
+	doctorName?: string;
+	doctorNameKo?: string;
+	doctorImage?: string;
+	doctorExperience?: number;
+	doctorLangs?: Language[];
+	doctorBio?: string;
+	doctorCareer?: CareerItemInput[];
+}

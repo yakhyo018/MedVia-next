@@ -17,6 +17,12 @@ export interface QuestionAnswer {
 	answer: string;
 }
 
+export interface StatusChange {
+	status: BookingStatus;
+	reason?: string | null;
+	changedAt: Date;
+}
+
 export interface Booking {
 	_id: string;
 	bookingCode: string;
@@ -30,6 +36,13 @@ export interface Booking {
 	respondDeadline: Date;
 	completedAt?: Date | null;
 	bookingReviewed?: boolean | null;
+	/** The clinic's view: the answers (decrypted only for this clinic and its doctor) and the Korean AI summary. */
+	bookingQuestionnaire?: { answers: QuestionAnswer[]; originalLang: Language } | null;
+	bookingAiSummary?: string | null;
+	bookingHistory?: StatusChange[];
+	/** "Timur A." — the clinic sees the short name. */
+	patientName?: string | null;
+	memberId?: string;
 	clinicId: string;
 	doctorId: string;
 	treatmentId: string;
@@ -71,4 +84,17 @@ export interface BookingsInquiry {
 	page: number;
 	limit: number;
 	tab?: BookingTab;
+	bookingStatus?: BookingStatus;
+	/** The clinic's filters. */
+	doctorId?: string;
+	memberId?: string;
+	/** Patient name or booking code. */
+	search?: string;
+}
+
+export interface BookingStatusUpdate {
+	bookingId: string;
+	bookingStatus: BookingStatus;
+	/** Required when the clinic declines or cancels. */
+	reason?: string;
 }

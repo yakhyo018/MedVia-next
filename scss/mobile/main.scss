@@ -957,6 +957,230 @@
 		min-width: 0;
 	}
 
+	/* Clinic Dashboard and Doctor Panel (F5) */
+	.clinic-strip {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		.avatar {
+			width: 44px;
+			height: 44px;
+			flex-shrink: 0;
+			border-radius: 12px;
+			overflow: hidden;
+			background: $primary-tint;
+			color: $primary;
+			font-size: 15px;
+			font-weight: 800;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+		}
+		.text {
+			flex: 1;
+			min-width: 0;
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+			strong {
+				font-size: 16px;
+			}
+			span {
+				font-size: 12px;
+				color: $text-secondary;
+			}
+		}
+	}
+	.clinic-tabs {
+		margin: 0 -16px;
+		padding: 0 16px 2px;
+		display: flex;
+		gap: 8px;
+		overflow-x: auto;
+		scrollbar-width: none;
+		.my-menu-item {
+			flex-shrink: 0;
+			height: 36px;
+			padding: 0 14px;
+			display: flex;
+			align-items: center;
+			border-radius: $radius-pill;
+			border: 1px solid $border-strong;
+			background: $surface;
+			font-size: 13px;
+			font-weight: 600;
+			color: $text;
+			&.active {
+				border-color: $primary;
+				background: $primary;
+				color: #fff;
+				font-weight: 700;
+			}
+		}
+	}
+	.my-page {
+		.pair {
+			grid-template-columns: 1fr;
+		}
+		.list-tools {
+			flex-wrap: wrap;
+			.MuiTextField-root {
+				min-width: 0;
+				flex: 1 1 100%;
+			}
+		}
+		.data-table {
+			.row.head {
+				display: none;
+			}
+			.row {
+				grid-template-columns: 1fr !important;
+				gap: 8px;
+			}
+		}
+	}
+	.clinic-dashboard {
+		.stat-grid {
+			grid-template-columns: 1fr 1fr;
+			gap: 10px;
+		}
+		.stat {
+			padding: 14px !important;
+			.icon {
+				display: none;
+			}
+			.text strong {
+				font-size: 22px;
+			}
+		}
+		.dashboard-columns {
+			flex-direction: column;
+		}
+		.today {
+			width: 100%;
+		}
+	}
+	.clinic-booking .actions .MuiButton-root {
+		flex: 1;
+	}
+	.clinic-schedule {
+		.schedule-tools {
+			flex-wrap: wrap;
+			.MuiTextField-root {
+				flex: 1 1 100%;
+				min-width: 0;
+			}
+		}
+		.week-nav {
+			flex: 1;
+			justify-content: space-between;
+			span {
+				min-width: 0;
+				font-size: 13px;
+			}
+		}
+		.day-strip {
+			display: grid;
+			grid-template-columns: repeat(7, minmax(0, 1fr));
+			gap: 4px;
+			button {
+				height: 54px;
+				border-radius: 12px;
+				border: 1px solid $border;
+				background: $surface;
+				font-family: $font;
+				color: $text;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				gap: 2px;
+				span {
+					font-size: 11px;
+				}
+				b {
+					font-size: 15px;
+				}
+				&[aria-selected='true'] {
+					border-color: $primary;
+					background: $primary;
+					color: #fff;
+				}
+			}
+		}
+		.day-list {
+			border-radius: $radius-card;
+			border: 1px solid $border;
+			background: $surface;
+			overflow: hidden;
+			> .hint {
+				padding: 16px;
+			}
+		}
+		.day-row {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			padding: 8px 12px;
+			&:not(:last-child) {
+				border-bottom: 1px solid $border;
+			}
+			time {
+				width: 44px;
+				font-size: 13px;
+				font-weight: 700;
+			}
+			.slot {
+				flex: 1;
+				min-height: 40px;
+			}
+		}
+		.pick-bar {
+			top: 72px;
+			flex-wrap: wrap;
+		}
+	}
+	.treatment-form,
+	.clinic-form,
+	.reply-reviews {
+		flex-direction: column;
+		.preview,
+		.side-cards,
+		.summary-side {
+			position: static;
+			width: 100%;
+		}
+	}
+	.doctor-create {
+		grid-template-columns: 1fr;
+	}
+	.reply-review .reply-tools {
+		flex-wrap: wrap;
+		.hint {
+			flex-basis: 100%;
+			order: -1;
+		}
+	}
+	.clinic-form .fields .wide {
+		grid-column: auto;
+	}
+	.doctor-profile .career-row {
+		grid-template-columns: 1fr 1fr;
+		padding-bottom: 10px;
+		border-bottom: 1px solid $border;
+		.MuiIconButton-root {
+			justify-self: start;
+		}
+	}
+	.join-form .role-pick {
+		flex-wrap: wrap;
+	}
+
 	/* Chat and notifications (F3) */
 	/* An open chat room is a full screen: no footer under the composer, no frame padding */
 	.my-page > .container.my-page-body:has(.chat-page.in-room) {

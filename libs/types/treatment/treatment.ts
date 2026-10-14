@@ -1,9 +1,23 @@
 import { Specialty } from '../../enums/clinic.enum';
+import { Language } from '../../enums/common.enum';
+import { TreatmentCategory, TreatmentStatus } from '../../enums/treatment.enum';
 import { Doctor } from '../doctor/doctor';
 
-/** The treatment fields the client reads (the doctor and clinic pages). */
+/** A change to a live treatment, waiting for the admin; the live one stays bookable meanwhile. */
+export interface TreatmentDraft {
+	treatmentName?: string;
+	treatmentCategory?: TreatmentCategory;
+	treatmentPrice?: number;
+	treatmentPriceNote?: string;
+	treatmentDesc?: string;
+	treatmentImages?: string[];
+	submittedAt: Date;
+}
+
+/** The treatment fields the client reads (public pages; the clinic dashboard reads the rest). */
 export interface Treatment {
 	_id: string;
+	treatmentStatus?: TreatmentStatus;
 	treatmentName: string;
 	treatmentCategory?: string;
 	/** minutes */
@@ -11,6 +25,13 @@ export interface Treatment {
 	treatmentPrice: number;
 	treatmentPriceNote?: string;
 	treatmentDesc?: string;
+	treatmentAftercare?: string;
+	treatmentLangs?: Language[];
+	treatmentImages?: string[];
+	treatmentReviewNote?: string | null;
+	treatmentDraft?: TreatmentDraft | null;
+	/** Requests this month (the clinic's table). */
+	treatmentBookingsMonth?: number | null;
 	doctorIds?: string[];
 	clinicId?: string;
 	/** The doctors who perform it (only ACTIVE ones on public pages). */
@@ -32,4 +53,22 @@ export interface TrendingTreatment {
 	/** Requests of the last 30 days. */
 	bookings: number;
 	clinics: number;
+}
+
+export interface TreatmentCreateInput {
+	treatmentName: string;
+	treatmentCategory: TreatmentCategory;
+	/** minutes, a multiple of 30 */
+	treatmentDuration: number;
+	treatmentPrice: number;
+	treatmentPriceNote?: string;
+	treatmentDesc?: string;
+	treatmentAftercare?: string;
+	treatmentLangs?: Language[];
+	treatmentImages?: string[];
+	doctorIds: string[];
+}
+
+export interface TreatmentUpdate extends Partial<TreatmentCreateInput> {
+	treatmentId: string;
 }

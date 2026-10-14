@@ -141,3 +141,21 @@ export const isReviewable = (booking: {
 	!booking.bookingReviewed &&
 	!!booking.completedAt &&
 	Date.now() - new Date(booking.completedAt).getTime() <= REVIEW_WINDOW_DAYS * 24 * 60 * 60 * 1000;
+
+/** "2026-10-14" + 3 → "2026-10-17" (plain calendar arithmetic, no time zone). */
+export const addDaysKey = (dateKey: string, days: number): string =>
+	new Date(Date.parse(`${dateKey}T00:00:00Z`) + days * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+
+/** 0 = Sunday … 6 = Saturday, for a calendar date. */
+export const weekdayOfKey = (dateKey: string): number => new Date(`${dateKey}T00:00:00Z`).getUTCDay();
+
+/** The Monday of the Seoul week that holds `dateKey`. */
+export const mondayOfKey = (dateKey: string): string => addDaysKey(dateKey, -((weekdayOfKey(dateKey) + 6) % 7));
+
+/** "Mon" / "пн" and "14" for a calendar date, in the reader's language. */
+export const dayLabels = (dateKey: string, locale = 'en'): { weekday: string; day: string } => {
+	const date = new Date(`${dateKey}T12:00:00Z`);
+	const part = (options: Intl.DateTimeFormatOptions) =>
+		new Intl.DateTimeFormat(locale, { ...options, timeZone: 'UTC' }).format(date);
+	return { weekday: part({ weekday: 'short' }), day: part({ day: 'numeric' }) };
+};

@@ -2,13 +2,15 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { Badge, Box, Button, CircularProgress, IconButton, Menu } from '@mui/material';
 import NotificationsNoneRoundedIcon from '@mui/icons-material/NotificationsNoneRounded';
 import { GET_MY_NOTIFICATIONS, GET_UNREAD_NOTIFICATION_COUNT } from '../../../apollo/user/query';
 import { MARK_NOTIFICATIONS_READ } from '../../../apollo/user/mutation';
+import { userVar } from '../../../apollo/store';
 import { Notification } from '../../types/notification/notification';
 import { NotificationStatus } from '../../enums/notification.enum';
+import { MemberType } from '../../enums/member.enum';
 import { notificationView } from '../../notificationText';
 import { seoulClock, seoulTime } from '../../utils';
 import { sweetMixinErrorAlert } from '../../sweetAlert';
@@ -23,6 +25,7 @@ const NotificationBell = (props: NotificationBellProps) => {
 	const { mobile } = props;
 	const router = useRouter();
 	const { t } = useTranslation('common');
+	const user = useReactiveVar(userVar);
 	const [anchor, setAnchor] = useState<HTMLElement | null>(null);
 
 	/** APOLLO REQUESTS **/
@@ -110,7 +113,7 @@ const NotificationBell = (props: NotificationBellProps) => {
 					<Box className={'bell-state'}>{t('No notifications yet')}</Box>
 				) : (
 					list.map((notification) => {
-						const view = notificationView(notification, t);
+						const view = notificationView(notification, t, user.memberType === MemberType.AGENT);
 						const unreadRow = notification.notificationStatus === NotificationStatus.WAIT;
 						return (
 							<button
