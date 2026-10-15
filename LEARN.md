@@ -684,3 +684,84 @@ document validated against the running API's schema.
    draft is still the one the admin saw, so a late edit by the clinic can't slip through.
 5. **Why a separate i18n namespace?** Next serializes the page's translations into its HTML; a
    namespace per area keeps the public pages small and loads admin texts only for admins.
+
+## F8 — Assistant UI (2026-10-15)
+
+**Problem.** The backend (AI-2) has a booking assistant: a patient writes "laser toning in
+Gangnam next week" in their language, the model searches clinics and free times with tools over
+MedVia's own services, and may *propose* one time. The patient needed a place to talk to it and
+one safe button that turns the proposal into a booking. No mockup existed; the user chose to
+build straight from the chat look and the design tokens.
+
+### 1. A floating button, a panel, no page
+
+`AssistantLauncher` is mounted once in `_app`: a floating "Ask MedVia AI" button (it bobs and
+sends out a soft ring so it is noticed; off with reduced motion) for patients and guests. A
+guest gets the login prompt; clinic, doctor and admin accounts never see it (the API serves
+patients only). It hides where the page owns the screen: `/booking`, chat, admin, login. The
+panel is a MUI `Drawer`: 420 px on the right on a computer, full screen on a phone — the patient
+can ask without leaving the clinic page.
+
+### 2. The conversation
+
+`AssistantPanel` keeps the turns in state; on open it restores the active session
+(`getMyAssistantSession`; "no session" is a fresh start). Each reply may carry clinic cards (→
+clinic page) and time options (a tap sends "I'd like …" as the next message). The API stores
+only the texts of old turns, so cards come back for new replies only. Errors map to the
+backend's `Messages`: a full session offers "New conversation", a failed send puts the text back
+into the field. The input is always visible — locked, with a hint, until the patient agrees to
+AI processing (`setAiConsent`), so nobody wonders where to write.
+
+### 3. Confirm is the only door
+
+The model can only *propose* (`pendingHold`, 15 minutes, a countdown on the card). The patient's
+**Confirm and continue** calls `confirmAssistantHold` — the API holds the slot — and the usual
+`/booking` page takes over (questionnaire, consents, request). `pendingHold` has no clinic id,
+which `/booking` needs: the panel finds it among the clinic cards of the conversation by name,
+else asks `getDoctor(doctorId)` for the doctor's clinic.
+
+### 4. Model text is data, not HTML
+
+Replies come with a little Markdown (`**bold**`, `- ` lists). `AssistantText` understands only
+those and builds React elements — nothing goes through `innerHTML`, so a reply can't inject
+markup.
+
+### 5. Half the page data: no English fallback
+
+21 assistant keys pushed the Russian and Kazakh pages to 130 kB (Next warns at 128). Each page
+carried its own locale **and** the whole English file as i18next's fallback — useless here,
+because the keys are the English sentences and every locale has every key. `fallbackLng: false`
+removed it (every page, admin included, is under the limit again); `yarn i18n:check` fails if a
+locale misses a key, so the fallback is never needed.
+
+### 6. Reviews on the clinic and doctor pages
+
+A patient asked where to write a review on a clinic page. A review belongs to a completed MedVia
+visit (COMPLETED, within 30 days, one per booking), so there is no free-text box: `ReviewInvite`
+shows "How was your visit? · Write a review" when the patient has such a visit there, otherwise
+a line saying where reviews come from (with a link to My Reviews).
+
+### Checked
+
+As Feride (seed patient): consent gate → agree; "Laser toning in Gangnam next week" → typing
+dots, a Russian reply (her profile language), 2 clinic cards, 8 time options; a time → the
+proposal card with the countdown; Confirm → `/booking` questionnaire with the right clinic,
+treatment, doctor and hold (left to expire); the session restored on another page; bold and
+lists rendered; phone 375 px full-screen panel. Two real model calls. `typecheck`, `lint:check`,
+`build:check` (no page over 128 kB), `i18n:check`, the new GraphQL documents validated against
+the running API.
+
+### Interview questions
+
+1. **Why can't the model book by itself?** It only writes a proposal; the hold is a separate
+   mutation the patient presses. A prompt injection or a hallucinated slot can at worst produce
+   a wrong proposal the patient sees before anything happens.
+2. **How do you show model output safely?** Treat it as text: parse the two Markdown forms you
+   support into React elements, never `dangerouslySetInnerHTML`.
+3. **Why one floating panel instead of a page?** The question usually starts on a clinic or
+   doctor page; a drawer keeps that context and costs no navigation.
+4. **What did `fallbackLng: false` trade?** A missing key would show the raw key; the check
+   script turns that into a failing command instead of a silent risk, and every page halves its
+   translation payload.
+5. **Why does the panel restore texts but not cards?** The API stores turns as text; cards are
+   tool results of one reply. Restoring them would need the API to keep tool output per turn.

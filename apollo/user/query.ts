@@ -1117,3 +1117,47 @@ export const GET_INQUIRY = gql`
 		}
 	}
 `;
+
+/**************************
+ *        ASSISTANT       *
+ *************************/
+
+const ASSISTANT_HOLD_FIELDS = `
+	treatmentId
+	doctorId
+	slotStart
+	label
+	clinicName
+	treatmentName
+	priceKrw
+	expiresAt
+`;
+
+/** The patient's active conversation (texts only — the cards of old replies are not kept). */
+export const GET_MY_ASSISTANT_SESSION = gql`
+	query GetMyAssistantSession {
+		getMyAssistantSession {
+			_id
+			sessionStatus
+			sessionLang
+			turns {
+				role
+				text
+			}
+			pendingHold {
+				${ASSISTANT_HOLD_FIELDS}
+			}
+			turnCount
+		}
+	}
+`;
+
+/** Only the doctor's clinic: where the assistant's held time is booked. */
+export const GET_DOCTOR_CLINIC = gql`
+	query GetDoctorClinic($doctorId: String!) {
+		getDoctor(doctorId: $doctorId) {
+			_id
+			clinicId
+		}
+	}
+`;

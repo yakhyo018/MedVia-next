@@ -31,6 +31,7 @@ import TreatmentTable from '../../libs/components/clinic/TreatmentTable';
 import BookingCard, { BookingRequest } from '../../libs/components/clinic/BookingCard';
 import ClinicCard from '../../libs/components/clinic/ClinicCard';
 import RatingSummary from '../../libs/components/review/RatingSummary';
+import ReviewInvite from '../../libs/components/review/ReviewInvite';
 import ReviewCard from '../../libs/components/review/ReviewCard';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import useLikeTarget from '../../libs/hooks/useLikeTarget';
@@ -483,6 +484,10 @@ const ClinicDetail: NextPage = () => {
 
 						<section>
 							<h2>{t('Verified reviews')}</h2>
+							<ReviewInvite
+								clinicId={typeof clinicId === 'string' ? clinicId : undefined}
+								empty={!(reviews?.summary && reviews.summary.reviews > 0)}
+							/>
 							{reviews?.summary && reviews.summary.reviews > 0 ? (
 								<>
 									<RatingSummary summary={reviews.summary} />
@@ -502,9 +507,7 @@ const ClinicDetail: NextPage = () => {
 										</Button>
 									)}
 								</>
-							) : (
-								<p className={'muted'}>{t('No reviews yet. Reviews come only from completed visits.')}</p>
-							)}
+							) : null}
 						</section>
 					</Stack>
 

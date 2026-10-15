@@ -3,9 +3,9 @@
 Where the frontend stands, what comes next, and how we work. A new session reads this first.
 Update it whenever a milestone closes.
 
-_Last updated: 2026-10-15 — **F7 closed: Admin panel (+ schedule slot colours fix) approved by
-the user, `feature/f7-admin` merged into `develop` and pushed. Next: F8 (Assistant UI) — start
-with the screen list review.**_
+_Last updated: 2026-10-15 — **F8 (Assistant UI) built on `feature/f8-assistant` and checked with
+the seed patient (+ "Write a review" on clinic / doctor pages, `fallbackLng: false`); next:
+merge into `develop`, then F9 (Deploy).**_
 
 ## The project
 
@@ -26,7 +26,7 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 | F5 | Clinic dashboard — schedule, requests, treatments, doctors (+ Doctor Panel) | done 2026-10-14 |
 | F6 | Community + CS — posts, FAQ, inquiries | done 2026-10-14 |
 | F7 | Admin — dashboard (one GraphQL request), moderation, audit | done 2026-10-15 |
-| **F8** | **Assistant UI — chat panel, cards, Confirm button** | **next** |
+| **F8** | **Assistant UI — chat panel, cards, Confirm button** | **built, user's check** |
 | F9 | Deploy — `medvia.uz` + `api.medvia.uz`, backend `develop` → `main` | |
 
 ## F0 — what was built (2026-10-12)
@@ -50,6 +50,21 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
   other tab turns guest; RU locale; 1440 px, 800 px and 375 px mobile (drawer).
 - Not in F0: Google sign-in (needs `GOOGLE_CLIENT_ID`), clinic signup (F5).
 - Test account made during the check: `f0.feride@medvia.test` (local DB only).
+
+## F8 — Assistant UI (2026-10-15)
+
+- No mockup; the user chose: build from the chat look, floating button + drawer, clinic id via
+  the cards / `getDoctor`.
+- `AssistantLauncher` (in `_app`; patients and guests; hidden on `/booking`, chat, admin,
+  login; floating animation), `AssistantPanel` (session restore, consent lock, suggestions,
+  clinic cards, time options, proposal card with countdown → `confirmAssistantHold` →
+  `/booking`, new conversation, full / error states), `AssistantText` (bold + lists as React
+  elements). GraphQL: `GET_MY_ASSISTANT_SESSION`, `GET_DOCTOR_CLINIC`, `SEND_ASSISTANT_MESSAGE`,
+  `CONFIRM_ASSISTANT_HOLD`, `CLOSE_ASSISTANT_SESSION`.
+- i18n: `fallbackLng: false` (pages no longer ship the English file) + `yarn i18n:check`.
+- Also: `ReviewInvite` on clinic and doctor pages ("Write a review" after a completed visit).
+- Checked with `feride@seed`: a real conversation (2 model calls), Confirm → `/booking` (the hold
+  was left to expire, no booking made). Feride's AI consent is now on.
 
 ## F7 — Admin panel (2026-10-15, done)
 

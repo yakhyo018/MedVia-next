@@ -22,6 +22,7 @@ cd ~/Desktop/MedVia-next && yarn dev               # app on :4000 (needs the API
 cd ~/Desktop/MedVia-next && yarn typecheck
 cd ~/Desktop/MedVia-next && yarn lint:check
 cd ~/Desktop/MedVia-next && yarn build:check       # safe beside yarn dev (writes .next-check/)
+cd ~/Desktop/MedVia-next && yarn i18n:check        # every locale has every key (fallbackLng is off)
 cd ~/Desktop/MedVia-next && npx prettier --check "pages/**/*.tsx" "libs/**/*.{ts,tsx}" "scss/**/*.scss" "apollo/**/*.ts"
 ```
 

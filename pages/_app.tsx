@@ -8,6 +8,7 @@ import { light } from '../scss/MaterialTheme';
 import { useApollo } from '../apollo/client';
 import { listenSessionEvents, restoreSession } from '../libs/auth';
 import useLiveSocket from '../libs/hooks/useLiveSocket';
+import AssistantLauncher from '../libs/components/assistant/AssistantLauncher';
 import '../scss/app.scss';
 import '../scss/pc/main.scss';
 import '../scss/mobile/main.scss';
@@ -36,6 +37,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 				<CssBaseline />
 				<LiveSocket />
 				<Component {...pageProps} />
+				<AssistantLauncher />
 			</ThemeProvider>
 		</ApolloProvider>
 	);
