@@ -61,9 +61,10 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
   `deploy/` (compose, nginx, certbot scripts, runbook `deploy/README.md`).
 - Frontend: `Dockerfile` (build args `REACT_APP_*` = `https://api.medvia.tech…`, `i18n:check`
   before `next build`, `next start` on :4000 as `node`).
-- Photos: free HF Space quota ~9 images a day; 21 doctor portraits still to come — doctors show
-  initials until `photos:generate` + `photos:attach` (no reseed). The user asked to take doctor
-  photos from Google regardless of copyright; declined (real people as fictional doctors).
+- Photos: licensed stock only (Unsplash / Pexels; no AI-generated images — removed at the user's
+  request): clinics 3–4 each, 24 doctor portraits (~30 % women), the sign-up panel's Seoul at
+  dusk (Pexels, a local copy). The user asked for Google images regardless of copyright; only
+  licensed sources were used.
 - Not checked here: Docker is not installed on the laptop — the images are first built on the
   server. Next 14 `yarn audit` still to re-check.
 
@@ -389,8 +390,7 @@ with `SEED_PASSWORD` from `~/Desktop/MedVia/.env`.
   or Google Images filtered to Creative Commons, source recorded) — not arbitrary Google
   results; names *realistic but fictional* — never a real Seoul clinic or a real doctor (the
   site shows reviews and ratings for them). Until then the current seed is enough.
-  Images: the user prefers AI-generated ones via Hugging Face (e.g. FLUX.1-schnell, Apache 2.0) —
-  no real faces, no licence questions; needs the user's `HF_TOKEN` in the backend `.env`.
+  Done 2026-10-15 with licensed stock photos (Unsplash / Pexels), see F9.
   Clinic signup (the mockup's SignupClinic form) is planned for F5, with the Clinic Dashboard.
 
 - **F9 deploy plan (the user's choices, 2026-10-14):**
