@@ -16,7 +16,7 @@ import { REPORT_CONTENT } from '../../../apollo/user/mutation';
 import { ReportGroup, ReportReason } from '../../enums/board-article.enum';
 import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../sweetAlert';
 
-const REASONS: Record<ReportReason, string> = {
+export const REASONS: Record<ReportReason, string> = {
 	[ReportReason.SPAM]: 'Spam',
 	[ReportReason.ADVERTISING]: 'Advertising',
 	[ReportReason.MEDICAL_MISINFORMATION]: 'Wrong medical information',

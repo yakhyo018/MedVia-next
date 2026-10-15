@@ -16,6 +16,8 @@ export interface BoardArticle {
 	articleLikes: number;
 	articleViews: number;
 	articleComments: number;
+	/** Reports by members — the admin's list only. */
+	articleReports?: number;
 	createdAt: Date;
 	updatedAt?: Date;
 	/** The author's account (own posts: Edit / Delete). */

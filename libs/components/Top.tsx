@@ -34,12 +34,13 @@ const Top = () => {
 	const currentLocale = router.locale ?? 'en';
 	/**
 	 * Each role's own area under its own name: My Page (patient), Clinic Dashboard (clinic),
-	 * Doctor Panel (doctor). The admin gets "Admin" with F7; until then nothing.
+	 * Doctor Panel (doctor), Admin.
 	 */
 	const workspaces: Partial<Record<MemberType, { href: string; label: string }>> = {
 		[MemberType.USER]: { href: '/mypage', label: t('My Page') },
 		[MemberType.AGENT]: { href: '/dashboard', label: t('Clinic Dashboard') },
 		[MemberType.DOCTOR]: { href: '/doctor-panel', label: t('Doctor Panel') },
+		[MemberType.ADMIN]: { href: '/_admin', label: t('Admin') },
 	};
 	const workspace = user.memberType ? (workspaces[user.memberType] ?? null) : null;
 	const menu = [

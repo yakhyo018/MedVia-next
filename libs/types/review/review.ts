@@ -1,5 +1,5 @@
 import { Language } from '../../enums/common.enum';
-import { ReviewStatus, ReviewTag } from '../../enums/review.enum';
+import { ReviewFlag, ReviewStatus, ReviewTag } from '../../enums/review.enum';
 import { TotalCounter } from '../common';
 
 export interface ReviewReply {
@@ -21,6 +21,8 @@ export interface Review {
 	reviewReply?: ReviewReply | null;
 	/** The admin's reason when asking for an edit or hiding the review. */
 	reviewNote?: string | null;
+	/** The medical-ad rules the admin found broken (moderation only). */
+	reviewFlags?: ReviewFlag[];
 	submittedAt?: Date;
 	bookingId?: string;
 	clinicId?: string;

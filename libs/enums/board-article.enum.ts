@@ -25,3 +25,15 @@ export enum ReportReason {
 	ABUSE = 'ABUSE',
 	OTHER = 'OTHER',
 }
+
+/** PENDING is the moderation queue; a decision closes every pending report of the target. */
+export enum ReportStatus {
+	PENDING = 'PENDING',
+	RESOLVED = 'RESOLVED',
+	DISMISSED = 'DISMISSED',
+}
+
+export enum ModerationDecision {
+	HIDE = 'HIDE',
+	SHOW = 'SHOW',
+}

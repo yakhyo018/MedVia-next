@@ -36,6 +36,9 @@ export interface Treatment {
 	clinicId?: string;
 	/** The doctors who perform it (only ACTIVE ones on public pages). */
 	doctors?: Pick<Doctor, '_id' | 'doctorName'>[];
+	/** The admin's queue: whose treatment it is. */
+	clinicData?: { _id: string; clinicName: string } | null;
+	submittedAt?: Date;
 }
 
 export interface ClinicTreatmentsInquiry {

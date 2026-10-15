@@ -1,6 +1,7 @@
 import { ClinicStatus, District, Specialty } from '../../enums/clinic.enum';
 import { Language } from '../../enums/common.enum';
 import { TotalCounter } from '../common';
+import { Member } from '../member/member';
 
 export interface ClinicHour {
 	/** 0 = Sunday … 6 = Saturday */
@@ -49,6 +50,8 @@ export interface Clinic {
 	/** Only when the viewer is signed in. */
 	meLiked?: boolean;
 	meFollowed?: boolean;
+	/** The clinic's account — the admin's lists only. */
+	memberData?: Pick<Member, '_id' | 'memberFullName' | 'memberEmail' | 'memberPhone'> | null;
 }
 
 export interface Clinics {
