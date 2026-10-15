@@ -3,9 +3,9 @@
 Where the frontend stands, what comes next, and how we work. A new session reads this first.
 Update it whenever a milestone closes.
 
-_Last updated: 2026-10-15 — **F8 closed: Assistant UI (+ "Write a review" on clinic / doctor
-pages, no English i18n fallback) approved by the user, `feature/f8-assistant` merged into
-`develop` and pushed. Next: F9 (Deploy) — start with the plan review.**_
+_Last updated: 2026-10-15 — **F9 (Deploy) in progress: code ready (backend `feature/seed-variety`,
+`feature/demo-mode`, `feature/docker`; frontend `feature/f9-deploy`). Next: merge both repos
+`develop` → `main`, then the server by `~/Desktop/MedVia/deploy/README.md`.**_
 
 ## The project
 
@@ -27,7 +27,7 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 | F6 | Community + CS — posts, FAQ, inquiries | done 2026-10-14 |
 | F7 | Admin — dashboard (one GraphQL request), moderation, audit | done 2026-10-15 |
 | F8 | Assistant UI — chat panel, cards, Confirm button | done 2026-10-15 |
-| **F9** | **Deploy — `medvia.uz` + `api.medvia.uz`, backend `develop` → `main`** | **next** |
+| **F9** | **Deploy — `medvia.tech` + `api.medvia.tech`, Docker Compose, both repos `develop` → `main`** | **in progress** |
 
 ## F0 — what was built (2026-10-12)
 
@@ -50,6 +50,22 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
   other tab turns guest; RU locale; 1440 px, 800 px and 375 px mobile (drawer).
 - Not in F0: Google sign-in (needs `GOOGLE_CLIENT_ID`), clinic signup (F5).
 - Test account made during the check: `f0.feride@medvia.test` (local DB only).
+
+## F9 — Deploy (2026-10-15, in progress)
+
+- The user's choices: domain **medvia.tech** (`api.medvia.tech`), **Docker Compose** (after the
+  PM2 vs Compose comparison), **DEMO_MODE** (synthetic data, OpenRouter in production), seed
+  enriched before deploy, 8 clinics × 3 doctors, 50 patients; deploy today.
+- Backend: seed variety (names checked against real clinics, hand-written clinics and doctors,
+  hours, licensed photos — see the backend STATUS), `DEMO_MODE`, `Dockerfile` +
+  `deploy/` (compose, nginx, certbot scripts, runbook `deploy/README.md`).
+- Frontend: `Dockerfile` (build args `REACT_APP_*` = `https://api.medvia.tech…`, `i18n:check`
+  before `next build`, `next start` on :4000 as `node`).
+- Photos: free HF Space quota ~9 images a day; 21 doctor portraits still to come — doctors show
+  initials until `photos:generate` + `photos:attach` (no reseed). The user asked to take doctor
+  photos from Google regardless of copyright; declined (real people as fictional doctors).
+- Not checked here: Docker is not installed on the laptop — the images are first built on the
+  server. Next 14 `yarn audit` still to re-check.
 
 ## F8 — Assistant UI (2026-10-15, done)
 

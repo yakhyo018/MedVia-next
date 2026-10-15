@@ -118,3 +118,14 @@ user's check, the merge. Details and the clinic-page plan: STATUS.md → "Next s
 | `fallbackLng: false` + `yarn i18n:check`. | The English fallback doubled every non-English page's data and pushed RU / KK pages over 128 kB; keys are English and every locale is complete. | A missing key shows the raw key — the check catches it. | A namespace per area for everything. |
 | Clinic / doctor pages: "Write a review" only for the patient's completed, unreviewed visit there; otherwise a hint. | The API's review rule (COMPLETED, 30 days, one per booking). | — | A free review box (the API would refuse). |
 | Cut: cards of old replies after a reload, conversation history list, voice input. | The API keeps turn texts and one active session. | — | — |
+
+## F9 — Deploy (2026-10-15)
+
+| Decision | Why | Risks | Alternatives |
+| --- | --- | --- | --- |
+| Domain `medvia.tech` + `api.medvia.tech` (the user's). | One site for the refresh cookie (SameSite Lax) — Safari blocks third-party cookies. | — | Separate hosts. |
+| Docker Compose on one VPS (the user's choice after a comparison with PM2). | Same environment anywhere, `up -d --build` deploys; portfolio signal. | More RAM / disk than PM2; prune old images. | PM2 + Nginx on the host. |
+| `REACT_APP_*` as build args. | Next inlines `env` at build time; the image is built per site. | A new API URL needs a rebuild. | Runtime config endpoint. |
+| `www` → apex redirect. | One origin for CORS (`FRONTEND_URL`) and the cookie's site. | — | Allow both origins. |
+| `DEMO_MODE` (backend) for the portfolio site. | Production locks refuse seed and free AI providers; the site holds synthetic data only. | Must never be on with real patients. | Anthropic (paid); AI off. |
+
