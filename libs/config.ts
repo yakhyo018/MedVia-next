@@ -75,7 +75,7 @@ export const localeToLanguage = (locale: string | undefined): Language =>
 	LANGUAGES.find((lang) => lang.locale === locale)?.code ?? Language.EN;
 
 /**
- * Photos, free under the Unsplash License (credit given on the page). Served from the
+ * Photos, free under the Unsplash / Pexels licences (credit given on the page). Unsplash ones are served from the
  * Unsplash CDN for now; `?w=` asks the CDN for a resized copy.
  */
 const unsplash = (id: string, width: number) =>
@@ -83,7 +83,12 @@ const unsplash = (id: string, width: number) =>
 
 export const IMAGES = {
 	/** From MedVia-design/landing-with-photos (the approved landing sample). */
-	hero: { src: '/img/hero.jpg', credit: '' },
-	login: { src: unsplash('photo-1786801525028-5be8739f4ae5', 1000), credit: 'Emma Gasseau-Dryer' },
-	signup: { src: unsplash('photo-1584516150909-c43483ee7932', 1000), credit: 'National Cancer Institute' },
+	hero: { src: '/img/hero.jpg', credit: '', source: '' },
+	login: {
+		src: unsplash('photo-1786801525028-5be8739f4ae5', 1000),
+		credit: 'Emma Gasseau-Dryer',
+		source: 'Unsplash',
+	},
+	/** Seoul at dusk — Pexels 12640885, a local copy (no hot-link). */
+	signup: { src: '/img/signup.jpg', credit: 'Ethan Brooke', source: 'Pexels' },
 };
