@@ -3,9 +3,9 @@
 Where the frontend stands, what comes next, and how we work. A new session reads this first.
 Update it whenever a milestone closes.
 
-_Last updated: 2026-10-15 — **F7 (Admin) committed on `feature/f7-admin` (+ a fix: Clinic
-Dashboard schedule slots coloured as in the mockup); next: merge into `develop`, then F8
-(Assistant UI).**_
+_Last updated: 2026-10-15 — **F7 closed: Admin panel (+ schedule slot colours fix) approved by
+the user, `feature/f7-admin` merged into `develop` and pushed. Next: F8 (Assistant UI) — start
+with the screen list review.**_
 
 ## The project
 
@@ -25,8 +25,8 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 | F4 | MyPage — reviews, follows, settings, "who saw my medical data" | done 2026-10-14 |
 | F5 | Clinic dashboard — schedule, requests, treatments, doctors (+ Doctor Panel) | done 2026-10-14 |
 | F6 | Community + CS — posts, FAQ, inquiries | done 2026-10-14 |
-| **F7** | **Admin — dashboard (one GraphQL request), moderation, audit** | **built, user's check** |
-| F8 | Assistant UI — chat panel, cards, Confirm button | |
+| F7 | Admin — dashboard (one GraphQL request), moderation, audit | done 2026-10-15 |
+| **F8** | **Assistant UI — chat panel, cards, Confirm button** | **next** |
 | F9 | Deploy — `medvia.uz` + `api.medvia.uz`, backend `develop` → `main` | |
 
 ## F0 — what was built (2026-10-12)
@@ -51,7 +51,7 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 - Not in F0: Google sign-in (needs `GOOGLE_CLIENT_ID`), clinic signup (F5).
 - Test account made during the check: `f0.feride@medvia.test` (local DB only).
 
-## F7 — Admin panel (2026-10-15, waiting for the user's check)
+## F7 — Admin panel (2026-10-15, done)
 
 - Screen list approved (13 mockups + an Audit log page); the user chose: phone = simple
   adaptation (drawer + scrolling tables, no Mobile-canvas artboards), one branch, Audit as its
