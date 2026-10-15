@@ -89,3 +89,18 @@ user's check, the merge. Details and the clinic-page plan: STATUS.md → "Next s
 | Doctor Panel → Q&A Answers lists every waiting question, not only the doctor's specialty. | Questions carry no specialty in the API. | Doctors see questions outside their field. | Tag questions by specialty (API change). |
 | `useShare` hook for "Share" (clinic page and posts). | One copy of "share sheet or copy link". | — | — |
 | Cut: post photos and tags, drafts, articles "in review", comment replies, author stats, inquiry attachments, translating doctors' answers. | No API. | — | — |
+
+## F7 — Admin panel (2026-10-15)
+
+| Decision | Why | Risks | Alternatives |
+| --- | --- | --- | --- |
+| `withLayoutAdmin`: own side menu + top bar, no site header / footer; the layout is the admin guard. | The mockup; one guard instead of thirteen; nestar-next's admin layout. | — | `WorkspaceFrame` like the clinic area. |
+| Phone: no Mobile-canvas artboards; menu in a drawer, tables scroll inside their card (the user's choice). | Admins work on a computer. | Tables are wide on a phone. | Draw phone screens first. |
+| One branch for all of F7 (the user's choice); Audit log as its own page (no mockup). | The API has `getAuditFeedByAdmin` with filters. | — | Only "Recent activity". |
+| Dashboard = one query with aliases; counters = `limit: 1` + `metaCounter`. | One round trip, no new API. | Totals are per status, not "older than 24 h". | A stats resolver per card. |
+| Clinic review page finds the clinic among PENDING / CHANGES_REQUESTED / REJECTED (≤ 50 each). | The API has no admin clinic-by-id; `getClinic` serves live clinics only. | > 50 clinics in one status. | Add `getClinicByAdmin` to the API. |
+| Clinics "All clinics": All / Live / Suspended (no "Hidden", no specialty filter). | The API has no clinic HIDDEN status or specialty filter for admins. | — | — |
+| Treatments: "Request edit" only for new ones; an edit of a live treatment is approved or rejected. | The API's review flow for drafts. | — | — |
+| The earlier review note is shown, not pre-filled into the message field. | A pre-filled field let a decision be sent by accident during the check. | — | Pre-fill. |
+| Admin texts in `admin.json` (+ `nsMode: 'fallback'` to `common`). | ~290 keys in `common.json` pushed every page over Next's 128 kB data warning. | Admin pages themselves still warn (138–162 kB; internal, `noindex`). | Keep one namespace. |
+| Cut: Export CSV, "Send notification" to a user, "Avg. response", booking date range, inquiry templates / "Ask clinic" / auto-translation, specialty filter, doctors-per-clinic count, 30-day chart. | No API. | — | — |

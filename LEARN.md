@@ -598,3 +598,89 @@ scroll, `build:check` 202 pages.
    back / forward and shared links restore the same list; the inputs are validated on read.
 5. **What happens at the fifth report?** The API hides the post or comment in the same request
    that records the report; readers stop seeing it until the admin restores or keeps it hidden.
+
+## F7 — Admin panel (2026-10-15)
+
+**Problem.** MedVia checks every clinic, treatment and review by hand before patients see it,
+answers 1:1 inquiries, writes notices and FAQ, and must be able to show *who decided what*. The
+API (M10) had all of it; the admin had no screen.
+
+### 1. Its own frame and its own guard
+
+`withLayoutAdmin` (nestar-next has the same idea) replaces the site header with a 240 px side
+menu and a top bar: breadcrumb, the page's search, the bell, the admin's menu. The open section
+shows its sub-pages (`ADMIN_MENU` in `AdminMenu.tsx` — one table drives the menu, the
+breadcrumb and the page title). The layout is also the guard: a guest gets the login prompt,
+any other account "The admin panel is for MedVia admins." — the page component is not even
+rendered, so its queries never run. On a phone the menu moves into a drawer and tables scroll
+inside their card.
+
+### 2. The dashboard is one GraphQL request
+
+`GET_ADMIN_DASHBOARD` asks five resolvers at once with **aliases**:
+`getBookingStatsByAdmin`, `getBatchStatusByAdmin`, and `pendingClinics: getClinicsByAdmin(…)`,
+`pendingReviews`, `pendingReports`, `pendingTreatments` with `limit: 1` — only `metaCounter.total`
+is read — plus the five latest audit entries. One round trip, one loading state. The chart is
+plain CSS bars (no chart library for 14 numbers); "+N vs. last Thursday" compares today with
+the same weekday a week earlier from the same 14-day array. The same alias trick fills every
+pill counter ("Patients (53)", "Pending (6)").
+
+### 3. List state lives in the URL
+
+`useUrlQuery` reads and writes `?tab=&page=&text=` with a shallow push: back / forward and shared
+links restore the list; a new filter drops `page` so it never opens on page 7. The top bar's
+search writes `?text=` for the pages that declare one (`SEARCH` in `LayoutAdmin`).
+
+### 4. Decisions mirror the API's rules
+
+- Clinics and treatments: Approve / Request changes / Reject; anything but Approve needs a
+  message (the API answers `REVIEW_NOTE_REQUIRED` otherwise, the UI asks first).
+- Reviews: the buttons come from a copy of the API's `MODERATION` table (`ALLOWED` — e.g. a
+  hidden review can only be approved again); "Request edit" and "Hide" open one dialog with the
+  broken rules (`ReviewFlag` chips) and the message to the patient.
+- An edit of a live treatment is sent with `draftSubmittedAt` — if the clinic changed the draft
+  after the admin opened it, the API refuses instead of approving something nobody read
+  (optimistic concurrency).
+- Posts and comments: `moderateContent` HIDE or SHOW; either closes every pending report of the
+  target. SHOW on a visible post is "Dismiss".
+- Users: block / unblock (`updateMemberByAdmin`), which also ends the member's sessions.
+
+### 5. Gaps in the API, handled on the client
+
+- No admin "clinic by id": the review page reads the three not-live statuses (≤ 50 each) and
+  finds the clinic; live ones are reviewed on All clinics.
+- The checklist on the review page is not stored (the API keeps only the decision); the
+  "Korean name missing" flag is computed from `clinicNameKo`.
+- The admin's medical-data card shows only the access log (`getAccessLogsByAdmin`) — never the
+  answers: admins are not on the list of readers.
+
+### 6. A namespace of its own
+
+~290 admin strings in `common.json` pushed **every** page's data over Next's 128 kB warning
+(each page carries its locale + the English fallback). They now live in `admin.json`, loaded
+only by admin pages (`serverSideTranslations(locale, ['common', 'admin'])`). `useTranslation`
+binds `t` to the first namespace by default; `{ nsMode: 'fallback' }` (`ADMIN_I18N`) makes it
+look in `admin` and then `common` (StatusChip, specialties, "Approve" …).
+
+### Checked
+
+As `admin@seed` (logged in by the user): all 13 pages with seed data, desktop 1440 / a narrow
+800 px pane and phone 375 px without sideways scroll; block → unblock of the F4 test patient
+(counters and audit log follow); user detail with bookings and the access log; notice draft
+created and removed; the inquiry thread; review dialog validation; RU texts with plurals.
+`typecheck`, `lint:check`, `build:check` (public pages under 128 kB again), every admin GraphQL
+document validated against the running API's schema.
+
+### Interview questions
+
+1. **Why one request for the dashboard?** Aliases let one GraphQL document call the same field
+   several times with different arguments; the page renders once, and five cards don't race.
+2. **How do you count without loading the list?** `limit: 1` and read `metaCounter.total` — the
+   API returns the total with every page, so a one-row page is a cheap count.
+3. **Why is the guard in the layout, not in each page?** One place to get right; pages assume an
+   admin, and nothing of theirs (queries included) runs for anyone else. The API still checks
+   `@Roles(ADMIN)` on every resolver — the UI guard is convenience, not security.
+4. **What is `draftSubmittedAt` for?** It is a version stamp: the update matches only if the
+   draft is still the one the admin saw, so a late edit by the clinic can't slip through.
+5. **Why a separate i18n namespace?** Next serializes the page's translations into its HTML; a
+   namespace per area keeps the public pages small and loads admin texts only for admins.
