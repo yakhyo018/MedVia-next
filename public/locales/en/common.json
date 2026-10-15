@@ -981,5 +981,9 @@
   "from {{price}}": "from {{price}}",
   "Press “Agree and start” to write": "Press “Agree and start” to write",
   "How was your visit?": "How was your visit?",
-  "Reviews come only from completed MedVia visits.": "Reviews come only from completed MedVia visits."
+  "Reviews come only from completed MedVia visits.": "Reviews come only from completed MedVia visits.",
+  "or": "or",
+  "No MedVia account for this Google account yet — accept the terms to sign up.": "No MedVia account for this Google account yet — accept the terms to sign up.",
+  "Google sign-in is not configured on this server!": "Google sign-in is not configured on this server!",
+  "Google sign-in failed, please try again!": "Google sign-in failed, please try again!"
 }

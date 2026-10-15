@@ -1005,5 +1005,9 @@
   "from {{price}}": "от {{price}}",
   "Press “Agree and start” to write": "Нажмите «Согласиться и начать», чтобы писать",
   "How was your visit?": "Как прошёл визит?",
-  "Reviews come only from completed MedVia visits.": "Отзывы оставляют только после завершённого визита через MedVia."
+  "Reviews come only from completed MedVia visits.": "Отзывы оставляют только после завершённого визита через MedVia.",
+  "or": "или",
+  "No MedVia account for this Google account yet — accept the terms to sign up.": "Для этого Google-аккаунта ещё нет аккаунта MedVia — примите условия, чтобы зарегистрироваться.",
+  "Google sign-in is not configured on this server!": "Вход через Google на этом сервере не настроен!",
+  "Google sign-in failed, please try again!": "Не удалось войти через Google, попробуйте ещё раз!"
 }

@@ -128,4 +128,4 @@ user's check, the merge. Details and the clinic-page plan: STATUS.md → "Next s
 | `REACT_APP_*` as build args. | Next inlines `env` at build time; the image is built per site. | A new API URL needs a rebuild. | Runtime config endpoint. |
 | `www` → apex redirect. | One origin for CORS (`FRONTEND_URL`) and the cookie's site. | — | Allow both origins. |
 | `DEMO_MODE` (backend) for the portfolio site. | Production locks refuse seed and free AI providers; the site holds synthetic data only. | Must never be on with real patients. | Anthropic (paid); AI off. |
-
+| Google sign-in with `@react-oauth/google` (planned in CLAUDE.md), patients only; the button hides without `REACT_APP_GOOGLE_CLIENT_ID`. | Google's own button gives the ID token the API's `googleLogin` already verifies; a clinic sign-up needs the clinic's details. | Needs an OAuth client in Google Cloud. | Google Identity Services script by hand. |

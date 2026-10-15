@@ -3,6 +3,8 @@ import { Language } from './enums/common.enum';
 export const REACT_APP_API_URL = `${process.env.REACT_APP_API_URL}`;
 export const REACT_APP_API_GRAPHQL_URL = `${process.env.REACT_APP_API_GRAPHQL_URL}`;
 export const REACT_APP_API_WS = `${process.env.REACT_APP_API_WS}`;
+/** Google sign-in's OAuth client id; empty = the Google button is not shown. */
+export const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID ?? '';
 
 /** Every time the patient sees is Seoul time; the API stores UTC. */
 export const SEOUL_TIME_ZONE = 'Asia/Seoul';
@@ -38,6 +40,8 @@ export enum Messages {
 	TOO_MANY_REQUESTS = 'You already have 3 requests waiting for clinics!',
 	CANCEL_TOO_LATE = 'A confirmed booking can be cancelled up to 24 hours before the visit!',
 	TRANSITION_NOT_ALLOWED = 'This booking cannot be changed this way!',
+	GOOGLE_NOT_CONFIGURED = 'Google sign-in is not configured on this server!',
+	GOOGLE_TOKEN_INVALID = 'Google sign-in failed, please try again!',
 	NO_DATA_FOUND = 'No data is found!',
 	NO_PENDING_HOLD = 'There is no time waiting for your confirmation, or it has expired!',
 	ASSISTANT_SESSION_FULL = 'This conversation is full, please start a new one!',

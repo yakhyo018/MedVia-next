@@ -981,5 +981,9 @@
   "from {{price}}": "{{price}} бастап",
   "Press “Agree and start” to write": "Жазу үшін «Келісіп, бастау» батырмасын басыңыз",
   "How was your visit?": "Келу қалай өтті?",
-  "Reviews come only from completed MedVia visits.": "Пікірлер тек MedVia арқылы аяқталған келуден кейін жазылады."
+  "Reviews come only from completed MedVia visits.": "Пікірлер тек MedVia арқылы аяқталған келуден кейін жазылады.",
+  "or": "немесе",
+  "No MedVia account for this Google account yet — accept the terms to sign up.": "Бұл Google аккаунтына әлі MedVia аккаунты жоқ — тіркелу үшін шарттарды қабылдаңыз.",
+  "Google sign-in is not configured on this server!": "Бұл серверде Google арқылы кіру бапталмаған!",
+  "Google sign-in failed, please try again!": "Google арқылы кіру сәтсіз, қайталап көріңіз!"
 }

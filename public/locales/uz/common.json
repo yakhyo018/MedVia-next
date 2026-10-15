@@ -981,5 +981,9 @@
   "from {{price}}": "{{price}} dan",
   "Press “Agree and start” to write": "Yozish uchun «Rozilik berib boshlash»ni bosing",
   "How was your visit?": "Tashrif qanday oʻtdi?",
-  "Reviews come only from completed MedVia visits.": "Sharhlar faqat MedVia orqali yakunlangan tashrifdan keyin yoziladi."
+  "Reviews come only from completed MedVia visits.": "Sharhlar faqat MedVia orqali yakunlangan tashrifdan keyin yoziladi.",
+  "or": "yoki",
+  "No MedVia account for this Google account yet — accept the terms to sign up.": "Bu Google akkauntiga hali MedVia akkaunti yo'q — ro'yxatdan o'tish uchun shartlarni qabul qiling.",
+  "Google sign-in is not configured on this server!": "Bu serverda Google orqali kirish sozlanmagan!",
+  "Google sign-in failed, please try again!": "Google orqali kirib bo'lmadi, qayta urinib ko'ring!"
 }

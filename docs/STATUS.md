@@ -65,6 +65,9 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
   request): clinics 3–4 each, 24 doctor portraits (~30 % women), the sign-up panel's Seoul at
   dusk (Pexels, a local copy). The user asked for Google images regardless of copyright; only
   licensed sources were used.
+- Google sign-in (the user's request): "Continue with Google" on Log in / Sign up for patients
+  (`GoogleButton`, `googleLogIn`, `GOOGLE_LOGIN`); hidden until `REACT_APP_GOOGLE_CLIENT_ID` is set —
+  the OAuth client is created by the user (runbook §3). Not tested end to end without it.
 - Not checked here: Docker is not installed on the laptop — the images are first built on the
   server. Next 14 `yarn audit` still to re-check.
 
@@ -401,7 +404,7 @@ with `SEED_PASSWORD` from `~/Desktop/MedVia/.env`.
   - **A new, strong `SEED_PASSWORD` in production** (and a new admin password): today's seed
     password is a weak demo one, and the demo accounts (`feride@`, `clinic01@`, `doctor01@`,
     `admin@seed.medvia.test`) will be reachable on the public site.
-- Google sign-in needs `GOOGLE_CLIENT_ID` (backend open item).
+- Google sign-in: built (F9); needs the OAuth client id in both `.env` files.
 - Before deploy (F9): copy the Unsplash photos into `public/img/` and re-check `yarn audit` for
   Next 14 (current advisories are mostly App Router / middleware / `next/image`).
 - `yarn build:check` builds into `.next-check/` while `yarn dev` runs (F1 passed: 47 static
