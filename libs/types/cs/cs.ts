@@ -1,11 +1,21 @@
-import { InquiryCategory, InquirySender, InquiryStatus, NoticeCategory } from '../../enums/cs.enum';
+import { InquiryCategory, InquirySender, InquiryStatus, NoticeCategory, NoticeStatus } from '../../enums/cs.enum';
 import { Language } from '../../enums/common.enum';
 import { TotalCounter } from '../common';
 
 /** A notice or an FAQ entry; `display…` is the text in the language the list asked for. */
+/** The same notice in another language (written by the admin). */
+export interface NoticeTranslation {
+	lang: Language;
+	title: string;
+	content: string;
+}
+
 export interface Notice {
 	_id: string;
 	noticeCategory: NoticeCategory;
+	/** The admin's lists only (the public ones are published notices). */
+	noticeStatus?: NoticeStatus;
+	noticeTranslations?: NoticeTranslation[];
 	noticeFaqCategory?: InquiryCategory | null;
 	noticePinned: boolean;
 	noticeTitle: string;
@@ -51,6 +61,9 @@ export interface Inquiry {
 	resolvedAt?: Date | null;
 	bookingId?: string | null;
 	bookingCode?: string | null;
+	/** The admin's view: who wrote it. */
+	memberId?: string;
+	patientName?: string | null;
 	createdAt: Date;
 	updatedAt: Date;
 }

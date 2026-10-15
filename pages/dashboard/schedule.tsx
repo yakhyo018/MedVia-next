@@ -121,12 +121,17 @@ const ClinicSchedule: NextPage = () => {
 				: kind === 'held'
 					? t('On hold')
 					: kind === 'blocked'
-						? slot.slotBlockReason || t('Blocked')
+						? t('Blocked')
 						: t('Open');
+		// As in the mockup: the treatment under a booking, "Request" under a request, the reason under a block.
 		const sub =
-			kind === 'booked' || kind === 'request'
-				? `${kind === 'request' ? `${t('Request')} · ` : ''}${slot.bookingData?.treatmentName ?? ''}`
-				: '';
+			kind === 'booked'
+				? (slot.bookingData?.treatmentName ?? '')
+				: kind === 'request'
+					? t('Request')
+					: kind === 'blocked'
+						? (slot.slotBlockReason ?? '')
+						: '';
 		const content = (
 			<>
 				{withDoctor && (

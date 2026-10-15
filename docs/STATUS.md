@@ -3,9 +3,9 @@
 Where the frontend stands, what comes next, and how we work. A new session reads this first.
 Update it whenever a milestone closes.
 
-_Last updated: 2026-10-14 — **F6 closed: Community + Help center approved by the user,
-`feature/f6-community` merged into `develop` and pushed. Next: F7 (Admin) — start with the screen
-list review.**_
+_Last updated: 2026-10-15 — **F7 (Admin) committed on `feature/f7-admin` (+ a fix: Clinic
+Dashboard schedule slots coloured as in the mockup); next: merge into `develop`, then F8
+(Assistant UI).**_
 
 ## The project
 
@@ -25,7 +25,7 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 | F4 | MyPage — reviews, follows, settings, "who saw my medical data" | done 2026-10-14 |
 | F5 | Clinic dashboard — schedule, requests, treatments, doctors (+ Doctor Panel) | done 2026-10-14 |
 | F6 | Community + CS — posts, FAQ, inquiries | done 2026-10-14 |
-| **F7** | **Admin — dashboard (one GraphQL request), moderation, audit** | **next** |
+| **F7** | **Admin — dashboard (one GraphQL request), moderation, audit** | **built, user's check** |
 | F8 | Assistant UI — chat panel, cards, Confirm button | |
 | F9 | Deploy — `medvia.uz` + `api.medvia.uz`, backend `develop` → `main` | |
 
@@ -50,6 +50,34 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
   other tab turns guest; RU locale; 1440 px, 800 px and 375 px mobile (drawer).
 - Not in F0: Google sign-in (needs `GOOGLE_CLIENT_ID`), clinic signup (F5).
 - Test account made during the check: `f0.feride@medvia.test` (local DB only).
+
+## F7 — Admin panel (2026-10-15, waiting for the user's check)
+
+- Screen list approved (13 mockups + an Audit log page); the user chose: phone = simple
+  adaptation (drawer + scrolling tables, no Mobile-canvas artboards), one branch, Audit as its
+  own page.
+- `withLayoutAdmin` (side menu, top bar with breadcrumb / search / bell / admin menu; the admin
+  guard), `AdminMenu`, `AdminPills`, `AdminPager`, `AdminStatCard`, `AdminClinicList`,
+  `useUrlQuery`, `apollo/admin/query.ts` + `mutation.ts`, `libs/types/admin/admin.ts`, enums
+  `admin.enum.ts` + `batch.enum.ts`. Header: "Admin" → `/_admin` for admin accounts.
+- Pages: `/_admin` (one request: booking cards, 14-day chart, languages, batch runs + queue,
+  recent decisions), `/_admin/users` (+ `/detail?id=`: account, activity, bookings, access log),
+  `/_admin/clinics` (verification) + `/all` (suspend / restore) + `/review?id=` (checklist,
+  decision), `/_admin/doctors`, `/_admin/treatments`, `/_admin/bookings` (monitor),
+  `/_admin/reviews`, `/_admin/community` (+ `/reports`), `/_admin/cs` (inquiries),
+  `/_admin/cs/notices` (notices & FAQ editor, EN + 4 translations), `/_admin/audit`.
+- i18n: admin texts in a new `admin.json` namespace (291 keys; ru 305 with plurals), loaded
+  only by admin pages — in `common.json` they pushed every page over Next's 128 kB data warning.
+  Admin pages still warn (138–162 kB).
+- Cut (no API): Export CSV, notify a user, avg. response, booking date range, inquiry templates
+  / "Ask clinic" / translation, specialty filters, doctors per clinic, 30-day chart.
+- Test data touched while checking (local DB): `f4.patient@medvia.test` blocked → unblocked;
+  a notice draft created → removed; **`f5.clinic@medvia.test` (F5 Test Smile Clinic) was sent
+  "Request changes" by mistake** (the old note was pre-filled — now fixed); it returns to
+  PENDING when the clinic resubmits its profile. These left entries in the audit log.
+- Same branch, separate commit (the user's request): `/dashboard/schedule` slots use the
+  mockup's colours — a 4 px left stripe (booked teal, request amber, blocked grey), open slots
+  dashed; blocked reads "Blocked" with the reason under it.
 
 ## F6 — Community + Help center (2026-10-14, done)
 

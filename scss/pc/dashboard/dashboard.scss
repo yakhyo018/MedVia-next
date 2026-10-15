@@ -696,37 +696,62 @@
 				text-overflow: ellipsis;
 			}
 		}
+		/* Colours as in the ClinicSchedule mockup: a 4 px stripe on the left tells the kind at a glance. */
+		&.booked,
+		&.request,
+		&.held,
+		&.blocked {
+			border-left-width: 4px;
+			b {
+				color: $text;
+			}
+		}
 		&.booked {
 			background: $primary-tint;
-			b {
+			border-color: $primary-soft;
+			border-left-color: $primary;
+			small {
 				color: $primary;
 			}
 		}
 		&.request,
 		&.held {
 			background: $warning-bg;
-			b {
+			border-color: #f6d9a8;
+			border-left-color: $warning;
+			small {
 				color: $warning;
 			}
 		}
 		&.open {
-			border-color: $border;
+			justify-content: center;
+			border: 1.5px dashed $border-strong;
 			background: $surface;
 			cursor: pointer;
+			.text {
+				align-items: center;
+			}
 			b {
-				font-weight: 600;
-				color: $text-secondary;
+				font-weight: 500;
+				color: $text-muted;
 			}
 			&:hover {
 				border-color: $primary;
+				b {
+					color: $primary;
+				}
 			}
 		}
 		&.blocked {
-			background: repeating-linear-gradient(-45deg, $surface-alt 0 6px, $background 6px 12px);
+			background: $background;
+			border-color: $border;
+			border-left-color: $text-muted;
 			cursor: pointer;
 			b {
-				font-weight: 600;
 				color: $text-secondary;
+			}
+			small {
+				color: $text-muted;
 			}
 		}
 		&.picked {
@@ -754,15 +779,19 @@
 		}
 		&.booked::before {
 			background: $primary-tint;
+			border-color: $primary;
 		}
 		&.request::before {
 			background: $warning-bg;
+			border-color: $warning;
 		}
 		&.open::before {
 			background: $surface;
+			border-color: $border-strong;
 		}
 		&.blocked::before {
-			background: $surface-alt;
+			background: $background;
+			border-color: $text-muted;
 		}
 	}
 }

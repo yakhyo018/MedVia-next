@@ -25,3 +25,10 @@ export enum InquirySender {
 	PATIENT = 'PATIENT',
 	ADMIN = 'ADMIN',
 }
+
+/** HOLD = a draft only admins see; ACTIVE = published. */
+export enum NoticeStatus {
+	HOLD = 'HOLD',
+	ACTIVE = 'ACTIVE',
+	DELETE = 'DELETE',
+}
