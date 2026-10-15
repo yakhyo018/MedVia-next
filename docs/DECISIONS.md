@@ -104,3 +104,17 @@ user's check, the merge. Details and the clinic-page plan: STATUS.md → "Next s
 | The earlier review note is shown, not pre-filled into the message field. | A pre-filled field let a decision be sent by accident during the check. | — | Pre-fill. |
 | Admin texts in `admin.json` (+ `nsMode: 'fallback'` to `common`). | ~290 keys in `common.json` pushed every page over Next's 128 kB data warning. | Admin pages themselves still warn (138–162 kB; internal, `noindex`). | Keep one namespace. |
 | Cut: Export CSV, "Send notification" to a user, "Avg. response", booking date range, inquiry templates / "Ask clinic" / auto-translation, specialty filter, doctors-per-clinic count, 30-day chart. | No API. | — | — |
+
+## F8 — Assistant UI (2026-10-15)
+
+| Decision | Why | Risks | Alternatives |
+| --- | --- | --- | --- |
+| No mockup: built from the chat look and tokens (the user's choice). | No assistant screen in any design source. | Look decided in code. | Draw on the canvas first. |
+| Floating button + right drawer (full screen on a phone), mounted in `_app` (the user's choice). | Ask without leaving the clinic page. | Covers a corner of every page; hidden on `/booking`, chat, admin, login. | An `/assistant` page. |
+| The button floats (bob + ring), stopped by reduced motion (the user's request). | It was not noticed. | Motion on every page. | A static button. |
+| `/booking` clinic id: from the conversation's clinic cards by name, else `getDoctor` (the user's choice). | `pendingHold` has no `clinicId`; no backend change. | `getDoctor` may count a doctor view. | Add `clinicId` to `AssistantHold` in the API. |
+| The input is always shown, locked until AI consent. | A hidden input made the patient ask where to write. | — | Hide it behind the consent screen. |
+| Replies: `**bold**` and `- ` lists rendered as React elements, nothing else. | Models write Markdown; HTML from a model is never trusted. | Other Markdown shows as text. | A Markdown library (a dependency for two forms). |
+| `fallbackLng: false` + `yarn i18n:check`. | The English fallback doubled every non-English page's data and pushed RU / KK pages over 128 kB; keys are English and every locale is complete. | A missing key shows the raw key — the check catches it. | A namespace per area for everything. |
+| Clinic / doctor pages: "Write a review" only for the patient's completed, unreviewed visit there; otherwise a hint. | The API's review rule (COMPLETED, 30 days, one per booking). | — | A free review box (the API would refuse). |
+| Cut: cards of old replies after a reload, conversation history list, voice input. | The API keeps turn texts and one active session. | — | — |
