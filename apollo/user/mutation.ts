@@ -621,3 +621,60 @@ export const ADD_INQUIRY_MESSAGE = gql`
 		}
 	}
 `;
+
+/**************************
+ *        ASSISTANT       *
+ *************************/
+
+export const SEND_ASSISTANT_MESSAGE = gql`
+	mutation SendAssistantMessage($input: AssistantMessageInput!) {
+		sendAssistantMessage(input: $input) {
+			sessionId
+			text
+			clinics {
+				clinicId
+				clinicName
+				district
+				rating
+				minPriceKrw
+			}
+			slots {
+				treatmentId
+				doctorId
+				slotStart
+				label
+			}
+			pendingHold {
+				treatmentId
+				doctorId
+				slotStart
+				label
+				clinicName
+				treatmentName
+				priceKrw
+				expiresAt
+			}
+			toolsUsed
+		}
+	}
+`;
+
+/** The only way from the assistant's proposal to a held slot — pressed by the patient. */
+export const CONFIRM_ASSISTANT_HOLD = gql`
+	mutation ConfirmAssistantHold($sessionId: String!) {
+		confirmAssistantHold(sessionId: $sessionId) {
+			slotIds
+			slotStart
+			holdExpiresAt
+		}
+	}
+`;
+
+export const CLOSE_ASSISTANT_SESSION = gql`
+	mutation CloseAssistantSession($sessionId: String!) {
+		closeAssistantSession(sessionId: $sessionId) {
+			_id
+			sessionStatus
+		}
+	}
+`;

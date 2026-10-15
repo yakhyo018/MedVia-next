@@ -38,6 +38,9 @@ export enum Messages {
 	TOO_MANY_REQUESTS = 'You already have 3 requests waiting for clinics!',
 	CANCEL_TOO_LATE = 'A confirmed booking can be cancelled up to 24 hours before the visit!',
 	TRANSITION_NOT_ALLOWED = 'This booking cannot be changed this way!',
+	NO_DATA_FOUND = 'No data is found!',
+	NO_PENDING_HOLD = 'There is no time waiting for your confirmation, or it has expired!',
+	ASSISTANT_SESSION_FULL = 'This conversation is full, please start a new one!',
 }
 
 /** Client texts: i18n keys in `common.json`. */
