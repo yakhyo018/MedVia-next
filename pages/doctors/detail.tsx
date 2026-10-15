@@ -21,6 +21,7 @@ import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import EmptyState from '../../libs/components/common/EmptyState';
 import RatingSummary from '../../libs/components/review/RatingSummary';
+import ReviewInvite from '../../libs/components/review/ReviewInvite';
 import ReviewCard from '../../libs/components/review/ReviewCard';
 import useLikeTarget from '../../libs/hooks/useLikeTarget';
 import useFollow from '../../libs/hooks/useFollow';
@@ -279,6 +280,10 @@ const DoctorDetail: NextPage = () => {
 
 						<section>
 							<h2>{t('Reviews')}</h2>
+							<ReviewInvite
+								doctorId={typeof doctorId === 'string' ? doctorId : undefined}
+								empty={!(reviews?.summary && reviews.summary.reviews > 0)}
+							/>
 							{reviews?.summary && reviews.summary.reviews > 0 ? (
 								<>
 									<RatingSummary summary={reviews.summary} />
@@ -298,9 +303,7 @@ const DoctorDetail: NextPage = () => {
 										</Button>
 									)}
 								</>
-							) : (
-								<p className={'muted'}>{t('No reviews yet. Reviews come only from completed visits.')}</p>
-							)}
+							) : null}
 						</section>
 					</Stack>
 
