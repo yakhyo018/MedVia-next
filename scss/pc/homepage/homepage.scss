@@ -489,6 +489,9 @@
 		padding: 4px 2px 8px;
 	}
 	.swiper-slide {
+		/* Swiper makes .swiper-wrapper content-box and MUI's CssBaseline says "inherit": without this
+		   a card's height: 100% plus its padding overflowed the slide and the button was cut off. */
+		box-sizing: border-box;
 		width: var(--slide-width);
 		height: auto;
 		display: flex;
