@@ -62,7 +62,7 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
   `deploy/` (compose, nginx, certbot scripts, runbook `deploy/README.md`).
 - **2026-10-16, the user's choice:** `deploy/` removed (the user); instead nestar-style
   `docker-compose.yml` + `deploy.sh` (reset → checkout main → pull → `up -d --force-recreate`) in
-  both repositories; HTTPS by nginx + certbot on the host. The `Dockerfile`s are no longer used.
+  both repositories; HTTPS by nginx + certbot on the host. The `Dockerfile`s were removed.
 - Frontend (before 2026-10-16): `Dockerfile` (build args `REACT_APP_*` = `https://api.medvia.tech…`, `i18n:check`
   before `next build`, `next start` on :4000 as `node`).
 - Photos: **generated** (2026-10-16, the user's decision after adding $5 of Hugging Face credits;
