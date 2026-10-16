@@ -10,6 +10,7 @@ Portfolio project: no SMS, no outgoing email, no payments.
   how we work. Update it whenever a milestone closes.
 - `LEARN.md` — why each mechanism exists, trade-offs, interview Q&A. Update after every milestone.
 - `docs/DECISIONS.md` — Decision / Why / Risks / Alternatives.
+- `docs/COMMANDS.md` — every terminal command (run, checks, seed, cleanup). Add new ones there.
 - The backend's rules and API: `~/Desktop/MedVia/CLAUDE.md`, `~/Desktop/MedVia/docs/STATUS.md`,
   schemas in `~/Desktop/MedVia/apps/medvia-api/src/libs/dto` (the GraphQL contract).
 
@@ -25,7 +26,8 @@ After porting any file: `rg -n "nestar|Nestar|property|Property" <file>` must re
 ## Stack (same majors as nestar-next — decided 2026-10-12)
 
 Next.js 14 (**pages router**), React 18.2, TypeScript, MUI 5 + Emotion, Apollo Client 3,
-`next-i18next`, SCSS (`scss/pc`, `scss/mobile`), `sweetalert2`. Package manager **npm**.
+`next-i18next`, SCSS (`scss/pc`, `scss/mobile`), `sweetalert2`. Package manager **yarn 1** (`yarn.lock`, like nestar-next); never `npm install` — it would write a
+`package-lock.json` beside it.
 Dev server on **port 4000** (the API's CORS allows only `FRONTEND_URL=http://localhost:4000`).
 No package is added without stating which problem it solves and why not the alternative; later
 milestones add `socket.io-client` (F3), `@react-oauth/google`, `swiper`, … when needed.
@@ -159,9 +161,9 @@ git diff --cached | grep -nE "sk-or-[A-Za-z0-9_-]{10,}|sk-ant-[A-Za-z0-9_-]{10,}
 ## Validation
 
 ```bash
-npm run typecheck
-npm run lint:check
-npm run build
-npm run dev                 # http://localhost:4000 — needs the API: cd ~/Desktop/MedVia && npm run start:dev
+yarn typecheck
+yarn lint:check
+yarn build                  # never while `yarn dev` runs — both write .next/
+yarn dev                    # http://localhost:4000 — needs the API: cd ~/Desktop/MedVia && npm run start:dev
 ```
-There is no `npm run lint` with `--fix` on purpose (same reason as the backend).
+There is no `yarn lint` with `--fix` on purpose (same reason as the backend).

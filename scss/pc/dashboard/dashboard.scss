@@ -1,0 +1,1102 @@
+/* Clinic Dashboard and Doctor Panel (F5) — they share the MyPage frame (.my-page …). #mobile-wrap overrides in mobile/main.scss */
+
+/** FRAME EXTRAS **/
+.workspace-side {
+	position: sticky;
+	top: calc(#{$header-height} + 20px);
+	width: 280px;
+	flex-shrink: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	.my-menu.side {
+		position: static;
+		width: auto;
+	}
+	.side-note {
+		padding: 0 4px;
+	}
+}
+.my-menu.side .who {
+	.avatar.square {
+		border-radius: 18px;
+	}
+	.mv-status-chip {
+		margin-top: 4px;
+	}
+}
+.public-card {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	padding: 18px;
+	border-radius: 14px;
+	background: $primary-tint;
+	> strong {
+		font-size: 14px;
+	}
+	.numbers {
+		display: flex;
+		justify-content: space-between;
+		span {
+			display: flex;
+			flex-direction: column;
+			font-size: 12px;
+			color: $text-secondary;
+		}
+		b {
+			font-size: 18px;
+			font-weight: 800;
+			color: $text;
+		}
+	}
+	a {
+		font-size: 13px;
+		font-weight: 700;
+		color: $primary;
+	}
+}
+.workspace-notice {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px 14px;
+	padding: 14px 16px;
+	border-radius: 12px;
+	background: $warning-bg;
+	color: $warning;
+	font-size: 13px;
+	line-height: 1.5;
+	strong {
+		flex-basis: 100%;
+		font-size: 14px;
+	}
+	&:has(.MuiButton-root) strong {
+		flex-basis: auto;
+		flex: 1;
+	}
+	a {
+		font-weight: 700;
+		color: inherit;
+		text-decoration: underline;
+	}
+	&.danger {
+		background: $danger-bg;
+		color: $danger;
+	}
+}
+.workspace-hint {
+	margin-top: -8px;
+	font-size: 13px;
+	line-height: 1.5;
+	color: $text-secondary;
+}
+.my-page {
+	/* Field group titles inside the forms (not the menu's .label) */
+	.card > .label,
+	.lang-group > .label,
+	.preview > .label {
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.pair {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 16px;
+	}
+	.chip-picks {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin-top: -6px;
+		button {
+			height: 36px;
+			padding: 0 14px;
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			border-radius: $radius-pill;
+			border: 1px solid $border-strong;
+			background: $surface;
+			font-family: $font;
+			font-size: 13px;
+			font-weight: 600;
+			color: $text;
+			cursor: pointer;
+			&[aria-pressed='true'] {
+				border-color: $primary;
+				background: $primary-tint;
+				color: $primary;
+			}
+		}
+	}
+	.mini-avatar {
+		width: 26px;
+		height: 26px;
+		border-radius: 50%;
+		background: $primary-tint;
+		color: $primary;
+		font-size: 10px;
+		font-weight: 800;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+	}
+	.inline-link {
+		font-size: 13px;
+		font-weight: 700;
+		color: $primary;
+	}
+	.photo-picks {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+		.thumb {
+			position: relative;
+			width: 104px;
+			height: 80px;
+			border-radius: 12px;
+			overflow: hidden;
+			background: $background;
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+			.MuiIconButton-root {
+				position: absolute;
+				top: 4px;
+				right: 4px;
+				width: 26px;
+				height: 26px;
+				background: rgba(255, 255, 255, 0.9);
+				svg {
+					font-size: 16px;
+				}
+			}
+			&.add {
+				border: 1px dashed $border-strong;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				gap: 4px;
+				font-family: $font;
+				font-size: 12px;
+				font-weight: 600;
+				color: $text-secondary;
+				cursor: pointer;
+			}
+		}
+	}
+	/* Grid "tables" that turn into cards on a phone */
+	.data-table {
+		border-radius: $radius-card;
+		border: 1px solid $border;
+		background: $surface;
+		overflow: hidden;
+		.row {
+			display: grid;
+			align-items: center;
+			gap: 12px;
+			padding: 14px 18px;
+			&:not(:last-child) {
+				border-bottom: 1px solid $border;
+			}
+			&.head {
+				padding: 10px 18px;
+				background: $background;
+				font-size: 12px;
+				font-weight: 700;
+				color: $text-muted;
+				text-transform: uppercase;
+				letter-spacing: 0.4px;
+			}
+		}
+		&.treatments .row {
+			grid-template-columns: minmax(0, 2.2fr) 1fr 0.7fr 0.9fr 0.7fr 1fr minmax(0, 1.6fr);
+		}
+		&.doctors .row {
+			grid-template-columns: minmax(0, 2.4fr) 1fr 0.8fr 0.8fr minmax(0, 1.8fr);
+		}
+		.name {
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+			min-width: 0;
+			strong {
+				font-size: 14px;
+			}
+			small {
+				font-size: 12px;
+				color: $text-secondary;
+			}
+			.draft {
+				color: $warning;
+				font-weight: 600;
+			}
+			.note {
+				color: $danger;
+			}
+		}
+		.doctors {
+			display: flex;
+			gap: 4px;
+		}
+		.person {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			min-width: 0;
+			.avatar {
+				width: 40px;
+				height: 40px;
+				border-radius: 50%;
+				overflow: hidden;
+				flex-shrink: 0;
+				background: $primary-tint;
+				color: $primary;
+				font-size: 13px;
+				font-weight: 800;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				img {
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+				}
+			}
+			.MuiInput-root {
+				font-size: 12px;
+				color: $text-secondary;
+			}
+		}
+		.langs {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 4px;
+			span {
+				padding: 1px 6px;
+				border-radius: 6px;
+				background: $surface-alt;
+				font-size: 11px;
+				font-weight: 700;
+				color: $text-secondary;
+			}
+		}
+		.rating {
+			display: flex;
+			align-items: center;
+			gap: 3px;
+			font-size: 13px;
+			color: $text-secondary;
+			svg {
+				font-size: 17px;
+				color: $star;
+			}
+			b {
+				color: $text;
+			}
+		}
+	}
+	.row-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 2px;
+		.MuiButton-root {
+			min-width: 0;
+			padding: 0 8px;
+			height: 30px;
+		}
+	}
+	.list-tools {
+		display: flex;
+		gap: 10px;
+		.MuiTextField-root {
+			min-width: 220px;
+			background: $surface;
+		}
+		.MuiTextField-root:first-child {
+			flex: 1;
+		}
+	}
+}
+
+/** DASHBOARD **/
+.clinic-dashboard {
+	.stat-grid {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 14px;
+	}
+	.stat {
+		flex-direction: row !important;
+		align-items: center;
+		gap: 14px !important;
+		padding: 18px !important;
+		.icon {
+			width: 42px;
+			height: 42px;
+			flex-shrink: 0;
+			border-radius: 12px;
+			background: $primary-tint;
+			color: $primary;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.text {
+			display: flex;
+			flex-direction: column;
+			gap: 1px;
+			min-width: 0;
+			span,
+			small {
+				font-size: 12px;
+				color: $text-secondary;
+			}
+			strong {
+				font-size: 24px;
+				font-weight: 800;
+				line-height: 1.2;
+			}
+		}
+		&.warn .icon {
+			background: $warning-bg;
+			color: $warning;
+		}
+	}
+	.dashboard-columns {
+		display: flex;
+		align-items: flex-start;
+		gap: 20px;
+	}
+	.requests {
+		flex: 1;
+		min-width: 0;
+		gap: 14px;
+		.section-head {
+			margin-bottom: 0;
+			span {
+				display: block;
+				margin-top: 2px;
+				font-size: 13px;
+				color: $text-secondary;
+			}
+		}
+	}
+	.today {
+		width: 280px;
+		flex-shrink: 0;
+		gap: 0 !important;
+		.head {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding-bottom: 10px;
+			h3 {
+				font-size: 16px;
+				font-weight: 800;
+			}
+			a {
+				font-size: 13px;
+				font-weight: 700;
+				color: $primary;
+			}
+		}
+		.visit {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			padding: 11px 0;
+			border-top: 1px solid $border;
+			time {
+				width: 42px;
+				font-size: 13px;
+				font-weight: 700;
+			}
+			.text {
+				flex: 1;
+				min-width: 0;
+				display: flex;
+				flex-direction: column;
+				strong {
+					font-size: 13px;
+				}
+				span {
+					font-size: 12px;
+					color: $text-secondary;
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+				}
+			}
+		}
+	}
+}
+
+/** BOOKING CARD (dashboard, bookings, chat) **/
+.clinic-booking-list {
+	gap: 12px;
+}
+.clinic-booking {
+	gap: 12px !important;
+	&.request {
+		border-color: $warning-bg !important;
+		box-shadow: inset 4px 0 0 $warning;
+	}
+	.top {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+	}
+	.patient {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		min-width: 0;
+		.avatar {
+			width: 42px;
+			height: 42px;
+			flex-shrink: 0;
+			border-radius: 50%;
+			background: $primary-tint;
+			color: $primary;
+			font-size: 14px;
+			font-weight: 800;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.who {
+			display: flex;
+			flex-direction: column;
+			min-width: 0;
+			strong {
+				font-size: 15px;
+			}
+			span {
+				font-size: 12px;
+				color: $text-secondary;
+			}
+		}
+	}
+	.facts {
+		display: flex;
+		flex-direction: column;
+		gap: 3px;
+		strong {
+			font-size: 15px;
+		}
+		span {
+			font-size: 13px;
+			color: $text-secondary;
+		}
+		.reason {
+			color: $danger;
+		}
+	}
+	.summary {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		padding: 14px 16px;
+		border-radius: 12px;
+		border: 1px solid $border;
+		background: $background;
+		.label {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			font-size: 12px;
+			color: $primary;
+			svg {
+				font-size: 16px;
+			}
+		}
+		p {
+			font-size: 14px;
+			line-height: 1.7;
+		}
+		dl {
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+			dt {
+				font-size: 12px;
+				color: $text-secondary;
+			}
+			dd {
+				font-size: 14px;
+			}
+		}
+		.hint button {
+			padding: 0;
+			border: 0;
+			background: none;
+			font: inherit;
+			font-weight: 700;
+			color: $primary;
+			cursor: pointer;
+		}
+	}
+	.open-details {
+		align-self: flex-start;
+		padding: 0;
+		border: 0;
+		background: none;
+		font-family: $font;
+		font-size: 13px;
+		font-weight: 700;
+		color: $primary;
+		cursor: pointer;
+	}
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+	.due {
+		font-size: 12px;
+		font-weight: 700;
+		color: $warning;
+	}
+}
+
+/** SCHEDULE **/
+.clinic-schedule {
+	.schedule-tools {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		.MuiTextField-root {
+			min-width: 220px;
+			background: $surface;
+		}
+	}
+	.week-nav {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		span {
+			min-width: 200px;
+			text-align: center;
+			font-size: 14px;
+			font-weight: 700;
+		}
+	}
+	.pick-bar {
+		position: sticky;
+		top: calc(#{$header-height} + 8px);
+		z-index: 3;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		padding: 10px 14px;
+		border-radius: 12px;
+		background: $text;
+		color: #fff;
+		span {
+			flex: 1;
+			font-size: 13px;
+			font-weight: 700;
+		}
+		.MuiButton-text {
+			color: #fff;
+		}
+		.MuiButton-outlined {
+			color: #fff;
+			border-color: rgba(255, 255, 255, 0.5);
+		}
+	}
+	.week-grid {
+		border-radius: $radius-card;
+		border: 1px solid $border;
+		background: $surface;
+		overflow: auto;
+		.row {
+			display: grid;
+			grid-template-columns: 56px repeat(7, minmax(96px, 1fr));
+			min-width: 760px;
+			&:not(:last-child) {
+				border-bottom: 1px solid $border;
+			}
+			&.head span {
+				padding: 10px 6px;
+				font-size: 12px;
+				color: $text-secondary;
+				text-align: center;
+				b {
+					font-size: 14px;
+					color: $text;
+				}
+				&.today {
+					color: $primary;
+					b {
+						color: $primary;
+					}
+				}
+			}
+			> time {
+				padding: 10px 8px;
+				font-size: 12px;
+				font-weight: 700;
+				color: $text-secondary;
+			}
+		}
+		.cell {
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+			padding: 4px;
+			border-left: 1px solid $border;
+		}
+	}
+	.slot {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		padding: 6px 8px;
+		border-radius: 8px;
+		border: 1px solid transparent;
+		font-family: $font;
+		text-align: left;
+		color: $text;
+		.doc {
+			width: 22px;
+			height: 22px;
+			flex-shrink: 0;
+			border-radius: 50%;
+			background: rgba(255, 255, 255, 0.7);
+			font-size: 9px;
+			font-weight: 800;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.text {
+			min-width: 0;
+			display: flex;
+			flex-direction: column;
+			b {
+				font-size: 12px;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+			small {
+				font-size: 11px;
+				color: $text-secondary;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+		}
+		/* Colours as in the ClinicSchedule mockup: a 4 px stripe on the left tells the kind at a glance. */
+		&.booked,
+		&.request,
+		&.held,
+		&.blocked {
+			border-left-width: 4px;
+			b {
+				color: $text;
+			}
+		}
+		&.booked {
+			background: $primary-tint;
+			border-color: $primary-soft;
+			border-left-color: $primary;
+			small {
+				color: $primary;
+			}
+		}
+		&.request,
+		&.held {
+			background: $warning-bg;
+			border-color: #f6d9a8;
+			border-left-color: $warning;
+			small {
+				color: $warning;
+			}
+		}
+		&.open {
+			justify-content: center;
+			border: 1.5px dashed $border-strong;
+			background: $surface;
+			cursor: pointer;
+			.text {
+				align-items: center;
+			}
+			b {
+				font-weight: 500;
+				color: $text-muted;
+			}
+			&:hover {
+				border-color: $primary;
+				b {
+					color: $primary;
+				}
+			}
+		}
+		&.blocked {
+			background: $background;
+			border-color: $border;
+			border-left-color: $text-muted;
+			cursor: pointer;
+			b {
+				color: $text-secondary;
+			}
+			small {
+				color: $text-muted;
+			}
+		}
+		&.picked {
+			border-color: $primary;
+			box-shadow: 0 0 0 2px $primary;
+		}
+	}
+	.legend {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 16px;
+		font-size: 12px;
+		color: $text-secondary;
+	}
+	.slot-dot {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		&::before {
+			content: '';
+			width: 12px;
+			height: 12px;
+			border-radius: 4px;
+			border: 1px solid $border;
+		}
+		&.booked::before {
+			background: $primary-tint;
+			border-color: $primary;
+		}
+		&.request::before {
+			background: $warning-bg;
+			border-color: $warning;
+		}
+		&.open::before {
+			background: $surface;
+			border-color: $border-strong;
+		}
+		&.blocked::before {
+			background: $background;
+			border-color: $text-muted;
+		}
+	}
+}
+
+/** DIALOGS **/
+.prompt-dialog {
+	.fields {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+		padding-top: 8px !important;
+	}
+	.hint {
+		font-size: 13px;
+		line-height: 1.5;
+		color: $text-secondary;
+	}
+	.pair {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 12px;
+	}
+	.weekdays {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0 4px;
+		.MuiFormControlLabel-label {
+			font-size: 13px;
+		}
+	}
+	.field-error {
+		font-size: 12px;
+		color: $danger;
+	}
+}
+
+/** TREATMENT FORM **/
+.treatment-form,
+.clinic-form {
+	display: flex;
+	align-items: flex-start;
+	gap: 20px;
+	.form-main {
+		flex: 1;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+}
+.treatment-form .preview,
+.clinic-form .side-cards {
+	width: 280px;
+	flex-shrink: 0;
+	position: sticky;
+	top: calc(#{$header-height} + 20px);
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+.preview-card {
+	border-radius: $radius-card;
+	border: 1px solid $border;
+	background: $surface;
+	overflow: hidden;
+	.photo {
+		height: 150px;
+		background: $primary-tint;
+		color: $primary;
+		font-size: 13px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+	.body {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		padding: 14px 16px;
+		small {
+			font-size: 12px;
+			font-weight: 700;
+			color: $primary;
+		}
+		strong {
+			font-size: 16px;
+		}
+		span {
+			font-size: 13px;
+			color: $text-secondary;
+		}
+		.price b {
+			font-size: 16px;
+			color: $text;
+		}
+	}
+}
+
+/** DOCTORS **/
+.doctor-create {
+	display: grid;
+	grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+	gap: 16px;
+	align-items: flex-start;
+	.roles ul {
+		margin: -6px 0 0;
+		padding-left: 18px;
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		font-size: 14px;
+		color: $text-secondary;
+	}
+	form .MuiButton-contained {
+		align-self: flex-start;
+	}
+}
+
+/** REVIEW REPLIES **/
+.reply-reviews {
+	display: flex;
+	align-items: flex-start;
+	gap: 20px;
+	.list {
+		flex: 1;
+		min-width: 0;
+		gap: 12px;
+	}
+	.summary-side {
+		width: 280px;
+		flex-shrink: 0;
+		position: sticky;
+		top: calc(#{$header-height} + 20px);
+	}
+}
+.reply-review {
+	gap: 10px !important;
+	.top {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 12px;
+	}
+	.patient {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		.avatar {
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			background: $primary-tint;
+			color: $primary;
+			font-size: 13px;
+			font-weight: 800;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.who {
+			display: flex;
+			flex-direction: column;
+			strong {
+				font-size: 14px;
+			}
+			span {
+				font-size: 12px;
+				color: $text-secondary;
+			}
+		}
+	}
+	.needs {
+		padding: 3px 10px;
+		border-radius: $radius-pill;
+		background: $warning-bg;
+		color: $warning;
+		font-size: 12px;
+		font-weight: 700;
+		white-space: nowrap;
+	}
+	.content {
+		font-size: 14px;
+		line-height: 1.6;
+	}
+	.reply {
+		padding: 12px 14px;
+		border-radius: 12px;
+		background: $background;
+		strong {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			margin-bottom: 4px;
+			font-size: 13px;
+			color: $primary;
+		}
+		p {
+			font-size: 14px;
+			color: $text-secondary;
+		}
+	}
+	.reply-form {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+	.reply-tools {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		.hint {
+			flex: 1;
+		}
+	}
+}
+
+/** PROFILE PAGES **/
+.clinic-form {
+	.fields .wide {
+		grid-column: span 2;
+	}
+	.side-cards .card {
+		gap: 10px;
+	}
+	.note {
+		font-size: 13px;
+		color: $warning;
+	}
+	.hours {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+	.hour-row {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		.day {
+			width: 44px;
+			font-size: 14px;
+			font-weight: 700;
+		}
+		.closed {
+			font-size: 13px;
+			color: $text-muted;
+		}
+		.MuiTextField-root {
+			width: 110px;
+		}
+	}
+	.lang-group {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+}
+.doctor-profile {
+	.career-row {
+		display: grid;
+		grid-template-columns: minmax(0, 2fr) minmax(0, 2fr) 90px 90px 40px;
+		gap: 8px;
+		align-items: center;
+	}
+	.add-entry {
+		align-self: flex-start;
+	}
+}
+
+/** CLINIC CHAT **/
+.clinic-chat .clinic-booking {
+	padding: 16px !important;
+}
+
+/** JOIN: I am a patient / clinic **/
+.join-form .role-pick {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin: 4px 0 -4px;
+	span {
+		margin-right: 4px;
+		font-size: 13px;
+		font-weight: 600;
+		color: $text-secondary;
+	}
+	button {
+		height: 34px;
+		padding: 0 16px;
+		border-radius: $radius-pill;
+		border: 1px solid $border-strong;
+		background: $surface;
+		font-family: $font;
+		font-size: 13px;
+		font-weight: 600;
+		color: $text;
+		cursor: pointer;
+		&[aria-checked='true'] {
+			border-color: $primary;
+			background: $primary-tint;
+			color: $primary;
+		}
+	}
+}

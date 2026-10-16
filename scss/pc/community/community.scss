@@ -1,0 +1,936 @@
+/* Community and Help center (F6). #mobile-wrap overrides in mobile/main.scss */
+
+.board-note a {
+	font-weight: 700;
+	color: $primary;
+}
+
+/** LIST PAGES (/community, /cs) **/
+.community-page,
+.cs-page {
+	padding-bottom: 72px;
+	> .container {
+		flex-direction: column;
+		gap: 18px;
+	}
+	.list-banner {
+		margin-bottom: 0;
+	}
+}
+.community-page > .container,
+.cs-page > .container {
+	padding-top: 28px;
+}
+.board-tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	button {
+		height: 40px;
+		padding: 0 18px;
+		border-radius: $radius-pill;
+		border: 1px solid $border-strong;
+		background: $surface;
+		font-family: $font;
+		font-size: 14px;
+		font-weight: 600;
+		color: $text;
+		cursor: pointer;
+		&.active {
+			border-color: $primary;
+			background: $primary;
+			color: #fff;
+			font-weight: 700;
+		}
+	}
+}
+.board-rule {
+	font-size: 13px;
+	line-height: 1.5;
+	color: $text-secondary;
+	a {
+		font-weight: 700;
+		color: $primary;
+	}
+}
+.board-head {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 16px;
+	h2 {
+		font-size: 24px;
+		font-weight: 800;
+	}
+	p {
+		margin-top: 2px;
+		font-size: 14px;
+		color: $text-secondary;
+	}
+}
+.board-tools {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	.search {
+		flex: 1;
+		.MuiOutlinedInput-root {
+			background: $surface;
+		}
+	}
+	> .MuiTextField-root {
+		min-width: 170px;
+		background: $surface;
+	}
+}
+.community-page .booking-tabs,
+.cs-page .booking-tabs,
+.doctor-qna .booking-tabs {
+	display: flex;
+	gap: 4px;
+	padding: 4px;
+	border-radius: 12px;
+	border: 1px solid $border;
+	background: $surface;
+	button {
+		height: 34px;
+		padding: 0 14px;
+		border: 0;
+		border-radius: 9px;
+		background: transparent;
+		font-family: $font;
+		font-size: 13px;
+		font-weight: 600;
+		color: $text-secondary;
+		white-space: nowrap;
+		cursor: pointer;
+		&[aria-selected='true'] {
+			background: $primary-tint;
+			color: $primary;
+			font-weight: 700;
+		}
+	}
+}
+.cs-page .cs-tabs {
+	align-self: flex-start;
+	button {
+		height: 38px;
+		padding: 0 20px;
+		font-size: 14px;
+	}
+}
+.article-list {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+/* Health tips: two columns of cover cards (CommunityNews mockup) */
+.article-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 18px;
+	align-items: start;
+}
+.article-card.with-cover {
+	padding: 14px;
+	gap: 10px;
+	.cover {
+		display: block;
+		height: 190px;
+		border-radius: 12px;
+		overflow: hidden;
+		background: $background;
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			display: block;
+		}
+	}
+}
+.article-card {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding: 18px 20px;
+	border-radius: $radius-card;
+	border: 1px solid $border;
+	background: $surface;
+	color: $text;
+	.title {
+		font-size: 17px;
+		line-height: 1.4;
+	}
+	.excerpt {
+		font-size: 14px;
+		line-height: 1.55;
+		color: $text-secondary;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+	.foot {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		font-size: 12px;
+		color: $text-secondary;
+	}
+	.author {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		min-width: 0;
+		.avatar {
+			width: 24px;
+			height: 24px;
+			border-radius: 50%;
+			background: $primary-tint;
+			color: $primary;
+			font-size: 10px;
+			font-weight: 800;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.muted {
+			color: $text-muted;
+		}
+	}
+	.numbers {
+		display: flex;
+		gap: 12px;
+		span {
+			display: inline-flex;
+			align-items: center;
+			gap: 3px;
+		}
+		svg {
+			font-size: 16px;
+		}
+	}
+	&:hover .title {
+		color: $primary;
+	}
+}
+/* Shared status chips of posts */
+.article-card .chips,
+.article-body .chips {
+	display: flex;
+	gap: 6px;
+}
+.article-card .state,
+.article-body .state,
+.article-body .board,
+.qna-item .state {
+	align-self: flex-start;
+	padding: 3px 10px;
+	border-radius: $radius-pill;
+	font-size: 12px;
+	font-weight: 700;
+	&.answered {
+		background: $success-bg;
+		color: $success;
+	}
+	&.waiting {
+		background: $warning-bg;
+		color: $warning;
+	}
+	&.tip {
+		background: $primary-tint;
+		color: $primary;
+	}
+}
+.article-body .board {
+	background: $surface-alt;
+	color: $text-secondary;
+}
+.author-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 2px;
+	padding: 1px 8px;
+	border-radius: $radius-pill;
+	font-size: 11px;
+	font-weight: 800;
+	&.doctor {
+		background: $primary-tint;
+		color: $primary;
+		svg {
+			font-size: 13px;
+		}
+	}
+	&.team {
+		background: $surface-alt;
+		color: $text-secondary;
+	}
+}
+.review-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 14px;
+}
+.free-table {
+	border-radius: $radius-card;
+	border: 1px solid $border;
+	background: $surface;
+	overflow: hidden;
+	.row {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 160px 120px 80px;
+		gap: 12px;
+		padding: 13px 18px;
+		font-size: 14px;
+		color: $text-secondary;
+		&:not(:last-child) {
+			border-bottom: 1px solid $border;
+		}
+		&.head {
+			padding: 10px 18px;
+			background: $background;
+			font-size: 12px;
+			font-weight: 700;
+			text-transform: uppercase;
+			color: $text-muted;
+		}
+		.title {
+			color: $text;
+			font-weight: 600;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			b {
+				color: $primary;
+			}
+		}
+	}
+	a.row:hover .title {
+		color: $primary;
+	}
+}
+.community-pagination {
+	align-self: center;
+}
+
+/** POST, NOTICE, INQUIRY PAGES **/
+.article-page,
+.write-page {
+	padding: 24px 0 72px;
+	> .container {
+		flex-direction: column;
+		gap: 16px;
+		max-width: 880px;
+	}
+	.crumbs {
+		display: flex;
+		gap: 8px;
+		font-size: 13px;
+		color: $text-muted;
+		a {
+			color: $text-secondary;
+			&:hover {
+				color: $primary;
+			}
+		}
+	}
+	.back-link {
+		display: none;
+	}
+	h1 {
+		font-size: 30px;
+		font-weight: 800;
+		letter-spacing: -0.5px;
+		line-height: 1.25;
+	}
+	.card {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		padding: 24px;
+		border-radius: $radius-card;
+		border: 1px solid $border;
+		background: $surface;
+	}
+	.hint {
+		font-size: 12px;
+		line-height: 1.5;
+		color: $text-secondary;
+		a {
+			font-weight: 700;
+			color: $primary;
+		}
+	}
+}
+.write-page > .container {
+	max-width: 1120px;
+}
+.article-body {
+	.author {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		.avatar {
+			width: 42px;
+			height: 42px;
+			border-radius: 50%;
+			background: $primary-tint;
+			color: $primary;
+			font-weight: 800;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.who {
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+			font-size: 12px;
+			color: $text-secondary;
+		}
+		.name {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			strong {
+				font-size: 15px;
+				color: $text;
+			}
+		}
+	}
+	/* A tip's photos after the first paragraph: one full width, two side by side */
+	.photos {
+		display: grid;
+		gap: 12px;
+		img {
+			width: 100%;
+			height: 400px;
+			border-radius: 16px;
+			object-fit: cover;
+			display: block;
+		}
+		&.count-2 {
+			grid-template-columns: 1fr 1fr;
+			img {
+				height: 300px;
+			}
+		}
+	}
+	.content {
+		font-size: 16px;
+		line-height: 1.75;
+		white-space: pre-line;
+	}
+	.meta {
+		font-size: 13px;
+		color: $text-muted;
+	}
+	.important {
+		align-self: flex-start;
+		padding: 3px 10px;
+		border-radius: $radius-pill;
+		background: $danger-bg;
+		color: $danger;
+		font-size: 12px;
+		font-weight: 700;
+	}
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		padding-top: 6px;
+		border-top: 1px solid $border;
+		.liked {
+			border-color: $danger;
+			color: $danger;
+		}
+		.report {
+			margin-left: auto;
+			color: $text-muted;
+		}
+	}
+}
+
+/** COMMENTS **/
+.comments {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	h2 {
+		font-size: 19px;
+		font-weight: 800;
+	}
+	.comment-list {
+		border-radius: $radius-card;
+		border: 1px solid $border;
+		background: $surface;
+		overflow: hidden;
+	}
+	.comment {
+		display: flex;
+		gap: 12px;
+		padding: 16px 18px;
+		&:not(:last-child) {
+			border-bottom: 1px solid $border;
+		}
+		&.doctor {
+			background: #f2fafb;
+		}
+		.avatar {
+			width: 36px;
+			height: 36px;
+			flex-shrink: 0;
+			border-radius: 50%;
+			background: $primary-tint;
+			color: $primary;
+			font-size: 12px;
+			font-weight: 800;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.body {
+			flex: 1;
+			min-width: 0;
+			display: flex;
+			flex-direction: column;
+			gap: 6px;
+		}
+		.head {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			gap: 6px;
+			strong {
+				font-size: 14px;
+			}
+			time {
+				font-size: 12px;
+				color: $text-muted;
+			}
+		}
+		p {
+			font-size: 14px;
+			line-height: 1.6;
+			white-space: pre-line;
+		}
+		.meta {
+			display: flex;
+			gap: 12px;
+			font-size: 11px;
+			color: $text-muted;
+			button {
+				padding: 0;
+				border: 0;
+				background: none;
+				font-family: $font;
+				font-size: 12px;
+				font-weight: 700;
+				color: $primary;
+				cursor: pointer;
+				&.danger {
+					color: $danger;
+				}
+				&.muted {
+					color: $text-muted;
+					font-weight: 600;
+				}
+			}
+		}
+	}
+	.comment-note {
+		font-size: 14px;
+		color: $text-secondary;
+	}
+	.more {
+		align-self: center;
+	}
+	.comment-gate {
+		flex-direction: row !important;
+		align-items: center;
+		justify-content: space-between;
+		span {
+			font-size: 14px;
+			color: $text-secondary;
+		}
+	}
+	.comment-form .label {
+		font-size: 14px;
+		font-weight: 700;
+	}
+}
+.comment-tools {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 8px;
+	.MuiTextField-root {
+		min-width: 150px;
+		margin-right: auto;
+	}
+}
+
+/** WRITE **/
+.write-layout {
+	display: flex;
+	align-items: flex-start;
+	gap: 20px;
+	.write-form {
+		flex: 1;
+		min-width: 0;
+	}
+	/* A tip's photos: 72 px tiles and a dashed teal "add" tile (WriteArticle mockup) */
+	.photo-field {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		.label {
+			font-size: 13px;
+			font-weight: 600;
+		}
+		.hint {
+			font-size: 12px;
+			color: $text-muted;
+		}
+	}
+	.photo-picks {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+		.thumb {
+			position: relative;
+			width: 72px;
+			height: 72px;
+			border-radius: 10px;
+			overflow: hidden;
+			background: $background;
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+			.MuiIconButton-root {
+				position: absolute;
+				top: 3px;
+				right: 3px;
+				width: 22px;
+				height: 22px;
+				background: rgba(255, 255, 255, 0.9);
+				svg {
+					font-size: 14px;
+				}
+			}
+			&.add {
+				border: 1.5px dashed $primary;
+				background: $primary-tint;
+				color: $primary;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-family: $font;
+				font-size: 11px;
+				font-weight: 600;
+				cursor: pointer;
+				&:disabled {
+					cursor: progress;
+				}
+			}
+		}
+	}
+	.form-actions {
+		display: flex;
+		justify-content: flex-end;
+		gap: 10px;
+	}
+	.guidelines {
+		width: 300px;
+		flex-shrink: 0;
+		position: sticky;
+		top: calc(#{$header-height} + 20px);
+		gap: 10px !important;
+		h2 {
+			font-size: 16px;
+			font-weight: 800;
+		}
+		ul {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
+		li {
+			display: flex;
+			gap: 6px;
+			font-size: 14px;
+			color: $text-secondary;
+			svg {
+				font-size: 18px;
+				color: $success;
+			}
+		}
+	}
+}
+
+/** HELP CENTER **/
+.cs-columns {
+	display: flex;
+	align-items: flex-start;
+	gap: 20px;
+	.cs-main {
+		flex: 1;
+		min-width: 0;
+		gap: 14px;
+	}
+	.cs-side {
+		width: 320px;
+		flex-shrink: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+	}
+}
+.cs-page .card {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: 20px;
+	border-radius: $radius-card;
+	border: 1px solid $border;
+	background: $surface;
+	h2 {
+		font-size: 17px;
+		font-weight: 800;
+	}
+	.hint {
+		font-size: 13px;
+		color: $text-secondary;
+	}
+}
+.cs-page {
+	.side-head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		button {
+			display: inline-flex;
+			align-items: center;
+			padding: 0;
+			border: 0;
+			background: none;
+			font-family: $font;
+			font-size: 13px;
+			font-weight: 700;
+			color: $primary;
+			cursor: pointer;
+			svg {
+				font-size: 18px;
+			}
+		}
+	}
+	.pair {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 14px;
+	}
+	.form-actions {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		.hint {
+			font-size: 12px;
+		}
+	}
+	.help-card {
+		background: $primary-tint;
+		border-color: $primary-soft;
+		span {
+			font-size: 13px;
+			line-height: 1.5;
+			color: $text-secondary;
+		}
+	}
+}
+.faq-filter {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	button {
+		height: 34px;
+		padding: 0 14px;
+		border-radius: $radius-pill;
+		border: 1px solid $border-strong;
+		background: $surface;
+		font-family: $font;
+		font-size: 13px;
+		font-weight: 600;
+		color: $text;
+		cursor: pointer;
+		&[aria-selected='true'] {
+			border-color: $primary;
+			background: $primary-tint;
+			color: $primary;
+		}
+	}
+}
+.faq-list {
+	border-radius: $radius-card;
+	border: 1px solid $border;
+	background: $surface;
+	overflow: hidden;
+	.MuiAccordion-root {
+		&:not(:last-child) {
+			border-bottom: 1px solid $border;
+		}
+		&::before {
+			display: none;
+		}
+	}
+	.MuiAccordionSummary-content {
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.MuiAccordionDetails-root {
+		padding-top: 0;
+		font-size: 14px;
+		line-height: 1.65;
+		color: $text-secondary;
+		white-space: pre-line;
+	}
+}
+.notice-list {
+	display: flex;
+	flex-direction: column;
+}
+.notice-row {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 12px 0;
+	color: $text;
+	&:not(:last-child) {
+		border-bottom: 1px solid $border;
+	}
+	.title {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.important {
+		flex-shrink: 0;
+		padding: 2px 8px;
+		border-radius: $radius-pill;
+		background: $danger-bg;
+		color: $danger;
+		font-size: 11px;
+		font-weight: 700;
+	}
+	.meta {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		font-size: 12px;
+		color: $text-muted;
+	}
+	&:hover .title {
+		color: $primary;
+	}
+}
+.cs-page .notices .notice-row {
+	padding: 14px 0;
+}
+.inquiry-thread {
+	.head {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 12px;
+		h1 {
+			font-size: 24px;
+		}
+		.category {
+			font-size: 12px;
+			font-weight: 700;
+			color: $primary;
+		}
+		.meta {
+			font-size: 13px;
+			color: $text-muted;
+		}
+	}
+	.messages {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+	.message {
+		max-width: 80%;
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		padding: 12px 14px;
+		border-radius: 14px;
+		p {
+			font-size: 14px;
+			line-height: 1.6;
+			white-space: pre-line;
+		}
+		strong {
+			font-size: 12px;
+			color: $primary;
+		}
+		time {
+			font-size: 11px;
+			color: $text-muted;
+		}
+		&.mine {
+			align-self: flex-end;
+			background: $primary-tint;
+		}
+		&.team {
+			align-self: flex-start;
+			background: $background;
+			border: 1px solid $border;
+		}
+	}
+	.reply {
+		display: flex;
+		align-items: flex-end;
+		gap: 10px;
+	}
+}
+
+/** DOCTOR PANEL: questions and own articles **/
+.qna-list {
+	gap: 12px;
+}
+.qna-item {
+	gap: 8px !important;
+	.title {
+		font-size: 17px;
+		font-weight: 800;
+		color: $text;
+		&:hover {
+			color: $primary;
+		}
+	}
+	.meta {
+		font-size: 12px;
+		color: $text-muted;
+	}
+	.excerpt {
+		font-size: 14px;
+		line-height: 1.55;
+		color: $text-secondary;
+	}
+	.answer {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+}

@@ -1,0 +1,1519 @@
+@import '../tokens';
+
+/**
+ * A row of cards the patient swipes sideways, bleeding to the screen edges and snapping
+ * to the 16px gutter (scroll-padding), not to the edge. $card: each card's width.
+ */
+@mixin swipe-row($card, $gap: 12px) {
+	display: flex;
+	gap: $gap;
+	margin: 0 -16px;
+	padding: 0 16px 4px;
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+	scroll-padding: 0 16px;
+	scrollbar-width: none;
+	&::-webkit-scrollbar {
+		display: none;
+	}
+	> * {
+		flex: 0 0 $card;
+		min-width: 0;
+		scroll-snap-align: start;
+	}
+}
+
+#mobile-wrap {
+	&.layout-basic #main {
+		background: $background;
+	}
+
+	#main {
+		flex: 1;
+	}
+
+	#top {
+		position: sticky;
+		top: 0;
+		z-index: 100;
+		.top {
+			height: 64px;
+			padding: 0 12px 0 16px;
+			flex-direction: row;
+			align-items: center;
+			justify-content: space-between;
+			background: $surface;
+			border-bottom: 1px solid $border;
+			.actions {
+				display: flex;
+				align-items: center;
+				gap: 4px;
+			}
+		}
+	}
+
+	.lang-btn {
+		height: 32px;
+		min-width: 0;
+		padding: 0 8px 0 10px;
+		border: 1px solid $border-strong;
+		border-radius: $radius-pill;
+		color: $text;
+		font-size: 13px;
+		font-weight: 700;
+		.MuiButton-startIcon {
+			margin-right: 4px;
+		}
+		.MuiButton-endIcon {
+			margin-left: 0;
+		}
+		svg {
+			font-size: 16px;
+		}
+	}
+
+	/* Home */
+	.home-page .hero {
+		padding: 32px 0 40px;
+		background: linear-gradient(180deg, $primary-tint 0%, $surface 100%);
+		.container {
+			flex-direction: column;
+			gap: 24px;
+		}
+		.hero-text {
+			display: flex;
+			flex-direction: column;
+			gap: 14px;
+			.badge {
+				align-self: flex-start;
+				padding: 5px 12px;
+				border-radius: $radius-pill;
+				background: $surface;
+				border: 1px solid $border;
+				font-size: 11px;
+				font-weight: 600;
+				i {
+					display: none;
+				}
+			}
+			h1 {
+				font-size: 32px;
+				font-weight: 800;
+				line-height: 1.15;
+				letter-spacing: -0.8px;
+				em {
+					font-style: normal;
+					color: $primary;
+				}
+			}
+			p {
+				font-size: 15px;
+				line-height: 1.55;
+				color: $text-secondary;
+			}
+		}
+		.hero-media {
+			position: relative;
+			height: 300px;
+			img {
+				width: 100%;
+				height: 220px;
+				object-fit: cover;
+				object-position: 72% center;
+				border-radius: 18px;
+			}
+			.verified-chip {
+				--mv-delay: 400ms;
+				position: absolute;
+				top: 12px;
+				right: 12px;
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				padding: 7px 12px;
+				border-radius: 12px;
+				background: $surface;
+				box-shadow: $shadow-menu;
+				font-size: 12px;
+				font-weight: 700;
+				svg {
+					font-size: 17px;
+					color: $success;
+				}
+			}
+			.hero-chat.compact {
+				--mv-delay: 500ms;
+				position: absolute;
+				left: 12px;
+				right: 12px;
+				bottom: 0;
+				padding: 12px;
+				border-radius: 14px;
+				background: $surface;
+				box-shadow: $shadow-modal;
+				.chat-head {
+					display: flex;
+					align-items: center;
+					gap: 8px;
+					padding-bottom: 8px;
+					.avatar {
+						width: 28px;
+						height: 28px;
+						font-size: 11px;
+					}
+					div {
+						display: flex;
+						flex-direction: column;
+					}
+					strong {
+						font-size: 12px;
+					}
+					.online {
+						display: flex;
+						align-items: center;
+						gap: 5px;
+						font-size: 10.5px;
+						color: $success;
+						i {
+							width: 6px;
+							height: 6px;
+							border-radius: 50%;
+							background: $success;
+						}
+					}
+				}
+				.chat-body {
+					min-height: 92px;
+					display: flex;
+					flex-direction: column;
+					gap: 6px;
+				}
+				.bubble {
+					max-width: 84%;
+					padding: 7px 11px;
+					font-size: 12px;
+					line-height: 1.4;
+					border-radius: 12px;
+					&.mine {
+						align-self: flex-end;
+						color: #ffffff;
+						background: $primary;
+						border-bottom-right-radius: 4px;
+					}
+					&.theirs,
+					&.typing {
+						align-self: flex-start;
+						background: $surface-alt;
+						border-bottom-left-radius: 4px;
+					}
+					&.typing {
+						display: flex;
+						gap: 4px;
+						i {
+							width: 6px;
+							height: 6px;
+							border-radius: 50%;
+							background: $text-muted;
+							animation: mv-typing 1s ease-in-out infinite;
+							&:nth-child(2) {
+								animation-delay: 0.15s;
+							}
+							&:nth-child(3) {
+								animation-delay: 0.3s;
+							}
+						}
+					}
+				}
+			}
+		}
+		.hero-search .search-box {
+			flex-direction: column;
+			align-items: stretch;
+			padding: 12px;
+			gap: 0;
+			.field {
+				padding: 8px 4px;
+				margin: 0;
+				border-right: 0;
+				&:not(:nth-last-child(2)) {
+					margin: 0;
+					border-right: 0;
+					border-bottom: 1px solid $border;
+				}
+			}
+			.search-btn {
+				gap: 8px;
+				font-family: $font;
+				font-size: 15px;
+				font-weight: 700;
+				.search-label {
+					display: inline;
+				}
+				width: 100%;
+				height: 48px;
+				margin-top: 8px;
+				border-radius: $radius-button;
+			}
+		}
+	}
+
+	/* Landing bands */
+	.home-section {
+		padding: 40px 0;
+		.section-head {
+			flex-direction: column;
+			align-items: flex-start;
+			h2 {
+				font-size: 24px;
+			}
+		}
+	}
+	/* Home carousels on a phone: bleed to the edges (Swiper adds the 16px offsets), dots, no arrows */
+	.home-carousel {
+		margin: 0 -16px;
+		.carousel-nav {
+			display: none;
+		}
+		.swiper {
+			padding: 4px 0 28px;
+		}
+		.swiper-pagination {
+			display: block;
+			bottom: 0;
+		}
+	}
+	.home-reviews .review-card {
+		padding: 16px;
+	}
+	.service-grid {
+		grid-template-columns: 1fr;
+		gap: 14px;
+	}
+	.service-card {
+		padding: 20px;
+		gap: 10px;
+		h3 {
+			font-size: 19px;
+		}
+		p {
+			font-size: 14px;
+		}
+	}
+	.board-tabs {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 4px;
+		padding: 4px;
+		border-radius: 12px;
+		border: 1px solid $border;
+		background: $surface;
+		button {
+			height: 38px;
+			border: 0;
+			border-radius: 9px;
+			background: transparent;
+			font-family: $font;
+			font-size: 14px;
+			font-weight: 600;
+			color: $text-secondary;
+			&[aria-selected='true'] {
+				background: $primary-tint;
+				color: $primary;
+				font-weight: 700;
+			}
+		}
+	}
+	.board-grid {
+		grid-template-columns: 1fr;
+	}
+	.board-column {
+		display: none;
+		padding: 0;
+		&.active {
+			display: block;
+		}
+		h3 {
+			display: none;
+		}
+		li:first-child {
+			border-top: 0;
+		}
+		li {
+			padding: 14px 16px;
+			strong {
+				font-size: 14px;
+			}
+		}
+	}
+
+	/* Skeletons while the carousels load */
+	.home-grid {
+		@include swipe-row(270px);
+	}
+	.trending-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 12px;
+	}
+	.trending-card {
+		padding: 8px;
+		.photo {
+			height: 110px;
+		}
+		.body strong {
+			font-size: 15px;
+		}
+	}
+
+	/* Join */
+	.join-page {
+		padding: 16px 0 40px;
+		.container {
+			flex-direction: column;
+			gap: 16px;
+		}
+		.welcome {
+			padding: 22px 20px;
+			border-radius: 18px;
+			background: $primary;
+			color: #ffffff;
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			h2 {
+				font-size: 24px;
+				font-weight: 800;
+				letter-spacing: -0.4px;
+				margin-bottom: 2px;
+			}
+			div {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				font-size: 13px;
+				font-weight: 500;
+			}
+			span {
+				width: 22px;
+				height: 22px;
+				flex-shrink: 0;
+				border-radius: 50%;
+				background: rgba(255, 255, 255, 0.18);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				svg {
+					font-size: 14px;
+				}
+			}
+		}
+		.join-form {
+			width: 100%;
+			padding: 20px 16px;
+			border-radius: $radius-card;
+			border: 1px solid $border;
+			background: $surface;
+			.field-row {
+				flex-direction: column;
+				gap: 20px;
+			}
+		}
+	}
+
+	/* Clinics */
+	.clinic-list-page > .container,
+	&.layout-basic .clinic-list-page > .container {
+		display: flex;
+		flex-direction: column;
+	}
+	.clinic-results .list-head {
+		flex-direction: column;
+		align-items: stretch;
+		.head-actions {
+			justify-content: space-between;
+			.sort-select {
+				min-width: 0;
+				flex: 1;
+			}
+		}
+	}
+	.clinic-grid {
+		grid-template-columns: 1fr;
+		gap: 14px;
+	}
+	.list-tabs a {
+		flex: 1;
+		justify-content: center;
+	}
+
+	/* Doctor page */
+	.doctor-detail-page,
+	.clinic-detail-page {
+		padding-top: 16px;
+		.crumbs {
+			font-size: 12px;
+		}
+	}
+	.doctor-hero {
+		grid-template-columns: 1fr;
+		justify-items: center;
+		text-align: center;
+		gap: 16px;
+		padding: 24px 16px;
+		.photo {
+			width: 112px;
+			height: 112px;
+			span {
+				font-size: 36px;
+			}
+		}
+		.chips,
+		.meta,
+		.stats {
+			justify-content: center;
+		}
+		h1 {
+			justify-content: center;
+			font-size: 26px;
+		}
+		.stats {
+			gap: 18px;
+		}
+		.actions {
+			width: 100%;
+			flex-direction: row;
+			.MuiButton-root {
+				flex: 1;
+			}
+			.like {
+				padding: 0 16px;
+			}
+		}
+	}
+	.detail-grid {
+		display: flex;
+		flex-direction: column;
+		gap: 24px;
+		.side {
+			position: static;
+			order: -1;
+			box-shadow: none;
+		}
+	}
+	.treatment-table .row {
+		grid-template-columns: minmax(0, 1.6fr) 0.8fr 1fr;
+		font-size: 14px;
+	}
+	.rating-summary {
+		grid-template-columns: 1fr;
+		gap: 16px;
+		padding: 20px;
+	}
+	.review-card {
+		padding: 16px;
+	}
+
+	/* Clinic page */
+	/* The fixed Book bar must not cover the end of the footer */
+	&:has(.book-bar) #footer {
+		padding-bottom: 84px;
+	}
+	.clinic-detail-page {
+		> .container {
+			gap: 18px;
+		}
+		.crumbs {
+			.back {
+				font-size: 20px;
+				color: $primary;
+			}
+			a {
+				font-weight: 600;
+				color: $primary;
+			}
+			.slash {
+				font-weight: 400;
+				color: $text-muted;
+			}
+			span {
+				font-weight: 400;
+				color: $text-secondary;
+			}
+		}
+		h2 {
+			font-size: 19px;
+			margin-bottom: 12px;
+		}
+		.detail-grid .main {
+			/* A flex child grows to its widest row (the doctor strip) unless allowed to shrink */
+			min-width: 0;
+			width: 100%;
+			gap: 28px;
+			section {
+				padding-bottom: 0;
+				border-bottom: 0;
+			}
+		}
+		.facts {
+			gap: 8px;
+			> div {
+				padding: 12px 10px;
+				border: 0;
+				background: $surface;
+			}
+			svg {
+				font-size: 18px;
+				margin-bottom: 2px;
+			}
+			span {
+				font-size: 11px;
+			}
+			strong {
+				font-size: 12.5px;
+			}
+		}
+		.clinic-map {
+			height: 180px;
+		}
+		.address strong {
+			font-size: 14px;
+		}
+		.nearby {
+			margin-top: 0;
+			.nearby-grid {
+				@include swipe-row(260px);
+			}
+		}
+	}
+	.clinic-head {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 14px;
+		h1 {
+			font-size: 26px;
+		}
+		.meta {
+			flex-direction: column;
+			gap: 6px;
+			font-size: 13px;
+		}
+		.actions .follow {
+			flex: 1;
+		}
+	}
+	.clinic-treatments {
+		border: 0;
+		background: transparent;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		.row {
+			grid-template-columns: minmax(0, 1fr) auto;
+			grid-template-areas:
+				'name price'
+				'meta action';
+			row-gap: 8px;
+			column-gap: 12px;
+			padding: 14px;
+			border: 1px solid $border;
+			border-radius: 12px;
+			background: $surface;
+			&.head {
+				display: none;
+			}
+			&.selected {
+				border: 1.5px solid $primary;
+			}
+		}
+		.name {
+			grid-area: name;
+		}
+		.price {
+			grid-area: price;
+			text-align: right;
+		}
+		.meta {
+			grid-area: meta;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			font-size: 12px;
+		}
+		.doctors i {
+			width: 22px;
+			height: 22px;
+			font-size: 9px;
+		}
+		.action {
+			grid-area: action;
+		}
+	}
+	.clinic-doctors {
+		@include swipe-row(220px);
+	}
+	.book-bar {
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 90;
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+		background: $surface;
+		border-top: 1px solid $border;
+		box-shadow: 0 -12px 32px rgba(15, 42, 61, 0.1);
+		.text {
+			flex: 1;
+			min-width: 0;
+			display: flex;
+			flex-direction: column;
+			span {
+				font-size: 12px;
+				color: $text-secondary;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+			strong {
+				font-size: 18px;
+				font-weight: 800;
+			}
+		}
+		.MuiButton-root {
+			height: 48px;
+			padding: 0 22px;
+			font-size: 15px;
+		}
+		.chat {
+			width: 48px;
+			height: 48px;
+			border-radius: $radius-button;
+			border: 1px solid $border-strong;
+		}
+	}
+
+	/* Booking (F2) */
+	.booking-page {
+		padding: 16px 0 110px;
+		> .container {
+			gap: 16px;
+		}
+		.detail-grid .main {
+			min-width: 0;
+			width: 100%;
+			gap: 14px;
+		}
+	}
+	.booking-steps {
+		gap: 4px;
+		li {
+			padding-top: 8px;
+		}
+		.label,
+		.dot {
+			display: none;
+		}
+	}
+	.booking-step {
+		padding: 18px 16px;
+		gap: 18px;
+		.step-head h1 {
+			font-size: 21px;
+		}
+		.question .chips button {
+			height: 36px;
+			padding: 0 14px;
+			font-size: 13px;
+		}
+	}
+	.booking-summary {
+		padding: 14px;
+		border-radius: $radius-card;
+		border: 1px solid $border;
+		background: $surface;
+		gap: 10px;
+		.photo {
+			width: 44px;
+			height: 44px;
+		}
+		.total strong {
+			font-size: 18px;
+		}
+	}
+	.booking-actions {
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 90;
+		padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+		background: $surface;
+		border-top: 1px solid $border;
+		.MuiButton-root {
+			height: 48px;
+			min-width: 0;
+		}
+		.MuiButton-contained {
+			flex: 1;
+		}
+	}
+	&:has(.booking-actions) #footer {
+		padding-bottom: 84px;
+	}
+	.booking-item {
+		flex-wrap: wrap;
+		padding: 16px;
+		gap: 12px;
+		.photo {
+			width: 52px;
+			height: 52px;
+		}
+		.actions {
+			width: 100%;
+			flex-direction: row;
+			.MuiButton-root {
+				flex: 1;
+				height: 40px;
+			}
+		}
+	}
+
+	/* MyPage (F4): no band, no side menu — the overview lists the sections */
+	.my-page {
+		> .container.my-page-body {
+			padding-top: 16px;
+			padding-bottom: 48px;
+		}
+		.my-page-main {
+			gap: 14px;
+		}
+		.page-head {
+			flex-wrap: wrap;
+			h1 {
+				font-size: 26px;
+			}
+			p {
+				font-size: 13px;
+			}
+		}
+		.booking-tabs {
+			align-self: stretch;
+			display: grid;
+			grid-auto-columns: minmax(0, 1fr);
+			grid-auto-flow: column;
+			button {
+				padding: 0 4px;
+				font-size: 13px;
+			}
+		}
+		.card {
+			padding: 16px;
+		}
+		.form-actions {
+			position: sticky;
+			bottom: 0;
+			z-index: 5;
+			margin: 0 -16px -48px;
+			padding: 12px 16px;
+			background: $surface;
+			border-top: 1px solid $border;
+			.MuiButton-root {
+				flex: 1;
+			}
+		}
+	}
+	.my-menu.list {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		section {
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
+		h2 {
+			padding-left: 4px;
+			font-size: 12px;
+			font-weight: 700;
+			letter-spacing: 0.5px;
+			text-transform: uppercase;
+			color: $text-muted;
+		}
+		.group {
+			border-radius: $radius-card;
+			border: 1px solid $border;
+			background: $surface;
+			overflow: hidden;
+		}
+		.my-menu-item {
+			width: 100%;
+			min-height: 56px;
+			padding: 0 14px;
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			border: 0;
+			background: $surface;
+			font-family: $font;
+			font-size: 15px;
+			font-weight: 600;
+			color: $text;
+			text-align: left;
+			&:not(:last-child) {
+				border-bottom: 1px solid $border;
+			}
+			.icon {
+				width: 36px;
+				height: 36px;
+				flex-shrink: 0;
+				border-radius: 10px;
+				background: $primary-tint;
+				color: $primary;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				svg {
+					font-size: 19px;
+				}
+			}
+			.label {
+				flex: 1;
+			}
+			.badge {
+				padding: 2px 8px;
+				border-radius: $radius-pill;
+				background: $primary-tint;
+				color: $primary;
+				font-size: 12px;
+				font-weight: 700;
+			}
+			.chevron {
+				color: $text-muted;
+			}
+			&.logout {
+				color: $danger;
+				.icon {
+					background: $danger-bg;
+					color: $danger;
+				}
+			}
+		}
+	}
+	.my-row {
+		padding: 12px 14px;
+	}
+	.next-visit {
+		flex-direction: column !important;
+		align-items: stretch;
+		.main {
+			align-items: flex-start;
+		}
+		.date {
+			width: 56px;
+			height: 60px;
+		}
+		.actions {
+			flex-direction: row;
+			.MuiButton-root {
+				flex: 1;
+			}
+		}
+	}
+	.my-overview .no-visit {
+		flex-direction: column;
+		align-items: stretch;
+	}
+	.review-prompt {
+		flex-wrap: wrap;
+		padding: 16px;
+		align-items: flex-start;
+		.MuiButton-root {
+			width: 100%;
+		}
+	}
+	.my-review {
+		padding: 16px;
+		.actions .MuiButton-root {
+			flex: 1;
+		}
+	}
+	.write-review-form {
+		gap: 14px;
+		.visit .head {
+			align-items: flex-start;
+		}
+		.rating button svg {
+			font-size: 32px;
+		}
+	}
+	.profile-form .fields {
+		grid-template-columns: 1fr;
+	}
+	.profile-form .security-row {
+		flex-wrap: wrap;
+	}
+	.following-btn {
+		min-width: 0;
+	}
+
+	/* Clinic Dashboard and Doctor Panel (F5) */
+	.clinic-strip {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		.avatar {
+			width: 44px;
+			height: 44px;
+			flex-shrink: 0;
+			border-radius: 12px;
+			overflow: hidden;
+			background: $primary-tint;
+			color: $primary;
+			font-size: 15px;
+			font-weight: 800;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+		}
+		.text {
+			flex: 1;
+			min-width: 0;
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+			strong {
+				font-size: 16px;
+			}
+			span {
+				font-size: 12px;
+				color: $text-secondary;
+			}
+		}
+	}
+	.clinic-tabs {
+		margin: 0 -16px;
+		padding: 0 16px 2px;
+		display: flex;
+		gap: 8px;
+		overflow-x: auto;
+		scrollbar-width: none;
+		.my-menu-item {
+			flex-shrink: 0;
+			height: 36px;
+			padding: 0 14px;
+			display: flex;
+			align-items: center;
+			border-radius: $radius-pill;
+			border: 1px solid $border-strong;
+			background: $surface;
+			font-size: 13px;
+			font-weight: 600;
+			color: $text;
+			&.active {
+				border-color: $primary;
+				background: $primary;
+				color: #fff;
+				font-weight: 700;
+			}
+		}
+	}
+	.my-page {
+		.pair {
+			grid-template-columns: 1fr;
+		}
+		.list-tools {
+			flex-wrap: wrap;
+			.MuiTextField-root {
+				min-width: 0;
+				flex: 1 1 100%;
+			}
+		}
+		.data-table {
+			.row.head {
+				display: none;
+			}
+			.row {
+				grid-template-columns: 1fr !important;
+				gap: 8px;
+			}
+		}
+	}
+	.clinic-dashboard {
+		.stat-grid {
+			grid-template-columns: 1fr 1fr;
+			gap: 10px;
+		}
+		.stat {
+			padding: 14px !important;
+			.icon {
+				display: none;
+			}
+			.text strong {
+				font-size: 22px;
+			}
+		}
+		.dashboard-columns {
+			flex-direction: column;
+		}
+		.today {
+			width: 100%;
+		}
+	}
+	.clinic-booking .actions .MuiButton-root {
+		flex: 1;
+	}
+	.clinic-schedule {
+		.schedule-tools {
+			flex-wrap: wrap;
+			.MuiTextField-root {
+				flex: 1 1 100%;
+				min-width: 0;
+			}
+		}
+		.week-nav {
+			flex: 1;
+			justify-content: space-between;
+			span {
+				min-width: 0;
+				font-size: 13px;
+			}
+		}
+		.day-strip {
+			display: grid;
+			grid-template-columns: repeat(7, minmax(0, 1fr));
+			gap: 4px;
+			button {
+				height: 54px;
+				border-radius: 12px;
+				border: 1px solid $border;
+				background: $surface;
+				font-family: $font;
+				color: $text;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				gap: 2px;
+				span {
+					font-size: 11px;
+				}
+				b {
+					font-size: 15px;
+				}
+				&[aria-selected='true'] {
+					border-color: $primary;
+					background: $primary;
+					color: #fff;
+				}
+			}
+		}
+		.day-list {
+			border-radius: $radius-card;
+			border: 1px solid $border;
+			background: $surface;
+			overflow: hidden;
+			> .hint {
+				padding: 16px;
+			}
+		}
+		.day-row {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			padding: 8px 12px;
+			&:not(:last-child) {
+				border-bottom: 1px solid $border;
+			}
+			time {
+				width: 44px;
+				font-size: 13px;
+				font-weight: 700;
+			}
+			.slot {
+				flex: 1;
+				min-height: 40px;
+			}
+		}
+		.pick-bar {
+			top: 72px;
+			flex-wrap: wrap;
+		}
+	}
+	.treatment-form,
+	.clinic-form,
+	.reply-reviews {
+		flex-direction: column;
+		.preview,
+		.side-cards,
+		.summary-side {
+			position: static;
+			width: 100%;
+		}
+	}
+	.doctor-create {
+		grid-template-columns: 1fr;
+	}
+	.reply-review .reply-tools {
+		flex-wrap: wrap;
+		.hint {
+			flex-basis: 100%;
+			order: -1;
+		}
+	}
+	.clinic-form .fields .wide {
+		grid-column: auto;
+	}
+	.doctor-profile .career-row {
+		grid-template-columns: 1fr 1fr;
+		padding-bottom: 10px;
+		border-bottom: 1px solid $border;
+		.MuiIconButton-root {
+			justify-self: start;
+		}
+	}
+	.join-form .role-pick {
+		flex-wrap: wrap;
+	}
+
+	/* Community and Help center (F6) */
+	.community-page > .container,
+	.cs-page > .container {
+		padding-top: 16px;
+		gap: 14px;
+	}
+	.board-tabs {
+		flex-wrap: nowrap;
+		margin: 0 -16px;
+		padding: 0 16px;
+		overflow-x: auto;
+		scrollbar-width: none;
+		button {
+			flex-shrink: 0;
+			height: 36px;
+			padding: 0 14px;
+			font-size: 13px;
+		}
+	}
+	.board-head {
+		flex-wrap: wrap;
+		h2 {
+			font-size: 20px;
+		}
+		.MuiButton-root {
+			width: 100%;
+		}
+	}
+	.board-tools {
+		flex-wrap: wrap;
+		.search {
+			flex: 1 1 100%;
+		}
+		.booking-tabs {
+			flex: 1;
+		}
+	}
+	.article-card {
+		padding: 14px;
+		.cover {
+			height: 170px;
+		}
+		.foot {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 6px;
+		}
+	}
+	.article-body .photos {
+		img {
+			height: 220px;
+		}
+		&.count-2 img {
+			height: 160px;
+		}
+	}
+	.review-grid {
+		grid-template-columns: 1fr;
+	}
+	.article-page,
+	.write-page {
+		padding-top: 12px;
+		.crumbs {
+			display: none;
+		}
+		.back-link {
+			display: inline-flex;
+			align-items: center;
+			align-self: flex-start;
+			font-size: 13px;
+			font-weight: 700;
+			color: $primary;
+			svg {
+				font-size: 20px;
+				margin-left: -6px;
+			}
+		}
+		h1 {
+			font-size: 22px;
+		}
+		.card {
+			padding: 16px;
+		}
+	}
+	.article-body .actions .MuiButton-root {
+		flex: 1;
+		&.report {
+			flex: 0 0 auto;
+		}
+	}
+	.comments .comment {
+		padding: 14px;
+	}
+	.comments .comment-gate {
+		flex-direction: column !important;
+		align-items: stretch;
+	}
+	.comment-tools {
+		flex-wrap: wrap;
+		.MuiTextField-root {
+			flex: 1;
+		}
+	}
+	.write-layout,
+	.cs-columns {
+		flex-direction: column;
+		.guidelines,
+		.cs-side {
+			position: static;
+			width: 100%;
+		}
+	}
+	.cs-page {
+		.cs-tabs {
+			align-self: stretch;
+			button {
+				flex: 1;
+				padding: 0 4px;
+				font-size: 13px;
+			}
+		}
+		.pair {
+			grid-template-columns: 1fr;
+		}
+		.form-actions {
+			flex-direction: column;
+			align-items: stretch;
+		}
+	}
+	.faq-filter {
+		flex-wrap: nowrap;
+		margin: 0 -16px;
+		padding: 0 16px;
+		overflow-x: auto;
+		scrollbar-width: none;
+		button {
+			flex-shrink: 0;
+		}
+	}
+	.inquiry-thread {
+		.head {
+			flex-direction: column;
+		}
+		.message {
+			max-width: 92%;
+		}
+		.reply {
+			flex-direction: column;
+			align-items: stretch;
+		}
+	}
+
+	/* Chat and notifications (F3) */
+	/* An open chat room is a full screen: no footer under the composer, no frame padding */
+	.my-page > .container.my-page-body:has(.chat-page.in-room) {
+		padding: 0;
+	}
+	&:has(.chat-page.in-room) #footer {
+		display: none;
+	}
+	.notifications-page {
+		padding: 20px 0 32px;
+		.page-head h1 {
+			font-size: 26px;
+		}
+	}
+	.notifications-page .booking-tabs {
+		align-self: stretch;
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+	.notification-item {
+		padding: 14px;
+	}
+	.chat-page {
+		.ai-banner {
+			flex-wrap: wrap;
+			.MuiButton-root {
+				width: 100%;
+			}
+		}
+		.chat-rooms {
+			margin: 0 -16px;
+			background: $surface;
+			> .MuiTextField-root {
+				padding: 0 16px 12px;
+			}
+		}
+		&.in-room {
+			gap: 0;
+			.chat-conversation {
+				height: calc(100dvh - 64px);
+				background: $surface;
+			}
+			.ai-banner {
+				border-radius: 0;
+			}
+		}
+	}
+	.chat-conversation .bubble {
+		max-width: 86%;
+	}
+
+	/* Doctors */
+	.list-banner {
+		padding: 24px 0 52px;
+		&::after {
+			width: 140px;
+			height: 140px;
+			right: -20px;
+			top: -10px;
+		}
+		h1 {
+			font-size: 28px;
+		}
+		p {
+			font-size: 14px;
+		}
+	}
+	.doctor-list-page > .container {
+		gap: 18px;
+	}
+	.doctor-filter {
+		grid-template-columns: 1fr;
+		padding: 12px;
+		.MuiButton-root {
+			width: 100%;
+		}
+	}
+	.list-head {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 12px;
+		.sorts {
+			overflow-x: auto;
+			margin: 0 -16px;
+			padding: 0 16px 2px;
+			scrollbar-width: none;
+			&::-webkit-scrollbar {
+				display: none;
+			}
+		}
+	}
+	.doctor-grid {
+		grid-template-columns: 1fr;
+		gap: 14px;
+	}
+	.doctor-card {
+		display: grid;
+		grid-template-columns: 72px minmax(0, 1fr);
+		column-gap: 14px;
+		row-gap: 10px;
+		padding: 16px;
+		text-align: left;
+		align-items: center;
+		.photo {
+			width: 72px;
+			height: 72px;
+			grid-row: span 2;
+			span {
+				font-size: 24px;
+			}
+		}
+		.langs {
+			justify-content: flex-start;
+		}
+		.stats,
+		.profile-btn {
+			grid-column: 1 / -1;
+		}
+	}
+
+	/* Footer */
+	#footer .footer-container {
+		padding: 32px 16px 24px;
+		background: $surface;
+		border-top: 1px solid $border;
+		.main {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 28px 16px;
+			padding-bottom: 28px;
+		}
+		.footer-box {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			min-width: 0;
+			&.brand,
+			&:nth-child(2) {
+				grid-column: 1 / -1;
+			}
+			> strong {
+				font-size: 15px;
+			}
+			p,
+			a {
+				font-size: 14px;
+				color: $text-secondary;
+				white-space: normal;
+			}
+			.contact {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				.icon {
+					width: 34px;
+					height: 34px;
+					border-radius: 10px;
+					background: $primary-tint;
+					color: $primary;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					svg {
+						font-size: 17px;
+					}
+				}
+				div {
+					display: flex;
+					flex-direction: column;
+					span {
+						font-size: 12px;
+						color: $text-secondary;
+					}
+				}
+			}
+		}
+		.second {
+			padding-top: 18px;
+			border-top: 1px solid $border;
+			font-size: 12px;
+			color: $text-secondary;
+		}
+	}
+}

@@ -1,0 +1,494 @@
+/* Booking assistant (F8): the floating button and the panel. Both live outside #pc-wrap /
+   #mobile-wrap (fixed button, MUI Drawer portal), so the styles are global. */
+
+.assistant-fab {
+	position: fixed;
+	right: 24px;
+	bottom: 24px;
+	z-index: 1100;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	height: 52px;
+	padding: 0 22px 0 18px;
+	border: 0;
+	border-radius: $radius-pill;
+	background: $primary;
+	color: #ffffff;
+	font-family: $font;
+	font-size: 15px;
+	font-weight: 700;
+	box-shadow: 0 12px 28px rgba(11, 122, 138, 0.35);
+	cursor: pointer;
+	/* It floats (a slow bob) and sends a soft ring out, so it is seen on any page. */
+	animation: assistant-float 3.2s ease-in-out infinite;
+	transition: background 0.2s ease;
+	&::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		background: $primary;
+		z-index: -1;
+		animation: assistant-ring 2.4s ease-out infinite;
+	}
+	svg {
+		font-size: 22px;
+		animation: assistant-sparkle 3.2s ease-in-out infinite;
+	}
+	&:hover {
+		background: $primary-hover;
+		animation-play-state: paused;
+		&::before {
+			animation-play-state: paused;
+			opacity: 0;
+		}
+	}
+	&:focus-visible {
+		outline: 3px solid $primary-soft;
+		outline-offset: 2px;
+	}
+	/* A phone: a round button above the pages' fixed bottom bars (Book, actions). */
+	&.mobile {
+		right: 16px;
+		bottom: 88px;
+		width: 56px;
+		height: 56px;
+		padding: 0;
+		justify-content: center;
+		&::before {
+			animation-name: assistant-ring-round;
+		}
+	}
+}
+@keyframes assistant-ring-round {
+	0% {
+		transform: scale(1);
+		opacity: 0.45;
+	}
+	80%,
+	100% {
+		transform: scale(1.6);
+		opacity: 0;
+	}
+}
+
+@keyframes assistant-float {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-8px);
+	}
+}
+@keyframes assistant-ring {
+	0% {
+		transform: scale(1);
+		opacity: 0.45;
+	}
+	80%,
+	100% {
+		transform: scale(1.35, 1.6);
+		opacity: 0;
+	}
+}
+@keyframes assistant-sparkle {
+	0%,
+	70%,
+	100% {
+		transform: rotate(0) scale(1);
+	}
+	80% {
+		transform: rotate(-12deg) scale(1.15);
+	}
+	90% {
+		transform: rotate(10deg) scale(1.1);
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.assistant-fab,
+	.assistant-fab::before,
+	.assistant-fab svg {
+		animation: none;
+	}
+}
+
+.assistant-drawer.MuiPaper-root {
+	width: 420px;
+	max-width: 100vw;
+	&.mobile {
+		width: 100vw;
+	}
+}
+
+.assistant-panel {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	background: $background;
+	font-family: $font;
+}
+
+.assistant-head {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 14px 10px 14px 18px;
+	background: $surface;
+	border-bottom: 1px solid $border;
+	.title {
+		flex: 1;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		strong {
+			font-size: 16px;
+			font-weight: 800;
+			color: $text;
+		}
+		span {
+			font-size: 12px;
+			color: $text-secondary;
+		}
+	}
+}
+.assistant-head .mark,
+.assistant-gate .mark {
+	display: grid;
+	place-items: center;
+	width: 38px;
+	height: 38px;
+	flex-shrink: 0;
+	border-radius: 12px;
+	background: $primary-tint;
+	color: $primary;
+	svg {
+		font-size: 21px;
+	}
+}
+
+.assistant-list {
+	flex: 1;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	padding: 18px 16px;
+	.bubble {
+		max-width: 86%;
+		p {
+			padding: 10px 13px;
+			font-size: 14px;
+			line-height: 1.5;
+			color: $text;
+			white-space: pre-wrap;
+			overflow-wrap: anywhere;
+		}
+		&.assistant {
+			align-self: flex-start;
+			p {
+				border-radius: 14px 14px 14px 4px;
+				border: 1px solid $border;
+				background: $surface;
+			}
+			/* A formatted reply: one bubble around paragraphs and lists. */
+			.assistant-text {
+				display: flex;
+				flex-direction: column;
+				gap: 6px;
+				padding: 10px 13px;
+				border-radius: 14px 14px 14px 4px;
+				border: 1px solid $border;
+				background: $surface;
+				font-size: 14px;
+				line-height: 1.5;
+				color: $text;
+				overflow-wrap: anywhere;
+				p {
+					padding: 0;
+					border: 0;
+					border-radius: 0;
+					background: none;
+				}
+				ul {
+					margin: 0;
+					padding-left: 18px;
+					display: flex;
+					flex-direction: column;
+					gap: 2px;
+				}
+				strong {
+					font-weight: 700;
+				}
+			}
+		}
+		&.user {
+			align-self: flex-end;
+			p {
+				border-radius: 14px 14px 4px 14px;
+				background: $primary;
+				color: #ffffff;
+			}
+		}
+		&.typing {
+			display: flex;
+			gap: 5px;
+			padding: 14px 16px;
+			border-radius: 14px 14px 14px 4px;
+			border: 1px solid $border;
+			background: $surface;
+			i {
+				width: 7px;
+				height: 7px;
+				border-radius: 50%;
+				background: $text-muted;
+				animation: assistant-dot 1.2s ease-in-out infinite;
+				&:nth-child(2) {
+					animation-delay: 0.15s;
+				}
+				&:nth-child(3) {
+					animation-delay: 0.3s;
+				}
+			}
+		}
+	}
+}
+@keyframes assistant-dot {
+	0%,
+	60%,
+	100% {
+		opacity: 0.3;
+		transform: translateY(0);
+	}
+	30% {
+		opacity: 1;
+		transform: translateY(-3px);
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.assistant-list .bubble.typing i {
+		animation: none;
+		opacity: 0.6;
+	}
+}
+
+.assistant-suggestions,
+.assistant-slots {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	button {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		min-height: 34px;
+		padding: 6px 14px;
+		border: 1px solid $border-strong;
+		border-radius: $radius-pill;
+		background: $surface;
+		font-family: $font;
+		font-size: 13px;
+		font-weight: 600;
+		color: $text;
+		text-align: left;
+		cursor: pointer;
+		svg {
+			font-size: 16px;
+			color: $primary;
+		}
+		&:hover:not(:disabled) {
+			border-color: $primary;
+			color: $primary;
+		}
+		&:disabled {
+			cursor: default;
+			opacity: 0.55;
+		}
+	}
+}
+.assistant-slots button {
+	border-color: $primary-soft;
+	background: $primary-tint;
+}
+
+.assistant-clinics {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	max-width: 92%;
+}
+.assistant-clinic {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 12px 14px;
+	border: 1px solid $border;
+	border-left: 4px solid $primary;
+	border-radius: 12px;
+	background: $surface;
+	color: $text;
+	white-space: normal;
+	transition:
+		border-color 0.2s ease,
+		box-shadow 0.2s ease;
+	strong {
+		font-size: 14px;
+	}
+	.meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px 12px;
+		font-size: 12px;
+		color: $text-secondary;
+		span {
+			display: inline-flex;
+			align-items: center;
+			gap: 3px;
+		}
+		svg {
+			font-size: 15px;
+			color: $text-muted;
+			&.star {
+				color: $star;
+			}
+		}
+	}
+	&:hover {
+		color: $text;
+		border-color: $primary-soft;
+		border-left-color: $primary;
+		box-shadow: $shadow-card;
+	}
+}
+
+.assistant-hold {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 16px;
+	border: 1px solid $primary-soft;
+	border-radius: $radius-card;
+	background: $surface;
+	box-shadow: $shadow-card;
+	.label {
+		font-size: 11px;
+		font-weight: 700;
+		letter-spacing: 0.8px;
+		text-transform: uppercase;
+		color: $primary;
+	}
+	strong {
+		font-size: 16px;
+		color: $text;
+	}
+	> span {
+		font-size: 13px;
+		color: $text-secondary;
+	}
+	.when {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		margin-top: 4px;
+		font-weight: 700;
+		color: $text;
+		svg {
+			font-size: 17px;
+			color: $primary;
+		}
+	}
+	.price {
+		font-weight: 700;
+		color: $text;
+	}
+	.MuiButton-root {
+		margin-top: 10px;
+	}
+	.note {
+		font-size: 12px;
+		color: $text-muted;
+		text-align: center;
+	}
+	&.expired {
+		opacity: 0.7;
+		border-color: $border;
+		.label {
+			color: $text-muted;
+		}
+	}
+}
+
+.assistant-full {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	padding: 10px 14px;
+	border-radius: 12px;
+	background: $warning-bg;
+	font-size: 13px;
+	color: $warning;
+	font-weight: 600;
+}
+
+.assistant-gate {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	padding: 32px 28px;
+	text-align: center;
+	strong {
+		font-size: 18px;
+		font-weight: 800;
+		color: $text;
+	}
+	p {
+		font-size: 14px;
+		line-height: 1.55;
+		color: $text-secondary;
+	}
+	a {
+		font-size: 13px;
+		font-weight: 700;
+	}
+}
+
+.assistant-compose {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	gap: 8px;
+	padding: 12px 12px 10px 16px;
+	background: $surface;
+	border-top: 1px solid $border;
+	.MuiTextField-root {
+		flex: 1;
+	}
+	.MuiOutlinedInput-root {
+		border-radius: 14px;
+		font-size: 14px;
+	}
+	.send {
+		width: 42px;
+		height: 42px;
+		background: $primary;
+		color: #ffffff;
+		&:hover {
+			background: $primary-hover;
+		}
+		&.Mui-disabled {
+			background: $surface-alt;
+			color: $text-muted;
+		}
+	}
+	.disclaimer {
+		flex-basis: 100%;
+		font-size: 11px;
+		color: $text-muted;
+		text-align: center;
+	}
+}

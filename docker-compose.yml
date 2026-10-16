@@ -1,0 +1,25 @@
+# PRODUCTION (medvia.tech): `./deploy.sh` pulls main and recreates the container.
+# The repository is mounted; `next build` reads the API URLs from .env.production.local on the
+# server (REACT_APP_API_URL=https://api.medvia.tech …) — Next inlines them at build time.
+services:
+  medvia-next:
+    container_name: medvia-next
+    restart: always
+    image: node:22.20.0
+    # The host's nginx proxies medvia.tech here (HTTPS ends at nginx).
+    ports:
+      - '127.0.0.1:4000:4000'
+    environment:
+      - NEXT_TELEMETRY_DISABLED=1
+    volumes:
+      - ./:/usr/src/medvia-next
+    working_dir: /usr/src/medvia-next
+    networks:
+      - client-network
+
+    # FOR PRODUCTION
+    command: bash -c "yarn install --frozen-lockfile && yarn i18n:check && yarn build && yarn start"
+
+networks:
+  client-network:
+    driver: bridge
