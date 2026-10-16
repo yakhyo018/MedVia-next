@@ -79,20 +79,13 @@ export const localeToLanguage = (locale: string | undefined): Language =>
 	LANGUAGES.find((lang) => lang.locale === locale)?.code ?? Language.EN;
 
 /**
- * Photos, free under the Unsplash / Pexels licences (credit given on the page). Unsplash ones are served from the
- * Unsplash CDN for now; `?w=` asks the CDN for a resized copy.
+ * The site's photos: generated (FLUX.1 Krea through Hugging Face) by `yarn images:generate`,
+ * prompts in docs/IMAGES.md — no licence credit to show, nothing hot-linked.
  */
-const unsplash = (id: string, width: number) =>
-	`https://images.unsplash.com/${id}?auto=format&fit=crop&q=75&w=${width}`;
-
 export const IMAGES = {
-	/** From MedVia-design/landing-with-photos (the approved landing sample). */
-	hero: { src: '/img/hero.jpg', credit: '', source: '' },
-	login: {
-		src: unsplash('photo-1786801525028-5be8739f4ae5', 1000),
-		credit: 'Emma Gasseau-Dryer',
-		source: 'Unsplash',
-	},
-	/** Seoul at dusk — Pexels 12640885, a local copy (no hot-link). */
-	signup: { src: '/img/signup.jpg', credit: 'Ethan Brooke', source: 'Pexels' },
+	hero: { src: '/img/hero.jpg' },
+	/** Bukchon hanok roofs and the Seoul skyline. */
+	login: { src: '/img/login.jpg' },
+	/** Seoul at dusk over the Han river. */
+	signup: { src: '/img/signup.jpg' },
 };

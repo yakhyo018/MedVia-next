@@ -10,7 +10,8 @@
 		"typecheck": "tsc --noEmit",
 		"lint:check": "next lint",
 		"lint:fix": "next lint --fix",
-		"i18n:check": "node scripts/i18n-check.js"
+		"i18n:check": "node scripts/i18n-check.js",
+		"images:generate": "node scripts/generate-images.js"
 	},
 	"dependencies": {
 		"@apollo/client": "^3.14.1",

@@ -61,10 +61,13 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
   `deploy/` (compose, nginx, certbot scripts, runbook `deploy/README.md`).
 - Frontend: `Dockerfile` (build args `REACT_APP_*` = `https://api.medvia.tech…`, `i18n:check`
   before `next build`, `next start` on :4000 as `node`).
-- Photos: licensed stock only (Unsplash / Pexels; no AI-generated images — removed at the user's
-  request): clinics 3–4 each, 24 doctor portraits (~30 % women), the sign-up panel's Seoul at
-  dusk (Pexels, a local copy). The user asked for Google images regardless of copyright; only
-  licensed sources were used.
+- Photos: **generated** (2026-10-16, the user's decision after adding $5 of Hugging Face credits;
+  replaces the stock photos of 2026-10-15) — FLUX.1 Krea [dev] through HF Inference Providers.
+  Backend seed: 32 clinic rooms + 24 doctor portraits (`npm run photos:generate`). Frontend: hero,
+  login (Bukchon roofs + skyline), signup (Seoul at dusk), 4 treatment cards
+  (`yarn images:generate`, prompts in `docs/IMAGES.md`), all local — nothing hot-linked, no credit
+  line. fal's safety checker blacked out two harmless images; both scripts now retry with the next
+  seed.
 - Google sign-in (the user's request): "Continue with Google" on Log in / Sign up for patients
   (`GoogleButton`, `googleLogIn`, `GOOGLE_LOGIN`); hidden until `REACT_APP_GOOGLE_CLIENT_ID` is set —
   the OAuth client is created by the user (runbook §3). Not tested end to end without it.
@@ -405,13 +408,13 @@ with `SEED_PASSWORD` from `~/Desktop/MedVia/.env`.
     password is a weak demo one, and the demo accounts (`feride@`, `clinic01@`, `doctor01@`,
     `admin@seed.medvia.test`) will be reachable on the public site.
 - Google sign-in: built (F9); needs the OAuth client id in both `.env` files.
-- Before deploy (F9): copy the Unsplash photos into `public/img/` and re-check `yarn audit` for
-  Next 14 (current advisories are mostly App Router / middleware / `next/image`).
+- Before deploy (F9): re-check `yarn audit` for Next 14 (current advisories are mostly App Router /
+  middleware / `next/image`). The photos are local and generated (2026-10-16).
 - `yarn build:check` builds into `.next-check/` while `yarn dev` runs (F1 passed: 47 static
   pages). Run it before every merge; the real `yarn build` is for deploy.
 - A test patient from the browser checks, `f1.feride@medvia.test`, stays until the backend's
   `npm run clean:test -- --yes` (or the next `npm run test:api`) removes it.
 - The demo seed was rebuilt several times on 2026-10-12/13 (`--reset`): clinic and doctor ids
   changed; old links with ids no longer resolve.
-- `hero.jpg` came from the design folder without a recorded source — confirm its licence before a
-  public deploy. `MedVia-design/landing-with-photos/img/` also has treatment and clinic photos for F1.
+- `hero.jpg` (once the design folder's sample with no recorded source) is generated since
+  2026-10-16, like every photo of the site.

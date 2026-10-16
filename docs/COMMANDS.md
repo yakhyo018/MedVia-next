@@ -28,6 +28,17 @@ cd ~/Desktop/MedVia-next && npx prettier --check "pages/**/*.tsx" "libs/**/*.{ts
 
 `yarn build` (writes `.next/`) is for deploy only.
 
+## Site photos (generated, paid from Hugging Face credits)
+
+```bash
+cd ~/Desktop/MedVia-next && yarn images:generate                  # files whose prompt changed / missing
+cd ~/Desktop/MedVia-next && yarn images:generate --file=hero.jpg  # one file
+cd ~/Desktop/MedVia-next && yarn images:generate --force          # all again (~$0.3)
+```
+
+`HF_TOKEN` comes from `~/Desktop/MedVia/.env`. The seed photos: `cd ~/Desktop/MedVia && npm run
+photos:generate`, then `npm run photos:attach -- --replace` for an existing database.
+
 ## Check (backend)
 
 ```bash

@@ -438,10 +438,6 @@ const Join: NextPage = () => {
 									src={loginView ? IMAGES.login.src : IMAGES.signup.src}
 									alt={t('Illustration')}
 								/>
-								<span className={'credit'}>
-									Photo: {(loginView ? IMAGES.login : IMAGES.signup).credit} /{' '}
-									{(loginView ? IMAGES.login : IMAGES.signup).source}
-								</span>
 							</Box>
 						</Stack>
 						<Stack className={'right'}>{form}</Stack>
