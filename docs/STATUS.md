@@ -5,7 +5,8 @@ Update it whenever a milestone closes.
 
 _Last updated: 2026-10-15 — **F9 (Deploy) in progress: code ready (backend `feature/seed-variety`,
 `feature/demo-mode`, `feature/docker`; frontend `feature/f9-deploy`). Next: merge both repos
-`develop` → `main`, then the server by `~/Desktop/MedVia/deploy/README.md`.**_
+`develop` → `main`, then the server: `docker-compose.yml` + `deploy.sh` in each repository (see
+COMMANDS → Production update).**_
 
 ## The project
 
@@ -59,7 +60,10 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 - Backend: seed variety (names checked against real clinics, hand-written clinics and doctors,
   hours, licensed photos — see the backend STATUS), `DEMO_MODE`, `Dockerfile` +
   `deploy/` (compose, nginx, certbot scripts, runbook `deploy/README.md`).
-- Frontend: `Dockerfile` (build args `REACT_APP_*` = `https://api.medvia.tech…`, `i18n:check`
+- **2026-10-16, the user's choice:** `deploy/` removed (the user); instead nestar-style
+  `docker-compose.yml` + `deploy.sh` (reset → checkout main → pull → `up -d --force-recreate`) in
+  both repositories; HTTPS by nginx + certbot on the host. The `Dockerfile`s are no longer used.
+- Frontend (before 2026-10-16): `Dockerfile` (build args `REACT_APP_*` = `https://api.medvia.tech…`, `i18n:check`
   before `next build`, `next start` on :4000 as `node`).
 - Photos: **generated** (2026-10-16, the user's decision after adding $5 of Hugging Face credits;
   replaces the stock photos of 2026-10-15) — FLUX.1 Krea [dev] through HF Inference Providers.

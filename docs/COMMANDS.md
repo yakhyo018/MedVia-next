@@ -84,7 +84,13 @@ git diff --cached | grep -nE "sk-or-[A-Za-z0-9_-]{10,}|sk-ant-[A-Za-z0-9_-]{10,}
 ## Production update (on the server)
 
 ```bash
-cd /opt/medvia/MedVia && ./deploy.sh           # both repositories to origin/main, then compose up -d --build
+cd /opt/medvia/MedVia && ./deploy.sh            # API + batch: pull main, recreate the containers
+cd /opt/medvia/MedVia-next && ./deploy.sh       # web: pull main, recreate the container
+docker image prune -f                           # now and then
 ```
 
-Details: `~/Desktop/MedVia/deploy/README.md` §7.
+Each repository has its own `docker-compose.yml` (nestar style: `node:22.20.0`, the repository
+mounted, `command` = install → build → start). The containers listen on 127.0.0.1 only
+(API :3000, web :4000); the host's nginx serves HTTPS for medvia.tech / api.medvia.tech.
+On the server: `MedVia/.env` (production values) and `MedVia-next/.env.production.local`
+(`REACT_APP_API_URL=https://api.medvia.tech` …) — Next inlines them at build time.
