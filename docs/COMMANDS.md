@@ -84,7 +84,7 @@ git diff --cached | grep -nE "sk-or-[A-Za-z0-9_-]{10,}|sk-ant-[A-Za-z0-9_-]{10,}
 ## Production update (on the server)
 
 ```bash
-/opt/medvia/MedVia/deploy/deploy.sh             # both repositories to origin/main, rebuild, health check
+cd /opt/medvia/MedVia && ./deploy.sh           # both repositories to origin/main, then compose up -d --build
 ```
 
 Details: `~/Desktop/MedVia/deploy/README.md` §7.
