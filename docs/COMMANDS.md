@@ -80,3 +80,11 @@ git add <files by name>                            # never git add -A
 git diff --cached                                  # read what goes in
 git diff --cached | grep -nE "sk-or-[A-Za-z0-9_-]{10,}|sk-ant-[A-Za-z0-9_-]{10,}|eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}|GOOGLE_CLIENT_SECRET=[^ ]+"   # must print nothing
 ```
+
+## Production update (on the server)
+
+```bash
+/opt/medvia/MedVia/deploy/deploy.sh             # both repositories to origin/main, rebuild, health check
+```
+
+Details: `~/Desktop/MedVia/deploy/README.md` §7.
