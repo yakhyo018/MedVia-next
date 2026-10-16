@@ -297,6 +297,7 @@ export const GET_ARTICLES = gql`
 				_id
 				articleCategory
 				articleTitle
+				articleImages
 				articleLang
 				articleAnswered
 				articleLikes

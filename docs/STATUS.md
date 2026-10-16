@@ -75,6 +75,8 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
   the browser (list + detail, 1440 px) and on the local API (doctor upload + post, limits, 403 for
   a patient). The write page itself was not opened as a doctor here — the local seed password
   could not be read in this session; worth a look when you log in as `doctor01@`.
+- Landing page Community board: health tips show their cover (72×56) beside the title; desktop
+  and 375 px checked.
 - The sign-up form's Full name field lost its sample name ("Feride Karimova").
 - Google sign-in (the user's request): "Continue with Google" on Log in / Sign up for patients
   (`GoogleButton`, `googleLogIn`, `GOOGLE_LOGIN`); hidden until `REACT_APP_GOOGLE_CLIENT_ID` is set —

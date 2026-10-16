@@ -9,10 +9,14 @@ import { ArticlesInquiry, BoardArticle } from '../../types/board-article/board-a
 import { BoardArticleCategory } from '../../enums/board-article.enum';
 import { Direction } from '../../enums/common.enum';
 import { MemberType } from '../../enums/member.enum';
-import { formatCount } from '../../utils';
+import { formatCount, imageUrl } from '../../utils';
+import { REACT_APP_API_URL } from '../../config';
 import HomeSection from './HomeSection';
 
-/** Two columns on desktop; on mobile the tabs show one at a time (CSS, both lists are loaded). */
+/**
+ * Two columns on desktop; on mobile the tabs show one at a time (CSS, both lists are loaded).
+ * A health tip with photos shows its cover beside the title.
+ */
 const BOARDS: { category: BoardArticleCategory; label: string; replies: string; href: string }[] = [
 	{ category: BoardArticleCategory.QNA, label: 'Q and A', replies: '{{count}} answers', href: '/community' },
 	{
@@ -61,24 +65,34 @@ const BoardColumn = (props: BoardColumnProps) => {
 								<Skeleton variant={'text'} width={'80%'} />
 							</li>
 						))
-					: list.map((article) => (
-							<li key={article._id}>
-								<Link href={`/community/detail?id=${article._id}`} className={'post-link'}>
-									{article.articleTitle}
-								</Link>
-								<span className={'meta'}>
-									<span>
-										{article.authorName}
-										{article.authorType === MemberType.DOCTOR && <em>{t('Doctor')}</em>} ·{' '}
-										{t(replies, { count: article.articleComments })}
+					: list.map((article) => {
+							const cover = article.articleImages?.[0];
+							return (
+								<li key={article._id} className={cover ? 'with-thumb' : ''}>
+									{cover && (
+										<Link href={`/community/detail?id=${article._id}`} className={'thumb'} tabIndex={-1}>
+											<img src={imageUrl(cover, REACT_APP_API_URL)} alt={''} loading={'lazy'} />
+										</Link>
+									)}
+									<span className={'post-body'}>
+										<Link href={`/community/detail?id=${article._id}`} className={'post-link'}>
+											{article.articleTitle}
+										</Link>
+										<span className={'meta'}>
+											<span>
+												{article.authorName}
+												{article.authorType === MemberType.DOCTOR && <em>{t('Doctor')}</em>} ·{' '}
+												{t(replies, { count: article.articleComments })}
+											</span>
+											<span className={'views'}>
+												<VisibilityOutlinedIcon />
+												{formatCount(article.articleViews)}
+											</span>
+										</span>
 									</span>
-									<span className={'views'}>
-										<VisibilityOutlinedIcon />
-										{formatCount(article.articleViews)}
-									</span>
-								</span>
-							</li>
-						))}
+								</li>
+							);
+						})}
 				{!loading && list.length === 0 && <li className={'empty'}>{t('No posts yet')}</li>}
 			</ul>
 		</div>

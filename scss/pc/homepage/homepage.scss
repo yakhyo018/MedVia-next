@@ -690,6 +690,33 @@
 			font-size: 14px;
 			color: $text-secondary;
 		}
+		.post-body {
+			display: flex;
+			flex-direction: column;
+			gap: 6px;
+			min-width: 0;
+			flex: 1;
+		}
+		/* A health tip's cover beside the title */
+		&.with-thumb {
+			flex-direction: row;
+			align-items: center;
+			gap: 14px;
+		}
+		.thumb {
+			flex-shrink: 0;
+			width: 72px;
+			height: 56px;
+			border-radius: 10px;
+			overflow: hidden;
+			background: $background;
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				display: block;
+			}
+		}
 	}
 	.meta {
 		display: flex;
