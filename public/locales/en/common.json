@@ -157,7 +157,6 @@
   "Interpreter available": "Interpreter available",
   "Interpreter": "Interpreter",
   "Reset": "Reset",
-  "Apply": "Apply",
   "Showing": "Showing",
   "of": "of",
   "clinics": "clinics",
@@ -987,5 +986,6 @@
   "Google sign-in is not configured on this server!": "Google sign-in is not configured on this server!",
   "Google sign-in failed, please try again!": "Google sign-in failed, please try again!",
   "Photos": "Photos",
-  "Up to 2 photos, JPG or PNG up to 5 MB; the first one is the cover. Faces of other people must be blurred.": "Up to 2 photos, JPG or PNG up to 5 MB; the first one is the cover. Faces of other people must be blurred."
+  "Up to 2 photos, JPG or PNG up to 5 MB; the first one is the cover. Faces of other people must be blurred.": "Up to 2 photos, JPG or PNG up to 5 MB; the first one is the cover. Faces of other people must be blurred.",
+  "Show results": "Show results"
 }

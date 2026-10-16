@@ -77,6 +77,13 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
   could not be read in this session; worth a look when you log in as `doctor01@`.
 - Landing page Community board: health tips show their cover (72×56) beside the title; desktop
   and 375 px checked.
+- Clinic search filters are live (the user's request): ticking a district, a specialty, a
+  language or the interpreter switch updates the URL and the list at once; text and prices after a
+  400 ms pause (one request per word). Desktop: no Apply button, Reset only; phone sheet: Reset +
+  "Show results". Checked: 8 → 3 → 1 clinics with the URL following, "laser " typed → one push,
+  phone sheet stays open while filtering.
+- Home carousels: cards were cut off at the bottom (Swiper's content-box wrapper + CssBaseline's
+  `inherit`); `.swiper-slide` is border-box now.
 - The sign-up form's Full name field lost its sample name ("Feride Karimova").
 - Google sign-in (the user's request): "Continue with Google" on Log in / Sign up for patients
   (`GoogleButton`, `googleLogIn`, `GOOGLE_LOGIN`); hidden until `REACT_APP_GOOGLE_CLIENT_ID` is set —
@@ -298,7 +305,7 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 
 - Menu: Home · Clinics · Doctors. Both lists carry "Clinics N | Doctors M" tabs.
 - `/clinics`: sidebar filters (name or treatment, 7 districts, specialty, ₩ range, languages,
-  interpreter) applied on Apply; sort Recommended / Rating / Price ↑ / Likes / Views / Newest;
+  interpreter) applied on Apply (live since 2026-10-16, see F9); sort Recommended / Rating / Price ↑ / Likes / Views / Newest;
   removable chips; 9 per page; URL keys `text, specialty, district, lang, min, max, interpreter,
   sort, page`; mobile filters in a bottom sheet. The home search now lands here.
 - Cards: real photos (seeded from the landing sample), Verified, ♡ (guest → login prompt that

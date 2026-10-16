@@ -157,7 +157,6 @@
   "Interpreter available": "Есть переводчик",
   "Interpreter": "Переводчик",
   "Reset": "Сбросить",
-  "Apply": "Применить",
   "Showing": "Показано",
   "of": "из",
   "clinics": "клиник",
@@ -1011,5 +1010,6 @@
   "Google sign-in is not configured on this server!": "Вход через Google на этом сервере не настроен!",
   "Google sign-in failed, please try again!": "Не удалось войти через Google, попробуйте ещё раз!",
   "Photos": "Фото",
-  "Up to 2 photos, JPG or PNG up to 5 MB; the first one is the cover. Faces of other people must be blurred.": "До 2 фото, JPG или PNG до 5 МБ; первое станет обложкой. Лица других людей нужно размыть."
+  "Up to 2 photos, JPG or PNG up to 5 MB; the first one is the cover. Faces of other people must be blurred.": "До 2 фото, JPG или PNG до 5 МБ; первое станет обложкой. Лица других людей нужно размыть.",
+  "Show results": "Показать результаты"
 }

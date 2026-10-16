@@ -157,7 +157,6 @@
   "Interpreter available": "Tarjimon bor",
   "Interpreter": "Tarjimon",
   "Reset": "Tozalash",
-  "Apply": "Qoʻllash",
   "Showing": "Koʻrsatilmoqda",
   "of": "/",
   "clinics": "ta klinika",
@@ -987,5 +986,6 @@
   "Google sign-in is not configured on this server!": "Bu serverda Google orqali kirish sozlanmagan!",
   "Google sign-in failed, please try again!": "Google orqali kirib bo'lmadi, qayta urinib ko'ring!",
   "Photos": "Rasmlar",
-  "Up to 2 photos, JPG or PNG up to 5 MB; the first one is the cover. Faces of other people must be blurred.": "2 tagacha rasm, JPG yoki PNG, 5 MB gacha; birinchisi muqova bo'ladi. Boshqa odamlarning yuzlari xiralashtirilgan bo'lishi kerak."
+  "Up to 2 photos, JPG or PNG up to 5 MB; the first one is the cover. Faces of other people must be blurred.": "2 tagacha rasm, JPG yoki PNG, 5 MB gacha; birinchisi muqova bo'ladi. Boshqa odamlarning yuzlari xiralashtirilgan bo'lishi kerak.",
+  "Show results": "Natijalarni ko'rsatish"
 }

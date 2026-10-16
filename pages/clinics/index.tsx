@@ -136,8 +136,8 @@ const ClinicList: NextPage = () => {
 		await router.push({ pathname: router.pathname, query }, undefined, { shallow: true, scroll: false });
 	};
 
-	const applyHandler = async (values: ClinicFilterValues) => {
-		setFilterOpen(false);
+	/** Every filter change (live from the sidebar) becomes the URL; page 1 again. */
+	const filterHandler = async (values: ClinicFilterValues) => {
 		await pushQuery({
 			text: values.text,
 			treatment: values.treatment,
@@ -149,7 +149,11 @@ const ClinicList: NextPage = () => {
 			interpreter: values.interpreter ? '1' : '',
 			page: '',
 		});
-		// A shorter list would leave the reader below it: go back to the top of the results.
+	};
+
+	/** A chip removed or "Clear all": the list may get longer, so back to the top of the results. */
+	const applyHandler = async (values: ClinicFilterValues) => {
+		await filterHandler(values);
 		window.scrollTo({ top: 0, behavior: 'smooth' });
 	};
 
@@ -188,7 +192,13 @@ const ClinicList: NextPage = () => {
 		...(filter.interpreter ? [{ label: t('Interpreter'), remove: { interpreter: false } }] : []),
 	];
 
-	const filterPanel = <ClinicFilter values={filter} onApply={applyHandler} />;
+	const filterPanel = (
+		<ClinicFilter
+			values={filter}
+			onChange={filterHandler}
+			onDone={device === 'mobile' ? () => setFilterOpen(false) : undefined}
+		/>
+	);
 
 	const results = (
 		<Stack className={'clinic-results'}>
