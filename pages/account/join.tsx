@@ -213,7 +213,6 @@ const Join: NextPage = () => {
 							<TextField
 								value={input.memberFullName}
 								onChange={(e) => inputHandler('memberFullName', e.target.value)}
-								placeholder={'Feride Karimova'}
 								autoComplete={'name'}
 								error={Boolean(errors.memberFullName)}
 								helperText={errorText('memberFullName')}
