@@ -806,3 +806,21 @@ Clinics list (8 cards, all photos load), a clinic page (4 rooms in one look, 3 p
    naming text makes text likelier. Describe what should be there (bare walls, clear glass).
 4. **Where does the token live?** Only in the API's `.env` (git-ignored); the frontend script reads
    it from there or the environment, so no Next env file can ever expose it.
+
+## F9 — Health-tip photos on the page (2026-10-16)
+
+- `ArticleCard` shows a cover (`.with-cover`) when the post has photos; the tips board renders a
+  two-column `.article-grid` on desktop, other boards keep the list.
+- The detail splits the text at the first blank line and puts the photos there (one full width,
+  two side by side) — the mockup's rhythm without a rich-text editor.
+- The write page reuses `useUpload` (target `article`) and the treatment editor's thumb pattern;
+  only tips send `articleImages` (another board would be refused by the API), an edit sends the
+  whole set, `[]` clears it.
+
+### Interview questions
+
+1. **Why does the client also skip photos for questions if the API refuses them?** The UI should
+   not offer what the server will reject; the server rule is still the one that counts.
+2. **Why send the whole photo set on update?** Order matters (the first is the cover); a full
+   replace is simpler and idempotent compared with add/remove operations.
+

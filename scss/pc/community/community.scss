@@ -120,7 +120,33 @@
 	}
 }
 .article-list {
+	display: flex;
+	flex-direction: column;
 	gap: 12px;
+}
+/* Health tips: two columns of cover cards (CommunityNews mockup) */
+.article-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 18px;
+	align-items: start;
+}
+.article-card.with-cover {
+	padding: 14px;
+	gap: 10px;
+	.cover {
+		display: block;
+		height: 190px;
+		border-radius: 12px;
+		overflow: hidden;
+		background: $background;
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			display: block;
+		}
+	}
 }
 .article-card {
 	display: flex;
@@ -373,6 +399,24 @@
 			}
 		}
 	}
+	/* A tip's photos after the first paragraph: one full width, two side by side */
+	.photos {
+		display: grid;
+		gap: 12px;
+		img {
+			width: 100%;
+			height: 400px;
+			border-radius: 16px;
+			object-fit: cover;
+			display: block;
+		}
+		&.count-2 {
+			grid-template-columns: 1fr 1fr;
+			img {
+				height: 300px;
+			}
+		}
+	}
 	.content {
 		font-size: 16px;
 		line-height: 1.75;
@@ -535,6 +579,64 @@
 	.write-form {
 		flex: 1;
 		min-width: 0;
+	}
+	/* A tip's photos: 72 px tiles and a dashed teal "add" tile (WriteArticle mockup) */
+	.photo-field {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		.label {
+			font-size: 13px;
+			font-weight: 600;
+		}
+		.hint {
+			font-size: 12px;
+			color: $text-muted;
+		}
+	}
+	.photo-picks {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+		.thumb {
+			position: relative;
+			width: 72px;
+			height: 72px;
+			border-radius: 10px;
+			overflow: hidden;
+			background: $background;
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+			.MuiIconButton-root {
+				position: absolute;
+				top: 3px;
+				right: 3px;
+				width: 22px;
+				height: 22px;
+				background: rgba(255, 255, 255, 0.9);
+				svg {
+					font-size: 14px;
+				}
+			}
+			&.add {
+				border: 1.5px dashed $primary;
+				background: $primary-tint;
+				color: $primary;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-family: $font;
+				font-size: 11px;
+				font-weight: 600;
+				cursor: pointer;
+				&:disabled {
+					cursor: progress;
+				}
+			}
+		}
 	}
 	.form-actions {
 		display: flex;

@@ -68,6 +68,14 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
   (`yarn images:generate`, prompts in `docs/IMAGES.md`), all local — nothing hot-linked, no credit
   line. fal's safety checker blacked out two harmless images; both scripts now retry with the next
   seed.
+- Health-tip photos (the user's request, 2026-10-16; backend `feature/article-images`): a tip can
+  carry 2 photos, the first is the cover. Write page: a Photos block for tips only (72 px tiles,
+  dashed add tile, as in WriteArticle), upload target `article`; Health tips board: two-column
+  cover cards (CommunityNews); detail: photos after the first paragraph (ArticleDetail). Checked in
+  the browser (list + detail, 1440 px) and on the local API (doctor upload + post, limits, 403 for
+  a patient). The write page itself was not opened as a doctor here — the local seed password
+  could not be read in this session; worth a look when you log in as `doctor01@`.
+- The sign-up form's Full name field lost its sample name ("Feride Karimova").
 - Google sign-in (the user's request): "Continue with Google" on Log in / Sign up for patients
   (`GoogleButton`, `googleLogIn`, `GOOGLE_LOGIN`); hidden until `REACT_APP_GOOGLE_CLIENT_ID` is set —
   the OAuth client is created by the user (runbook §3). Not tested end to end without it.
@@ -129,7 +137,7 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
   (`/doctor-panel/articles`). Home Community board links to posts and "See all".
 - Notifications: ARTICLE_COMMENT, DOCTOR_ANSWERED, INQUIRY_ANSWERED with links.
 - `useShare` hook (clinic page + posts). 136 i18n keys × 5 languages.
-- Cut (no API): post photos / tags / drafts / "in review", comment replies, author stats,
+- Cut (no API): post photos (health tips got them in F9) / tags / drafts / "in review", comment replies, author stats,
   inquiry attachments, translation of posts and answers, questions by specialty.
 - Test data: the F4 test patient's inquiry stays (cleaned by `clean:test`); the test question,
   its answer and the doctor's test tip were removed.

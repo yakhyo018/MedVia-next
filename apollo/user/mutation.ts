@@ -564,6 +564,7 @@ export const UPDATE_ARTICLE = gql`
 			_id
 			articleTitle
 			articleContent
+			articleImages
 			articleLang
 			updatedAt
 		}

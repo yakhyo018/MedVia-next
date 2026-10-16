@@ -26,14 +26,14 @@ import { BoardArticle } from '../../libs/types/board-article/board-article';
 import { BoardArticleCategory, ReportGroup } from '../../libs/enums/board-article.enum';
 import { LikeGroup } from '../../libs/enums/like.enum';
 import { MemberType } from '../../libs/enums/member.enum';
-import { ClientMessages, LANGUAGES } from '../../libs/config';
+import { ClientMessages, LANGUAGES, REACT_APP_API_URL } from '../../libs/config';
 import {
 	sweetDangerConfirmAlert,
 	sweetLoginConfirmAlert,
 	sweetMixinErrorAlert,
 	sweetTopSmallSuccessAlert,
 } from '../../libs/sweetAlert';
-import { formatCount, initials, isObjectId, seoulTime } from '../../libs/utils';
+import { formatCount, imageUrl, initials, isObjectId, seoulTime } from '../../libs/utils';
 import { T } from '../../libs/types/common';
 
 export const getStaticProps = async ({ locale }: T) => ({
@@ -41,6 +41,27 @@ export const getStaticProps = async ({ locale }: T) => ({
 		...(await serverSideTranslations(locale, ['common'])),
 	},
 });
+
+/**
+ * The text with a tip's photos after its first paragraph (as in the ArticleDetail mockup);
+ * one photo runs full width, two sit side by side.
+ */
+const articleBody = (article: BoardArticle) => {
+	const images = article.articleImages ?? [];
+	if (images.length === 0) return <p className={'content'}>{article.articleContent}</p>;
+	const [lead, ...rest] = (article.articleContent ?? '').split(/\n\s*\n/);
+	return (
+		<>
+			<p className={'content'}>{lead}</p>
+			<div className={`photos count-${images.length}`}>
+				{images.map((path) => (
+					<img key={path} src={imageUrl(path, REACT_APP_API_URL)} alt={article.articleTitle} />
+				))}
+			</div>
+			{rest.length > 0 && <p className={'content'}>{rest.join('\n\n')}</p>}
+		</>
+	);
+};
 
 /** One post: the text, like / share / report, the author's Edit and Delete, and the comments. */
 const ArticleDetail: NextPage = () => {
@@ -131,7 +152,7 @@ const ArticleDetail: NextPage = () => {
 							</span>
 						</span>
 					</div>
-					<p className={'content'}>{article.articleContent}</p>
+					{articleBody(article)}
 					<div className={'actions'}>
 						<Button
 							variant={'outlined'}

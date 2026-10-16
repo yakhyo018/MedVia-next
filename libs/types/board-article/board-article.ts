@@ -11,6 +11,8 @@ export interface BoardArticle {
 	articleTitle: string;
 	/** Only the detail asks for the body. */
 	articleContent?: string;
+	/** Health tips only, 0–2 uploaded paths, the first is the cover; older posts have null. */
+	articleImages?: string[] | null;
 	articleLang: Language;
 	articleAnswered: boolean;
 	articleLikes: number;
@@ -55,6 +57,8 @@ export interface ArticleInput {
 	articleTitle: string;
 	articleContent: string;
 	articleLang: Language;
+	/** Health tips only (the API refuses photos on other boards). */
+	articleImages?: string[];
 }
 
 export interface ArticleUpdate {
@@ -62,6 +66,8 @@ export interface ArticleUpdate {
 	articleTitle?: string;
 	articleContent?: string;
 	articleLang?: Language;
+	/** The whole new set; [] removes every photo. */
+	articleImages?: string[];
 }
 
 /** A flat comment; a doctor's comment on a question is its answer. */

@@ -967,6 +967,7 @@ export const GET_ARTICLE = gql`
 			articleStatus
 			articleTitle
 			articleContent
+			articleImages
 			articleLang
 			articleAnswered
 			articleLikes
@@ -991,6 +992,7 @@ export const GET_BOARD_ARTICLES = gql`
 				articleCategory
 				articleTitle
 				articleContent
+				articleImages
 				articleLang
 				articleAnswered
 				articleLikes

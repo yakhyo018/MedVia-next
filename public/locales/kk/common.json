@@ -985,5 +985,7 @@
   "or": "немесе",
   "No MedVia account for this Google account yet — accept the terms to sign up.": "Бұл Google аккаунтына әлі MedVia аккаунты жоқ — тіркелу үшін шарттарды қабылдаңыз.",
   "Google sign-in is not configured on this server!": "Бұл серверде Google арқылы кіру бапталмаған!",
-  "Google sign-in failed, please try again!": "Google арқылы кіру сәтсіз, қайталап көріңіз!"
+  "Google sign-in failed, please try again!": "Google арқылы кіру сәтсіз, қайталап көріңіз!",
+  "Photos": "Суреттер",
+  "Up to 2 photos, JPG or PNG up to 5 MB; the first one is the cover. Faces of other people must be blurred.": "2 суретке дейін, JPG немесе PNG, 5 МБ-қа дейін; біріншісі мұқаба болады. Басқа адамдардың беттері бұлдыратылуы керек."
 }
