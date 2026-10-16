@@ -164,12 +164,13 @@ const Community: NextPage = () => {
 			</div>
 		);
 	} else {
+		// Health tips carry photos: a two-column grid of cover cards, as in the News mockup.
 		list = (
-			<Stack className={'article-list'}>
+			<Box className={board.key === 'tips' && !mobile ? 'article-grid' : 'article-list'}>
 				{articles.map((article) => (
 					<ArticleCard key={article._id} article={article} />
 				))}
-			</Stack>
+			</Box>
 		);
 	}
 

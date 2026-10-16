@@ -2,10 +2,18 @@ import Router from 'next/router';
 import { ApolloError } from '@apollo/client';
 import { initializeApollo } from '../../apollo/client';
 import { EMPTY_USER, sessionReadyVar, userVar } from '../../apollo/store';
-import { CHANGE_PASSWORD, LOGIN, LOGOUT, REFRESH_TOKEN, SIGNUP_CLINIC, SIGN_UP } from '../../apollo/user/mutation';
+import {
+	CHANGE_PASSWORD,
+	GOOGLE_LOGIN,
+	LOGIN,
+	LOGOUT,
+	REFRESH_TOKEN,
+	SIGNUP_CLINIC,
+	SIGN_UP,
+} from '../../apollo/user/mutation';
 import { GET_MY_PROFILE } from '../../apollo/user/query';
 import { Member } from '../types/member/member';
-import { MemberInput } from '../types/member/member.input';
+import { GoogleLoginInput, MemberInput } from '../types/member/member.input';
 import { ClinicSignupInput } from '../types/clinic/clinic';
 import { UNAUTHENTICATED } from '../config';
 
@@ -79,6 +87,22 @@ export const signUp = async (input: MemberInput): Promise<void> => {
 		fetchPolicy: 'no-cache',
 	});
 	startSession(result?.data?.signup);
+	storage.set(LOGIN_EVENT, Date.now().toString());
+};
+
+/**
+ * "Continue with Google": the API verifies Google's ID token, then signs the member in — or,
+ * on a first visit, creates the patient account (terms required) or links an existing one
+ * with the same verified email.
+ */
+export const googleLogIn = async (input: GoogleLoginInput): Promise<void> => {
+	const apolloClient = initializeApollo();
+	const result = await apolloClient.mutate({
+		mutation: GOOGLE_LOGIN,
+		variables: { input },
+		fetchPolicy: 'no-cache',
+	});
+	startSession(result?.data?.googleLogin);
 	storage.set(LOGIN_EVENT, Date.now().toString());
 };
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { Box, Button, Checkbox, FormControlLabel, InputAdornment, Switch, TextField } from '@mui/material';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
@@ -14,7 +14,7 @@ export interface ClinicFilterValues {
 	specialty: Specialty | '';
 	districts: District[];
 	langs: Language[];
-	/** Kept as typed text until Apply; numbers in the URL. */
+	/** Kept as typed text; numbers in the URL. */
 	priceMin: string;
 	priceMax: string;
 	interpreter: boolean;
@@ -32,46 +32,82 @@ export const EMPTY_CLINIC_FILTER: ClinicFilterValues = {
 };
 
 interface ClinicFilterProps {
+	/** What the URL holds now. */
 	values: ClinicFilterValues;
-	onApply: (values: ClinicFilterValues) => void;
+	/** Every change, live: the page writes it to the URL and the list follows. */
+	onChange: (values: ClinicFilterValues) => void;
+	/** The phone's bottom sheet: "Show results" closes it. */
+	onDone?: () => void;
 }
+
+/** Typing (search text, prices) waits this long after the last key before the list follows. */
+const TYPING_DELAY = 400;
+
+/** The search text without outer spaces — what the URL and the API get. */
+const normalize = (values: ClinicFilterValues): ClinicFilterValues => ({ ...values, text: values.text.trim() });
 
 const toggle = <V,>(list: V[], value: V): V[] =>
 	list.includes(value) ? list.filter((item) => item !== value) : [...list, value];
 
-/** The sidebar: nothing is sent until Apply, so ticking five boxes is one request, not five. */
+/**
+ * The sidebar, live: a box, pill or switch changes the list at once; typed text and prices follow
+ * after a short pause, so a word is one request, not one per letter.
+ */
 const ClinicFilter = (props: ClinicFilterProps) => {
-	const { values, onApply } = props;
+	const { values, onChange, onDone } = props;
 	const { t } = useTranslation('common');
 	const [input, setInput] = useState<ClinicFilterValues>(values);
+	const typing = useRef<ReturnType<typeof setTimeout>>();
 
 	/** LIFECYCLES **/
 	useEffect(() => {
-		// Back / forward, a chip removed or a shared link: show what is applied.
-		setInput(values);
+		// Back / forward, a chip removed or a shared link: show what is applied — but keep what is
+		// being typed when the URL only lacks its outer spaces ("laser " stays "laser ").
+		setInput((prev) => ({ ...values, text: values.text === prev.text.trim() ? prev.text : values.text }));
 	}, [values]);
 
+	useEffect(() => () => clearTimeout(typing.current), []);
+
 	/** HANDLERS **/
+	const send = (next: ClinicFilterValues) => {
+		clearTimeout(typing.current);
+		const clean = normalize(next);
+		if (JSON.stringify(clean) !== JSON.stringify(values)) onChange(clean);
+	};
+
+	/** A click: the list follows now. */
 	const inputHandler = <K extends keyof ClinicFilterValues>(name: K, value: ClinicFilterValues[K]) => {
-		setInput((prev) => ({ ...prev, [name]: value }));
+		const next = { ...input, [name]: value };
+		setInput(next);
+		send(next);
+	};
+
+	/** Typing: the list follows after a pause. */
+	const typeHandler = <K extends 'text' | 'priceMin' | 'priceMax'>(name: K, value: string) => {
+		const next = { ...input, [name]: value };
+		setInput(next);
+		clearTimeout(typing.current);
+		typing.current = setTimeout(() => send(next), TYPING_DELAY);
 	};
 
 	const priceHandler = (name: 'priceMin' | 'priceMax') => (e: React.ChangeEvent<HTMLInputElement>) => {
-		inputHandler(name, e.target.value.replace(/\D/g, '').slice(0, 9));
+		typeHandler(name, e.target.value.replace(/\D/g, '').slice(0, 9));
 	};
 
-	const applyHandler = (e: React.FormEvent) => {
+	/** Enter in a field: no need to wait for the pause. */
+	const submitHandler = (e: React.FormEvent) => {
 		e.preventDefault();
-		onApply({ ...input, text: input.text.trim() });
+		send(input);
+		onDone?.();
 	};
 
 	const resetHandler = () => {
 		setInput(EMPTY_CLINIC_FILTER);
-		onApply(EMPTY_CLINIC_FILTER);
+		send(EMPTY_CLINIC_FILTER);
 	};
 
 	return (
-		<Box component={'form'} className={'clinic-filter'} onSubmit={applyHandler}>
+		<Box component={'form'} className={'clinic-filter'} onSubmit={submitHandler}>
 			<strong className={'title'}>
 				<TuneRoundedIcon />
 				{t('Filters')}
@@ -79,7 +115,7 @@ const ClinicFilter = (props: ClinicFilterProps) => {
 
 			<TextField
 				value={input.text}
-				onChange={(e) => inputHandler('text', e.target.value)}
+				onChange={(e) => typeHandler('text', e.target.value)}
 				placeholder={t('Clinic or treatment')}
 				inputProps={{ maxLength: 100, 'aria-label': t('Clinic or treatment') }}
 				InputProps={{
@@ -170,13 +206,15 @@ const ClinicFilter = (props: ClinicFilterProps) => {
 				label={t('Interpreter available')}
 			/>
 
-			<div className={'actions'}>
+			<div className={`actions ${onDone ? '' : 'single'}`}>
 				<Button variant={'outlined'} onClick={resetHandler}>
 					{t('Reset')}
 				</Button>
-				<Button type={'submit'} variant={'contained'}>
-					{t('Apply')}
-				</Button>
+				{onDone && (
+					<Button type={'submit'} variant={'contained'}>
+						{t('Show results')}
+					</Button>
+				)}
 			</div>
 		</Box>
 	);

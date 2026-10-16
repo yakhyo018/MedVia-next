@@ -1220,10 +1220,21 @@
 	}
 	.article-card {
 		padding: 14px;
+		.cover {
+			height: 170px;
+		}
 		.foot {
 			flex-direction: column;
 			align-items: flex-start;
 			gap: 6px;
+		}
+	}
+	.article-body .photos {
+		img {
+			height: 220px;
+		}
+		&.count-2 img {
+			height: 160px;
 		}
 	}
 	.review-grid {

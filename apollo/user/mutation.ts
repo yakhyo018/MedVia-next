@@ -48,6 +48,29 @@ export const LOGIN = gql`
 	}
 `;
 
+/** Google sign-in / sign-up with the ID token Google gave the browser; the API verifies it. */
+export const GOOGLE_LOGIN = gql`
+	mutation GoogleLogin($input: GoogleLoginInput!) {
+		googleLogin(input: $input) {
+			_id
+			memberType
+			memberStatus
+			memberAuthType
+			memberEmail
+			memberMustChangePassword
+			memberAiConsentAt
+			memberFullName
+			memberPhone
+			memberImage
+			memberCountry
+			memberLang
+			createdAt
+			updatedAt
+			accessToken
+		}
+	}
+`;
+
 /** No input: the refresh token is the httpOnly `medvia_rt` cookie the browser sends itself. */
 export const REFRESH_TOKEN = gql`
 	mutation RefreshToken {
@@ -541,6 +564,7 @@ export const UPDATE_ARTICLE = gql`
 			_id
 			articleTitle
 			articleContent
+			articleImages
 			articleLang
 			updatedAt
 		}

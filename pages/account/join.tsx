@@ -30,6 +30,7 @@ import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import Logo from '../../libs/components/common/Logo';
 import ClinicSignupForm from '../../libs/components/account/ClinicSignupForm';
+import GoogleButton from '../../libs/components/account/GoogleButton';
 import { logIn, signUp } from '../../libs/auth';
 import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
 import { sessionReadyVar, userVar } from '../../apollo/store';
@@ -175,6 +176,11 @@ const Join: NextPage = () => {
 		}
 	};
 
+	const googleHandler = async () => {
+		await router.push(referrer);
+		await sweetTopSmallSuccessAlert(loginView ? 'Welcome back!' : 'Your account is ready!');
+	};
+
 	const label = (text: string) => <span className={'field-label'}>{text}</span>;
 	const icon = (node: React.ReactNode) => <InputAdornment position={'start'}>{node}</InputAdornment>;
 	const errorText = (name: keyof JoinInput) => (errors[name] ? t(errors[name] as string) : undefined);
@@ -207,7 +213,6 @@ const Join: NextPage = () => {
 							<TextField
 								value={input.memberFullName}
 								onChange={(e) => inputHandler('memberFullName', e.target.value)}
-								placeholder={'Feride Karimova'}
 								autoComplete={'name'}
 								error={Boolean(errors.memberFullName)}
 								helperText={errorText('memberFullName')}
@@ -318,6 +323,14 @@ const Join: NextPage = () => {
 						{loginView ? t('Log in') : t('Create account')}
 					</Button>
 
+					<GoogleButton
+						mode={loginView ? 'login' : 'signup'}
+						termsAccepted={input.termsAccepted}
+						memberLang={input.memberLang}
+						onSignedIn={googleHandler}
+						onNeedsSignup={() => viewChangeHandler(false)}
+					/>
+
 					<p className={'ask-info'}>
 						{loginView ? t('New to MedVia?') : t('Already have an account?')}{' '}
 						<b onClick={() => viewChangeHandler(!loginView)}>{loginView ? t('Create an account') : t('Log in')}</b>
@@ -424,7 +437,6 @@ const Join: NextPage = () => {
 									src={loginView ? IMAGES.login.src : IMAGES.signup.src}
 									alt={t('Illustration')}
 								/>
-								<span className={'credit'}>Photo: {(loginView ? IMAGES.login : IMAGES.signup).credit} / Unsplash</span>
 							</Box>
 						</Stack>
 						<Stack className={'right'}>{form}</Stack>

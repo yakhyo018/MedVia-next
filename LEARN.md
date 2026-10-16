@@ -765,3 +765,62 @@ the running API.
    translation payload.
 5. **Why does the panel restore texts but not cards?** The API stores turns as text; cards are
    tool results of one reply. Restoring them would need the API to keep tool output per turn.
+
+## F9 — Generated site photos (2026-10-16)
+
+**Problem.** The site mixed a design sample with no recorded source (hero), an Unsplash photo
+hot-linked from its CDN (login, with a credit line) and stock photos (treatments, sign-up; one
+showed a brand on a tool). The user added Hugging Face credits and asked for every image to be
+generated.
+
+- `yarn images:generate` (`scripts/generate-images.js`): FLUX.1 Krea [dev] through Hugging Face
+  Inference Providers — `POST https://router.huggingface.co/fal-ai/fal-ai/flux/krea` with the HF
+  token; the router bills the HF account, so one token covers every provider.
+- Each file has a prompt (recorded in `docs/IMAGES.md`, state in `scripts/images-manifest.json`,
+  both outside `public/` so neither is served) and a fixed seed; a file is redone only when its
+  prompt changes or with `--force`. `sips` shrinks the 0.6–0.9 MB JPEGs to web size on macOS.
+- Patients in the pictures come from the site's markets (Russian, Kazakh, Central Asian); the
+  `IMAGES` config lost its credit fields and the join page its credit line.
+- Lessons from the run: FLUX has no negative prompt — "no text, no logos" invited garbled signs,
+  plain surfaces described positively removed them; fal's safety checker returns a black frame
+  (`has_nsfw_concepts: [true]`) for harmless scenes (an abdominal ultrasound, an empty lobby), so
+  the scripts retry with the next seed; fal bills per started megapixel, so sizes stay under 1 MP;
+  one prompt template gave every male doctor the same face — per-doctor traits (hair, glasses,
+  clothes, background, pose) fixed it.
+
+### Checked
+
+Clinics list (8 cards, all photos load), a clinic page (4 rooms in one look, 3 portraits), home
+(hero + 4 treatment cards), the join page's login panel (local file, no credit), 375 px and
+1440 px; `typecheck`, `lint:check`, `build:check`.
+
+### Interview questions
+
+1. **Why generate instead of using stock?** A stock model is a real person who would be shown as
+   a fictional doctor with ratings; generated people are nobody. No licence, credit or CDN
+   dependency either.
+2. **How do you keep a paid generation job cheap and repeatable?** Idempotent slots keyed by the
+   prompt, a seed per file, stop at the first hard error, retry only the known soft one, and sizes
+   that fit the billing unit.
+3. **Why can't you just write "no text" in the prompt?** Diffusion models condition on every token;
+   naming text makes text likelier. Describe what should be there (bare walls, clear glass).
+4. **Where does the token live?** Only in the API's `.env` (git-ignored); the frontend script reads
+   it from there or the environment, so no Next env file can ever expose it.
+
+## F9 — Health-tip photos on the page (2026-10-16)
+
+- `ArticleCard` shows a cover (`.with-cover`) when the post has photos; the tips board renders a
+  two-column `.article-grid` on desktop, other boards keep the list.
+- The detail splits the text at the first blank line and puts the photos there (one full width,
+  two side by side) — the mockup's rhythm without a rich-text editor.
+- The write page reuses `useUpload` (target `article`) and the treatment editor's thumb pattern;
+  only tips send `articleImages` (another board would be refused by the API), an edit sends the
+  whole set, `[]` clears it.
+
+### Interview questions
+
+1. **Why does the client also skip photos for questions if the API refuses them?** The UI should
+   not offer what the server will reject; the server rule is still the one that counts.
+2. **Why send the whole photo set on update?** Order matters (the first is the cover); a full
+   replace is simpler and idempotent compared with add/remove operations.
+

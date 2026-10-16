@@ -3,9 +3,10 @@
 Where the frontend stands, what comes next, and how we work. A new session reads this first.
 Update it whenever a milestone closes.
 
-_Last updated: 2026-10-15 — **F8 closed: Assistant UI (+ "Write a review" on clinic / doctor
-pages, no English i18n fallback) approved by the user, `feature/f8-assistant` merged into
-`develop` and pushed. Next: F9 (Deploy) — start with the plan review.**_
+_Last updated: 2026-10-15 — **F9 (Deploy) in progress: code ready (backend `feature/seed-variety`,
+`feature/demo-mode`, `feature/docker`; frontend `feature/f9-deploy`). Next: merge both repos
+`develop` → `main`, then the server: `docker-compose.yml` + `deploy.sh` in each repository (see
+COMMANDS → Production update).**_
 
 ## The project
 
@@ -27,7 +28,7 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 | F6 | Community + CS — posts, FAQ, inquiries | done 2026-10-14 |
 | F7 | Admin — dashboard (one GraphQL request), moderation, audit | done 2026-10-15 |
 | F8 | Assistant UI — chat panel, cards, Confirm button | done 2026-10-15 |
-| **F9** | **Deploy — `medvia.uz` + `api.medvia.uz`, backend `develop` → `main`** | **next** |
+| **F9** | **Deploy — `medvia.tech` + `api.medvia.tech`, Docker Compose, both repos `develop` → `main`** | **in progress** |
 
 ## F0 — what was built (2026-10-12)
 
@@ -50,6 +51,49 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
   other tab turns guest; RU locale; 1440 px, 800 px and 375 px mobile (drawer).
 - Not in F0: Google sign-in (needs `GOOGLE_CLIENT_ID`), clinic signup (F5).
 - Test account made during the check: `f0.feride@medvia.test` (local DB only).
+
+## F9 — Deploy (2026-10-15, in progress)
+
+- The user's choices: domain **medvia.tech** (`api.medvia.tech`), **Docker Compose** (after the
+  PM2 vs Compose comparison), **DEMO_MODE** (synthetic data, OpenRouter in production), seed
+  enriched before deploy, 8 clinics × 3 doctors, 50 patients; deploy today.
+- Backend: seed variety (names checked against real clinics, hand-written clinics and doctors,
+  hours, licensed photos — see the backend STATUS), `DEMO_MODE`, `Dockerfile` +
+  `deploy/` (compose, nginx, certbot scripts, runbook `deploy/README.md`).
+- **2026-10-16, the user's choice:** `deploy/` removed (the user); instead nestar-style
+  `docker-compose.yml` + `deploy.sh` (reset → checkout main → pull → `up -d --force-recreate`) in
+  both repositories; HTTPS by nginx + certbot on the host. The `Dockerfile`s were removed.
+- Frontend (before 2026-10-16): `Dockerfile` (build args `REACT_APP_*` = `https://api.medvia.tech…`, `i18n:check`
+  before `next build`, `next start` on :4000 as `node`).
+- Photos: **generated** (2026-10-16, the user's decision after adding $5 of Hugging Face credits;
+  replaces the stock photos of 2026-10-15) — FLUX.1 Krea [dev] through HF Inference Providers.
+  Backend seed: 32 clinic rooms + 24 doctor portraits (`npm run photos:generate`). Frontend: hero,
+  login (Bukchon roofs + skyline), signup (Seoul at dusk), 4 treatment cards
+  (`yarn images:generate`, prompts in `docs/IMAGES.md`), all local — nothing hot-linked, no credit
+  line. fal's safety checker blacked out two harmless images; both scripts now retry with the next
+  seed.
+- Health-tip photos (the user's request, 2026-10-16; backend `feature/article-images`): a tip can
+  carry 2 photos, the first is the cover. Write page: a Photos block for tips only (72 px tiles,
+  dashed add tile, as in WriteArticle), upload target `article`; Health tips board: two-column
+  cover cards (CommunityNews); detail: photos after the first paragraph (ArticleDetail). Checked in
+  the browser (list + detail, 1440 px) and on the local API (doctor upload + post, limits, 403 for
+  a patient). The write page itself was not opened as a doctor here — the local seed password
+  could not be read in this session; worth a look when you log in as `doctor01@`.
+- Landing page Community board: health tips show their cover (72×56) beside the title; desktop
+  and 375 px checked.
+- Clinic search filters are live (the user's request): ticking a district, a specialty, a
+  language or the interpreter switch updates the URL and the list at once; text and prices after a
+  400 ms pause (one request per word). Desktop: no Apply button, Reset only; phone sheet: Reset +
+  "Show results". Checked: 8 → 3 → 1 clinics with the URL following, "laser " typed → one push,
+  phone sheet stays open while filtering.
+- Home carousels: cards were cut off at the bottom (Swiper's content-box wrapper + CssBaseline's
+  `inherit`); `.swiper-slide` is border-box now.
+- The sign-up form's Full name field lost its sample name ("Feride Karimova").
+- Google sign-in (the user's request): "Continue with Google" on Log in / Sign up for patients
+  (`GoogleButton`, `googleLogIn`, `GOOGLE_LOGIN`); hidden until `REACT_APP_GOOGLE_CLIENT_ID` is set —
+  the OAuth client is created by the user (runbook §3). Not tested end to end without it.
+- Not checked here: Docker is not installed on the laptop — the images are first built on the
+  server. Next 14 `yarn audit` still to re-check.
 
 ## F8 — Assistant UI (2026-10-15, done)
 
@@ -106,7 +150,7 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
   (`/doctor-panel/articles`). Home Community board links to posts and "See all".
 - Notifications: ARTICLE_COMMENT, DOCTOR_ANSWERED, INQUIRY_ANSWERED with links.
 - `useShare` hook (clinic page + posts). 136 i18n keys × 5 languages.
-- Cut (no API): post photos / tags / drafts / "in review", comment replies, author stats,
+- Cut (no API): post photos (health tips got them in F9) / tags / drafts / "in review", comment replies, author stats,
   inquiry attachments, translation of posts and answers, questions by specialty.
 - Test data: the F4 test patient's inquiry stays (cleaned by `clean:test`); the test question,
   its answer and the doctor's test tip were removed.
@@ -265,7 +309,7 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 
 - Menu: Home · Clinics · Doctors. Both lists carry "Clinics N | Doctors M" tabs.
 - `/clinics`: sidebar filters (name or treatment, 7 districts, specialty, ₩ range, languages,
-  interpreter) applied on Apply; sort Recommended / Rating / Price ↑ / Likes / Views / Newest;
+  interpreter) applied on Apply (live since 2026-10-16, see F9); sort Recommended / Rating / Price ↑ / Likes / Views / Newest;
   removable chips; 9 per page; URL keys `text, specialty, district, lang, min, max, interpreter,
   sort, page`; mobile filters in a bottom sheet. The home search now lands here.
 - Cards: real photos (seeded from the landing sample), Verified, ♡ (guest → login prompt that
@@ -373,8 +417,7 @@ with `SEED_PASSWORD` from `~/Desktop/MedVia/.env`.
   or Google Images filtered to Creative Commons, source recorded) — not arbitrary Google
   results; names *realistic but fictional* — never a real Seoul clinic or a real doctor (the
   site shows reviews and ratings for them). Until then the current seed is enough.
-  Images: the user prefers AI-generated ones via Hugging Face (e.g. FLUX.1-schnell, Apache 2.0) —
-  no real faces, no licence questions; needs the user's `HF_TOKEN` in the backend `.env`.
+  Done 2026-10-15 with licensed stock photos (Unsplash / Pexels), see F9.
   Clinic signup (the mockup's SignupClinic form) is planned for F5, with the Clinic Dashboard.
 
 - **F9 deploy plan (the user's choices, 2026-10-14):**
@@ -385,14 +428,14 @@ with `SEED_PASSWORD` from `~/Desktop/MedVia/.env`.
   - **A new, strong `SEED_PASSWORD` in production** (and a new admin password): today's seed
     password is a weak demo one, and the demo accounts (`feride@`, `clinic01@`, `doctor01@`,
     `admin@seed.medvia.test`) will be reachable on the public site.
-- Google sign-in needs `GOOGLE_CLIENT_ID` (backend open item).
-- Before deploy (F9): copy the Unsplash photos into `public/img/` and re-check `yarn audit` for
-  Next 14 (current advisories are mostly App Router / middleware / `next/image`).
+- Google sign-in: built (F9); needs the OAuth client id in both `.env` files.
+- Before deploy (F9): re-check `yarn audit` for Next 14 (current advisories are mostly App Router /
+  middleware / `next/image`). The photos are local and generated (2026-10-16).
 - `yarn build:check` builds into `.next-check/` while `yarn dev` runs (F1 passed: 47 static
   pages). Run it before every merge; the real `yarn build` is for deploy.
 - A test patient from the browser checks, `f1.feride@medvia.test`, stays until the backend's
   `npm run clean:test -- --yes` (or the next `npm run test:api`) removes it.
 - The demo seed was rebuilt several times on 2026-10-12/13 (`--reset`): clinic and doctor ids
   changed; old links with ids no longer resolve.
-- `hero.jpg` came from the design folder without a recorded source — confirm its licence before a
-  public deploy. `MedVia-design/landing-with-photos/img/` also has treatment and clinic photos for F1.
+- `hero.jpg` (once the design folder's sample with no recorded source) is generated since
+  2026-10-16, like every photo of the site.

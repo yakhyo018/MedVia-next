@@ -7,21 +7,28 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import AuthorBadge from './AuthorBadge';
 import { BoardArticle } from '../../types/board-article/board-article';
 import { BoardArticleCategory } from '../../enums/board-article.enum';
-import { formatCount, initials, seoulTime } from '../../utils';
+import { formatCount, imageUrl, initials, seoulTime } from '../../utils';
+import { REACT_APP_API_URL } from '../../config';
 
 interface ArticleCardProps {
 	article: BoardArticle;
 }
 
-/** A question or a health tip in a list: status, title, the start of the text, author, numbers. */
+/** A question or a health tip in a list: cover photo (tips), status, title, the start of the text, author, numbers. */
 const ArticleCard = (props: ArticleCardProps) => {
 	const { article } = props;
 	const router = useRouter();
 	const { t } = useTranslation('common');
 	const question = article.articleCategory === BoardArticleCategory.QNA;
+	const cover = article.articleImages?.[0];
 
 	return (
-		<Link href={`/community/detail?id=${article._id}`} className={'article-card mv-lift'}>
+		<Link href={`/community/detail?id=${article._id}`} className={`article-card mv-lift${cover ? ' with-cover' : ''}`}>
+			{cover && (
+				<span className={'cover'}>
+					<img src={imageUrl(cover, REACT_APP_API_URL)} alt={''} loading={'lazy'} />
+				</span>
+			)}
 			<span className={'chips'}>
 				{question ? (
 					<span className={`state ${article.articleAnswered ? 'answered' : 'waiting'}`}>

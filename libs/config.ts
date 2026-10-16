@@ -3,6 +3,8 @@ import { Language } from './enums/common.enum';
 export const REACT_APP_API_URL = `${process.env.REACT_APP_API_URL}`;
 export const REACT_APP_API_GRAPHQL_URL = `${process.env.REACT_APP_API_GRAPHQL_URL}`;
 export const REACT_APP_API_WS = `${process.env.REACT_APP_API_WS}`;
+/** Google sign-in's OAuth client id; empty = the Google button is not shown. */
+export const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID ?? '';
 
 /** Every time the patient sees is Seoul time; the API stores UTC. */
 export const SEOUL_TIME_ZONE = 'Asia/Seoul';
@@ -38,6 +40,8 @@ export enum Messages {
 	TOO_MANY_REQUESTS = 'You already have 3 requests waiting for clinics!',
 	CANCEL_TOO_LATE = 'A confirmed booking can be cancelled up to 24 hours before the visit!',
 	TRANSITION_NOT_ALLOWED = 'This booking cannot be changed this way!',
+	GOOGLE_NOT_CONFIGURED = 'Google sign-in is not configured on this server!',
+	GOOGLE_TOKEN_INVALID = 'Google sign-in failed, please try again!',
 	NO_DATA_FOUND = 'No data is found!',
 	NO_PENDING_HOLD = 'There is no time waiting for your confirmation, or it has expired!',
 	ASSISTANT_SESSION_FULL = 'This conversation is full, please start a new one!',
@@ -75,15 +79,13 @@ export const localeToLanguage = (locale: string | undefined): Language =>
 	LANGUAGES.find((lang) => lang.locale === locale)?.code ?? Language.EN;
 
 /**
- * Photos, free under the Unsplash License (credit given on the page). Served from the
- * Unsplash CDN for now; `?w=` asks the CDN for a resized copy.
+ * The site's photos: generated (FLUX.1 Krea through Hugging Face) by `yarn images:generate`,
+ * prompts in docs/IMAGES.md — no licence credit to show, nothing hot-linked.
  */
-const unsplash = (id: string, width: number) =>
-	`https://images.unsplash.com/${id}?auto=format&fit=crop&q=75&w=${width}`;
-
 export const IMAGES = {
-	/** From MedVia-design/landing-with-photos (the approved landing sample). */
-	hero: { src: '/img/hero.jpg', credit: '' },
-	login: { src: unsplash('photo-1786801525028-5be8739f4ae5', 1000), credit: 'Emma Gasseau-Dryer' },
-	signup: { src: unsplash('photo-1584516150909-c43483ee7932', 1000), credit: 'National Cancer Institute' },
+	hero: { src: '/img/hero.jpg' },
+	/** Bukchon hanok roofs and the Seoul skyline. */
+	login: { src: '/img/login.jpg' },
+	/** Seoul at dusk over the Han river. */
+	signup: { src: '/img/signup.jpg' },
 };

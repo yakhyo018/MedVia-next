@@ -28,6 +28,17 @@ cd ~/Desktop/MedVia-next && npx prettier --check "pages/**/*.tsx" "libs/**/*.{ts
 
 `yarn build` (writes `.next/`) is for deploy only.
 
+## Site photos (generated, paid from Hugging Face credits)
+
+```bash
+cd ~/Desktop/MedVia-next && yarn images:generate                  # files whose prompt changed / missing
+cd ~/Desktop/MedVia-next && yarn images:generate --file=hero.jpg  # one file
+cd ~/Desktop/MedVia-next && yarn images:generate --force          # all again (~$0.3)
+```
+
+`HF_TOKEN` comes from `~/Desktop/MedVia/.env`. The seed photos: `cd ~/Desktop/MedVia && npm run
+photos:generate`, then `npm run photos:attach -- --replace` for an existing database.
+
 ## Check (backend)
 
 ```bash
@@ -69,3 +80,17 @@ git add <files by name>                            # never git add -A
 git diff --cached                                  # read what goes in
 git diff --cached | grep -nE "sk-or-[A-Za-z0-9_-]{10,}|sk-ant-[A-Za-z0-9_-]{10,}|eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}|GOOGLE_CLIENT_SECRET=[^ ]+"   # must print nothing
 ```
+
+## Production update (on the server)
+
+```bash
+cd /opt/medvia/MedVia && ./deploy.sh            # API + batch: pull main, recreate the containers
+cd /opt/medvia/MedVia-next && ./deploy.sh       # web: pull main, recreate the container
+docker image prune -f                           # now and then
+```
+
+Each repository has its own `docker-compose.yml` (nestar style: `node:22.20.0`, the repository
+mounted, `command` = install → build → start). The containers listen on 127.0.0.1 only
+(API :3000, web :4000); the host's nginx serves HTTPS for medvia.tech / api.medvia.tech.
+On the server: `MedVia/.env` (production values) and `MedVia-next/.env.production.local`
+(`REACT_APP_API_URL=https://api.medvia.tech` …) — Next inlines them at build time.

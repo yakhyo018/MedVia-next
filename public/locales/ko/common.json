@@ -157,7 +157,6 @@
   "Interpreter available": "통역 가능",
   "Interpreter": "통역",
   "Reset": "초기화",
-  "Apply": "적용",
   "Showing": "표시",
   "of": "/",
   "clinics": "개 병원",
@@ -969,5 +968,12 @@
   "from {{price}}": "{{price}}부터",
   "Press “Agree and start” to write": "작성하려면 ‘동의하고 시작’을 누르세요",
   "How was your visit?": "방문은 어떠셨나요?",
-  "Reviews come only from completed MedVia visits.": "후기는 MedVia를 통해 완료된 방문 후에만 작성할 수 있습니다."
+  "Reviews come only from completed MedVia visits.": "후기는 MedVia를 통해 완료된 방문 후에만 작성할 수 있습니다.",
+  "or": "또는",
+  "No MedVia account for this Google account yet — accept the terms to sign up.": "이 Google 계정에 연결된 MedVia 계정이 없습니다 — 약관에 동의하고 가입하세요.",
+  "Google sign-in is not configured on this server!": "이 서버에는 Google 로그인이 설정되지 않았습니다!",
+  "Google sign-in failed, please try again!": "Google 로그인에 실패했습니다. 다시 시도해 주세요!",
+  "Photos": "사진",
+  "Up to 2 photos, JPG or PNG up to 5 MB; the first one is the cover. Faces of other people must be blurred.": "사진은 최대 2장, 5MB 이하의 JPG 또는 PNG이며 첫 번째 사진이 대표 이미지가 됩니다. 다른 사람의 얼굴은 흐리게 처리해야 합니다.",
+  "Show results": "결과 보기"
 }

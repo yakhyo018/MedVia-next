@@ -6,7 +6,7 @@ import { ClientMessages, REACT_APP_API_URL } from '../config';
 export const UPLOAD_MAX_BYTES = 5 * 1024 * 1024;
 export const UPLOAD_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
-export type UploadTarget = 'member' | 'clinic' | 'doctor';
+export type UploadTarget = 'member' | 'clinic' | 'doctor' | 'article';
 
 /**
  * Images go over REST, not GraphQL (no apollo-upload-client): `POST /upload/image?target=`,

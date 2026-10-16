@@ -1,24 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
-import { Box, Button, MenuItem, Skeleton, Stack, TextField } from '@mui/material';
+import { Box, Button, IconButton, MenuItem, Skeleton, Stack, TextField } from '@mui/material';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import EmptyState from '../../libs/components/common/EmptyState';
 import { BOARDS, BoardKey, WRITERS } from '../../libs/components/community/boards';
+import useUpload from '../../libs/hooks/useUpload';
 import { GET_ARTICLE } from '../../apollo/user/query';
 import { CREATE_ARTICLE, UPDATE_ARTICLE } from '../../apollo/user/mutation';
 import { sessionReadyVar, userVar } from '../../apollo/store';
 import { ArticleInput, BoardArticle } from '../../libs/types/board-article/board-article';
 import { BoardArticleCategory } from '../../libs/enums/board-article.enum';
 import { Language } from '../../libs/enums/common.enum';
-import { ClientMessages, LANGUAGES, localeToLanguage } from '../../libs/config';
+import { ClientMessages, LANGUAGES, localeToLanguage, REACT_APP_API_URL } from '../../libs/config';
 import { sweetLoginConfirmAlert, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
-import { isObjectId } from '../../libs/utils';
+import { imageUrl, isObjectId } from '../../libs/utils';
 import { T } from '../../libs/types/common';
 
 export const getStaticProps = async ({ locale }: T) => ({
@@ -32,6 +35,9 @@ const TITLE_MIN = 2;
 const TITLE_MAX = 150;
 const CONTENT_MIN = 10;
 const CONTENT_MAX = 5000;
+/** A health tip's photos (ARTICLE_IMAGES_MAX); the API stores JPG and PNG only. */
+const PHOTOS_MAX = 2;
+const PHOTO_TYPES = 'image/jpeg,image/png';
 
 const GUIDELINES = [
 	'Share your own experience',
@@ -45,11 +51,13 @@ const DEFAULT_INPUT: ArticleInput = {
 	articleTitle: '',
 	articleContent: '',
 	articleLang: Language.EN,
+	articleImages: [],
 };
 
 /**
  * Write a post (`?board=qna|free|tips`) or edit one (`?id=`). The board is fixed once posted;
- * a patient picks Q and A or the free board, a doctor writes health tips. Posts go live at once.
+ * a patient picks Q and A or the free board, a doctor writes health tips (with up to two photos,
+ * the first is the cover). Posts go live at once.
  */
 const WriteArticle: NextPage = () => {
 	const router = useRouter();
@@ -59,7 +67,10 @@ const WriteArticle: NextPage = () => {
 	const [input, setInput] = useState<ArticleInput>(DEFAULT_INPUT);
 	const [errors, setErrors] = useState<{ title?: string; content?: string }>({});
 	const [filled, setFilled] = useState<boolean>(false);
+	const fileRef = useRef<HTMLInputElement>(null);
+	const { upload, uploading } = useUpload();
 	const articleId = isObjectId(router.query.id) ? router.query.id : '';
+	const tip = input.articleCategory === BoardArticleCategory.HEALTH_TIP;
 	const boards = BOARDS.filter((board) => board.category && (WRITERS[board.key] ?? []).includes(user.memberType));
 
 	/** APOLLO REQUESTS **/
@@ -90,6 +101,7 @@ const WriteArticle: NextPage = () => {
 				articleTitle: article.articleTitle,
 				articleContent: article.articleContent ?? '',
 				articleLang: article.articleLang,
+				articleImages: article.articleImages ?? [],
 			});
 		} else {
 			const wanted = boards.find((board) => board.key === (router.query.board as BoardKey)) ?? boards[0];
@@ -104,6 +116,18 @@ const WriteArticle: NextPage = () => {
 	}, [router.isReady, user._id, articleId, article]);
 
 	/** HANDLERS **/
+	const photoHandler = async (event: React.ChangeEvent<HTMLInputElement>) => {
+		const file = event.target.files?.[0];
+		event.target.value = '';
+		if (!file) return;
+		try {
+			const path = await upload(file, 'article');
+			setInput((current) => ({ ...current, articleImages: [...(current.articleImages ?? []), path] }));
+		} catch (err) {
+			await sweetMixinErrorAlert(t((err as Error).message));
+		}
+	};
+
 	const submitHandler = async (event: React.FormEvent) => {
 		event.preventDefault();
 		const title = input.articleTitle.trim();
@@ -113,17 +137,25 @@ const WriteArticle: NextPage = () => {
 		if (content.length < CONTENT_MIN || content.length > CONTENT_MAX) found.content = t('Write 10 to 5000 characters');
 		setErrors(found);
 		if (Object.keys(found).length > 0) return;
+		// Only tips carry photos; another board sends none (the API would refuse them).
+		const articleImages = tip ? (input.articleImages ?? []) : [];
 		try {
 			let id = articleId;
 			if (articleId) {
 				await updateArticle({
 					variables: {
-						input: { articleId, articleTitle: title, articleContent: content, articleLang: input.articleLang },
+						input: {
+							articleId,
+							articleTitle: title,
+							articleContent: content,
+							articleLang: input.articleLang,
+							...(tip ? { articleImages } : {}),
+						},
 					},
 				});
 			} else {
 				const result = await createArticle({
-					variables: { input: { ...input, articleTitle: title, articleContent: content } },
+					variables: { input: { ...input, articleTitle: title, articleContent: content, articleImages } },
 				});
 				id = result.data.createArticle._id;
 			}
@@ -190,6 +222,47 @@ const WriteArticle: NextPage = () => {
 						helperText={errors.content ?? `${input.articleContent.trim().length} / ${CONTENT_MAX}`}
 						inputProps={{ maxLength: CONTENT_MAX }}
 					/>
+					{tip && (
+						<div className={'photo-field'}>
+							<span className={'label'}>{t('Photos')}</span>
+							<div className={'photo-picks'}>
+								{(input.articleImages ?? []).map((path) => (
+									<span key={path} className={'thumb'}>
+										<img src={imageUrl(path, REACT_APP_API_URL)} alt={''} />
+										<IconButton
+											size={'small'}
+											aria-label={t('Remove photo')}
+											onClick={() =>
+												setInput({
+													...input,
+													articleImages: (input.articleImages ?? []).filter((item) => item !== path),
+												})
+											}
+										>
+											<CloseRoundedIcon />
+										</IconButton>
+									</span>
+								))}
+								{(input.articleImages ?? []).length < PHOTOS_MAX && (
+									<button
+										type={'button'}
+										className={'thumb add'}
+										disabled={uploading}
+										aria-label={t('Add photo')}
+										onClick={() => fileRef.current?.click()}
+									>
+										{uploading ? <span>{t('Uploading…')}</span> : <AddRoundedIcon />}
+									</button>
+								)}
+								<input ref={fileRef} type={'file'} accept={PHOTO_TYPES} hidden onChange={photoHandler} />
+							</div>
+							<span className={'hint'}>
+								{t(
+									'Up to 2 photos, JPG or PNG up to 5 MB; the first one is the cover. Faces of other people must be blurred.',
+								)}
+							</span>
+						</div>
+					)}
 					<TextField
 						select
 						label={t('Written in')}
@@ -211,7 +284,7 @@ const WriteArticle: NextPage = () => {
 						>
 							{t('Cancel')}
 						</Button>
-						<Button type={'submit'} variant={'contained'} disabled={creating || updating}>
+						<Button type={'submit'} variant={'contained'} disabled={creating || updating || uploading}>
 							{articleId ? t('Save changes') : t('Publish')}
 						</Button>
 					</div>
