@@ -1,4 +1,5 @@
 import type { AppProps } from 'next/app';
+import Head from 'next/head';
 import React, { useEffect } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
@@ -34,6 +35,11 @@ const App = ({ Component, pageProps }: AppProps) => {
 	return (
 		<ApolloProvider client={client}>
 			<ThemeProvider theme={theme}>
+				<Head>
+					{/* Next's default has no initial-scale: a phone then zooms out to fit any wide content
+					   (iPhone showed the pages shrunk with an empty band). viewport-fit for the notch. */}
+					<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+				</Head>
 				<CssBaseline />
 				<LiveSocket />
 				<Component {...pageProps} />

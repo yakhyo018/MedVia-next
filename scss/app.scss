@@ -11,6 +11,10 @@ body {
 	margin: 0;
 	padding: 0;
 }
+body {
+	/* A long word or link breaks instead of widening the page (inherited by everything). */
+	overflow-wrap: break-word;
+}
 a {
 	white-space: nowrap;
 	text-decoration: none;
