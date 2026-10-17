@@ -211,6 +211,7 @@
 		line-height: 1.7;
 		color: $text-secondary;
 		white-space: pre-line;
+		overflow-wrap: anywhere;
 	}
 	.career {
 		margin: 0;
@@ -549,6 +550,7 @@
 		font-size: 15px;
 		line-height: 1.6;
 		white-space: pre-line;
+		overflow-wrap: anywhere;
 	}
 	.reply {
 		padding: 12px 14px;

@@ -149,6 +149,9 @@
 	}
 }
 .article-card {
+	/* The card is a link: undo the global nowrap so titles and excerpts wrap. */
+	white-space: normal;
+	overflow-wrap: anywhere;
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
@@ -367,6 +370,8 @@
 	max-width: 1120px;
 }
 .article-body {
+	/* User text (title, body, comments): a long word or link breaks inside the card. */
+	overflow-wrap: anywhere;
 	.author {
 		display: flex;
 		align-items: center;
@@ -421,6 +426,7 @@
 		font-size: 16px;
 		line-height: 1.75;
 		white-space: pre-line;
+		overflow-wrap: anywhere;
 	}
 	.meta {
 		font-size: 13px;
@@ -454,6 +460,8 @@
 
 /** COMMENTS **/
 .comments {
+	/* User text (title, body, comments): a long word or link breaks inside the card. */
+	overflow-wrap: anywhere;
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
@@ -514,6 +522,7 @@
 			font-size: 14px;
 			line-height: 1.6;
 			white-space: pre-line;
+			overflow-wrap: anywhere;
 		}
 		.meta {
 			display: flex;
@@ -799,6 +808,7 @@
 		line-height: 1.65;
 		color: $text-secondary;
 		white-space: pre-line;
+		overflow-wrap: anywhere;
 	}
 }
 .notice-list {
@@ -806,6 +816,8 @@
 	flex-direction: column;
 }
 .notice-row {
+	white-space: normal;
+	overflow-wrap: anywhere;
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
@@ -879,6 +891,7 @@
 			font-size: 14px;
 			line-height: 1.6;
 			white-space: pre-line;
+			overflow-wrap: anywhere;
 		}
 		strong {
 			font-size: 12px;
