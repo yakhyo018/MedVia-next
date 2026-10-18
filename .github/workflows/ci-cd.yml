@@ -1,0 +1,94 @@
+# CI: every push and pull request — install, typecheck, lint, i18n check, production build.
+# CD: a push to main that passes CI deploys the site to medvia.tech over SSH.
+#   The deploy job runs only when the repository variable DEPLOY_ENABLED is "true" and the
+#   secrets DEPLOY_HOST, DEPLOY_USER, DEPLOY_SSH_KEY, DEPLOY_KNOWN_HOSTS are set
+#   (setup: docs/CI-CD.md in the API repository, MedVia).
+name: CI/CD
+
+on:
+  push:
+    branches: [main, develop, 'feature/**', 'fix/**', 'chore/**']
+  pull_request:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: Typecheck, lint, i18n, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+      # The build only needs URLs of the right shape; the server builds with its own.
+      REACT_APP_API_URL: https://api.medvia.tech
+      REACT_APP_API_GRAPHQL_URL: https://api.medvia.tech/graphql
+      REACT_APP_API_WS: https://api.medvia.tech
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+
+      - name: Install (exactly the lockfile)
+        run: yarn install --frozen-lockfile
+
+      - name: Typecheck
+        run: yarn typecheck
+
+      - name: Lint
+        run: yarn lint:check
+
+      - name: Every locale has every key
+        run: yarn i18n:check
+
+      - name: Production build
+        run: yarn build
+
+  deploy:
+    name: Deploy to medvia.tech
+    needs: ci
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: production
+      url: https://medvia.tech
+    # One deploy at a time; a newer push waits instead of cancelling a half-done one.
+    concurrency:
+      group: deploy-web
+      cancel-in-progress: false
+    steps:
+      - name: SSH key and the server's known host key
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+      # The key is locked to ci-deploy.sh on the server (forced command): "web" is all it can ask.
+      - name: Deploy (the server pulls main and rebuilds the site)
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: ssh -i ~/.ssh/deploy_key -o BatchMode=yes "$DEPLOY_USER@$DEPLOY_HOST" web
+
+      # The container installs and builds after the restart: wait for the new site (~3 min).
+      - name: Wait until the site answers
+        run: |
+          sleep 30
+          for i in $(seq 1 60); do
+            if curl -sf https://medvia.tech/ > /dev/null; then
+              echo "The site is up"
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "The site did not answer within 10 minutes"
+          exit 1
