@@ -81,6 +81,9 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
   could not be read in this session; worth a look when you log in as `doctor01@`.
 - Landing page Community board: health tips show their cover (72×56) beside the title; desktop
   and 375 px checked.
+- CI/CD (2026-10-18): GitHub Actions — typecheck, lint, i18n, build on every push; a push to
+  `main` deploys to medvia.tech over SSH (restricted key, `DEPLOY_ENABLED` switch). Setup in
+  `MedVia/docs/CI-CD.md`. The footer contacts went live through the first automatic deploy.
 - Clinic search filters are live (the user's request): ticking a district, a specialty, a
   language or the interpreter switch updates the URL and the list at once; text and prices after a
   400 ms pause (one request per word). Desktop: no Apply button, Reset only; phone sheet: Reset +
