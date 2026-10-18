@@ -228,6 +228,13 @@
 						strong {
 							font-size: 15px;
 						}
+						/* tel: / mailto: links keep the text colour; teal only on hover */
+						a {
+							color: $text;
+							&:hover {
+								color: $primary;
+							}
+						}
 					}
 				}
 			}

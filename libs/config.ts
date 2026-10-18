@@ -82,6 +82,13 @@ export const localeToLanguage = (locale: string | undefined): Language =>
  * The site's photos: generated (FLUX.1 Krea through Hugging Face) by `yarn images:generate`,
  * prompts in docs/IMAGES.md — no licence credit to show, nothing hot-linked.
  */
+/** The footer's contacts: shown as written, dialled / mailed through tel: and mailto:. */
+export const SUPPORT = {
+	phone: '+82 10-6687-2218',
+	phoneHref: 'tel:+821066872218',
+	email: 'choriyevyahyo@gmail.com',
+};
+
 export const IMAGES = {
 	hero: { src: '/img/hero.jpg' },
 	/** Bukchon hanok roofs and the Seoul skyline. */

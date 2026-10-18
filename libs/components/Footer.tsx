@@ -5,6 +5,7 @@ import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
 import MailOutlineRoundedIcon from '@mui/icons-material/MailOutlineRounded';
 import useDeviceDetect from '../hooks/useDeviceDetect';
 import Logo from './common/Logo';
+import { SUPPORT } from '../config';
 
 const Footer = () => {
 	const device = useDeviceDetect();
@@ -30,7 +31,9 @@ const Footer = () => {
 					</span>
 					<div>
 						<span>{t('Total free customer care')}</span>
-						<strong>[support phone]</strong>
+						<a href={SUPPORT.phoneHref}>
+							<strong>{SUPPORT.phone}</strong>
+						</a>
 					</div>
 				</div>
 				<div className={'contact'}>
@@ -39,7 +42,9 @@ const Footer = () => {
 					</span>
 					<div>
 						<span>{t('Need live support?')}</span>
-						<strong>[support email]</strong>
+						<a href={`mailto:${SUPPORT.email}`}>
+							<strong>{SUPPORT.email}</strong>
+						</a>
 					</div>
 				</div>
 			</Box>
