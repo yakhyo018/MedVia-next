@@ -824,3 +824,23 @@ Clinics list (8 cards, all photos load), a clinic page (4 rooms in one look, 3 p
 2. **Why send the whole photo set on update?** Order matters (the first is the cover); a full
    replace is simpler and idempotent compared with add/remove operations.
 
+## F9 — CI/CD for the site (2026-10-18)
+
+- `.github/workflows/ci-cd.yml`: `ci` = `yarn install --frozen-lockfile` → typecheck → lint →
+  `i18n:check` → `next build` with placeholder `REACT_APP_*` URLs (the build only needs the right
+  shape; the server builds with its own `.env.production.local`). `deploy` (push to `main`, after
+  `ci`, `DEPLOY_ENABLED=true`) runs `ssh … web` with the same restricted key as the API — the
+  server's `ci-deploy.sh` maps `web` to `MedVia-next/deploy.sh` — and waits until
+  `https://medvia.tech` answers.
+- The container rebuilds after the restart, so the site returns 502 for ~3 min; the first run
+  showed it (site 502, API 200 the whole time, then the new footer live).
+- Setup, secrets and the reasoning: `MedVia/docs/CI-CD.md` and the API's LEARN.md (CI/CD section).
+
+### Interview questions
+
+1. **Why does the frontend CI build with fake API URLs?** `next build` inlines them; CI only proves
+   the code compiles and every page renders; the real values belong to the server's build.
+2. **Why is the site down during a deploy and how would you fix it?** The container installs and
+   builds on start. Build an image in CI, push it to a registry, and `docker compose pull && up -d`
+   on the server — or run two containers and switch nginx between them.
+

@@ -77,7 +77,22 @@ jobs:
         env:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-        run: ssh -i ~/.ssh/deploy_key -o BatchMode=yes "$DEPLOY_USER@$DEPLOY_HOST" web
+        # A GitHub runner sometimes cannot reach the server for a moment ("Connection timed out").
+        # ssh exits 255 when the connection itself fails: only then try again, at most 3 times.
+        # Any other exit code comes from deploy.sh on the server and fails the job at once.
+        run: |
+          for attempt in 1 2 3; do
+            ssh -i ~/.ssh/deploy_key -o BatchMode=yes -o ConnectTimeout=15 \
+              "$DEPLOY_USER@$DEPLOY_HOST" web && exit 0 || code=$?
+            if [ "$code" -ne 255 ]; then
+              echo "deploy.sh failed on the server (exit $code)"
+              exit "$code"
+            fi
+            echo "Could not reach the server (attempt $attempt of 3)"
+            [ "$attempt" -lt 3 ] && sleep 20
+          done
+          echo "The server was unreachable 3 times"
+          exit 255
 
       # The container installs and builds after the restart: wait for the new site (~3 min).
       - name: Wait until the site answers
