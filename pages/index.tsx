@@ -7,12 +7,13 @@ import useDeviceDetect from '../libs/hooks/useDeviceDetect';
 import withLayoutHome from '../libs/components/layout/LayoutHome';
 import HeroSearch from '../libs/components/homepage/HeroSearch';
 import HeroChat from '../libs/components/homepage/HeroChat';
-import TrendingTreatments from '../libs/components/homepage/TrendingTreatments';
-import TopClinics from '../libs/components/homepage/TopClinics';
-import TopDoctors from '../libs/components/homepage/TopDoctors';
-import HomeReviews from '../libs/components/homepage/HomeReviews';
-import PatientServices from '../libs/components/homepage/PatientServices';
-import CommunityBoard from '../libs/components/homepage/CommunityBoard';
+import HeroWords from '../libs/components/homepage/HeroWords';
+import HeroFloatCards from '../libs/components/homepage/HeroFloatCards';
+import HeroMarquee from '../libs/components/homepage/HeroMarquee';
+import { HeroLiveBadge, HeroTrust } from '../libs/components/homepage/HeroParts';
+import WhyMedvia from '../libs/components/homepage/WhyMedvia';
+import FlyInTreatments from '../libs/components/homepage/FlyInTreatments';
+import HomeCta from '../libs/components/homepage/HomeCta';
 import { T } from '../libs/types/common';
 import { IMAGES } from '../libs/config';
 
@@ -28,12 +29,9 @@ const Home: NextPage = () => {
 
 	const heading = (
 		<Box className={'hero-text'}>
-			<span className={'badge mv-enter'}>
-				<i />
-				{t('For international patients in Korea')}
-			</span>
+			<HeroLiveBadge />
 			<h1 className={'mv-enter'}>
-				{t('Book trusted Korean clinics')} <em>{t('in your language')}</em>.
+				{t('Book trusted Korean clinics')} <HeroWords />
 			</h1>
 			<p className={'mv-enter'}>
 				{t(
@@ -58,14 +56,12 @@ const Home: NextPage = () => {
 							<HeroChat compact />
 						</Box>
 						<HeroSearch />
+						<HeroTrust />
 					</Stack>
 				</Stack>
-				<TopClinics />
-				<TrendingTreatments />
-				<TopDoctors />
-				<HomeReviews />
-				<PatientServices />
-				<CommunityBoard />
+				<WhyMedvia />
+				<FlyInTreatments />
+				<HomeCta />
 			</Stack>
 		);
 	} else {
@@ -76,6 +72,7 @@ const Home: NextPage = () => {
 						<Stack className={'left'}>
 							{heading}
 							<HeroSearch />
+							<HeroTrust />
 						</Stack>
 						<Stack className={'right'}>
 							<Box className={'photo mv-enter-zoom'}>
@@ -91,15 +88,14 @@ const Home: NextPage = () => {
 								</div>
 							</Box>
 							<HeroChat />
+							<HeroFloatCards />
 						</Stack>
 					</Stack>
+					<HeroMarquee />
 				</Stack>
-				<TopClinics />
-				<TrendingTreatments />
-				<TopDoctors />
-				<HomeReviews />
-				<PatientServices />
-				<CommunityBoard />
+				<WhyMedvia />
+				<FlyInTreatments />
+				<HomeCta />
 			</Stack>
 		);
 	}

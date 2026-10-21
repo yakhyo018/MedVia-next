@@ -3,8 +3,9 @@ import { useTranslation } from 'next-i18next';
 import { Box } from '@mui/material';
 import TranslateRoundedIcon from '@mui/icons-material/TranslateRounded';
 
-/** When each step of the sample conversation appears, in ms after load. */
+/** When each step of the sample conversation appears, in ms after it starts; it replays every CYCLE ms. */
 const STEPS = [900, 1600, 2300, 3600];
+const CYCLE = 9000;
 
 /**
  * A sample chat on the hero photo: the patient writes in Russian, the clinic reads Korean,
@@ -22,8 +23,18 @@ const HeroChat = (props: HeroChatProps) => {
 
 	/** LIFECYCLES **/
 	useEffect(() => {
-		const timers = STEPS.map((delay, index) => setTimeout(() => setStep(index + 1), delay));
-		return () => timers.forEach(clearTimeout);
+		let timers: ReturnType<typeof setTimeout>[] = [];
+		const play = () => {
+			setStep(0);
+			timers = STEPS.map((delay, index) => setTimeout(() => setStep(index + 1), delay));
+		};
+		play();
+		// With reduced motion the conversation plays once and stays.
+		const loop = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? null : setInterval(play, CYCLE);
+		return () => {
+			timers.forEach(clearTimeout);
+			if (loop) clearInterval(loop);
+		};
 	}, []);
 
 	return (

@@ -9,7 +9,7 @@ import { Specialty } from '../../enums/clinic.enum';
 import { formatKrw } from '../../utils';
 import HomeSection from './HomeSection';
 
-const PHOTO: Record<Specialty, string> = {
+export const TREATMENT_PHOTO: Record<Specialty, string> = {
 	[Specialty.DERMATOLOGY]: '/img/treatments/dermatology.jpg',
 	[Specialty.PLASTIC_SURGERY]: '/img/treatments/plastic-surgery.jpg',
 	[Specialty.DENTAL]: '/img/treatments/dental.jpg',
@@ -47,7 +47,7 @@ const TrendingTreatments = () => {
 								style={{ ['--mv-delay' as string]: `${index * 60}ms` }}
 							>
 								<div className={'photo'}>
-									<img src={PHOTO[item.specialty]} alt={''} loading={'lazy'} />
+									<img src={TREATMENT_PHOTO[item.specialty]} alt={''} loading={'lazy'} />
 									{item.bookings > 0 && (
 										<span className={'badge'}>
 											<TrendingUpRoundedIcon />
