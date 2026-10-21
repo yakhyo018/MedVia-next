@@ -16,6 +16,40 @@ const AUDIT_FIELDS = `
 `;
 
 /**
+ * The review queues' totals alone, for the side menu's badges. Same fields and arguments as the
+ * dashboard's aliases, so Apollo serves either from the other's cache.
+ */
+export const GET_ADMIN_COUNTS = gql`
+	query GetAdminCounts(
+		$clinics: AdminClinicsInquiry!
+		$reviews: AdminReviewsInquiry!
+		$reports: ReportsInquiry!
+		$treatments: AdminTreatmentsInquiry!
+	) {
+		pendingClinics: getClinicsByAdmin(input: $clinics) {
+			metaCounter {
+				total
+			}
+		}
+		pendingReviews: getReviewsByAdmin(input: $reviews) {
+			metaCounter {
+				total
+			}
+		}
+		pendingReports: getReportsByAdmin(input: $reports) {
+			metaCounter {
+				total
+			}
+		}
+		pendingTreatments: getTreatmentsByAdmin(input: $treatments) {
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+/**
  * The whole dashboard in one request: booking cards and chart, the batch's last runs, the
  * review queues' totals (limit 1 — only `metaCounter` is read) and the latest decisions.
  */

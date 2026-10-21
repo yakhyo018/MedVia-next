@@ -282,5 +282,12 @@
   "{{count}} h ago_other": "{{count}}시간 전",
   "{{count}} min ago_other": "{{count}}분 전",
   "{{count}} reports_other": "신고 {{count}}건",
-  "{{count}} reports closed_other": "신고 {{count}}건 종료"
+  "{{count}} reports closed_other": "신고 {{count}}건 종료",
+  "Operations": "운영",
+  "People": "사람",
+  "Support": "지원",
+  "Needs attention": "확인 필요",
+  "Treatments to review": "검토할 시술",
+  "Reviews to moderate": "검토할 후기",
+  "Reported posts": "신고된 게시글"
 }

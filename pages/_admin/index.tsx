@@ -13,23 +13,22 @@ import OutlinedFlagRoundedIcon from '@mui/icons-material/OutlinedFlagRounded';
 import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import FormatListBulletedRoundedIcon from '@mui/icons-material/FormatListBulletedRounded';
+import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import withLayoutAdmin from '../../libs/components/layout/LayoutAdmin';
 import AdminStatCard from '../../libs/components/admin/AdminStatCard';
 import {
 	ADMIN_I18N,
 	ADMIN_NS,
+	ADMIN_QUEUES_INPUT,
 	AUDIT_ACTIONS,
 	AuditTone,
 	BATCH_JOBS,
-	languageName,
 	timeAgo,
 } from '../../libs/components/admin/adminText';
 import { GET_ADMIN_DASHBOARD } from '../../apollo/admin/query';
 import { AuditLog, BatchRun, BatchStatusView, BookingStats } from '../../libs/types/admin/admin';
 import { BatchName, BatchStatus } from '../../libs/enums/batch.enum';
-import { ClinicStatus } from '../../libs/enums/clinic.enum';
-import { ReviewStatus } from '../../libs/enums/review.enum';
-import { ReportStatus } from '../../libs/enums/board-article.enum';
 import { T } from '../../libs/types/common';
 
 export const getStaticProps = async ({ locale }: T) => ({
@@ -39,13 +38,7 @@ export const getStaticProps = async ({ locale }: T) => ({
 });
 
 /** Totals only: every queue is asked for one row and its `metaCounter`. */
-const DASHBOARD_INPUT = {
-	clinics: { page: 1, limit: 1, clinicStatus: ClinicStatus.PENDING },
-	reviews: { page: 1, limit: 1, reviewStatus: ReviewStatus.PENDING },
-	reports: { page: 1, limit: 1, reportStatus: ReportStatus.PENDING },
-	treatments: { page: 1, limit: 1, reviewQueue: true },
-	feed: { page: 1, limit: 5 },
-};
+const DASHBOARD_INPUT = { ...ADMIN_QUEUES_INPUT, feed: { page: 1, limit: 5 } };
 
 const TONE_ICONS: Record<AuditTone, React.ReactNode> = {
 	success: <CheckRoundedIcon />,
@@ -86,6 +79,45 @@ const AdminDashboard: NextPage = () => {
 	const pendingReports = total(data, 'pendingReports');
 	const toReview =
 		pendingReviews === undefined || pendingReports === undefined ? undefined : pendingReviews + pendingReports;
+
+	/** "Needs attention": every queue that waits for an admin, each opening its page. */
+	const attention = [
+		{
+			href: '/_admin/clinics',
+			label: t('Clinics to review'),
+			sub: t('Waiting for review'),
+			value: pendingClinics,
+			icon: <ApartmentOutlinedIcon />,
+		},
+		{
+			href: '/_admin/treatments',
+			label: t('Treatments to review'),
+			sub: t('Waiting for review'),
+			value: pendingTreatments,
+			icon: <FormatListBulletedRoundedIcon />,
+		},
+		{
+			href: '/_admin/reviews',
+			label: t('Reviews to moderate'),
+			sub: t('Moderation'),
+			value: pendingReviews,
+			icon: <StarBorderRoundedIcon />,
+		},
+		{
+			href: '/_admin/community/reports',
+			label: t('Reported posts'),
+			sub: t('Reports'),
+			value: pendingReports,
+			icon: <OutlinedFlagRoundedIcon />,
+		},
+		{
+			href: '/_admin/bookings',
+			label: t('Waiting for clinics'),
+			sub: t('Pending, before the deadline'),
+			value: stats?.waitingForClinic,
+			icon: <ScheduleRoundedIcon />,
+		},
+	];
 
 	const dayLabel = (date: string) =>
 		new Intl.DateTimeFormat(locale, {
@@ -199,32 +231,34 @@ const AdminDashboard: NextPage = () => {
 							</div>
 						</div>
 					)}
+					<div className={'admin-chart-legend'}>
+						<span>
+							<i />
+							{t('Bookings')}
+						</span>
+					</div>
 				</section>
 
-				<section className={'admin-card'}>
+				<section className={'admin-card admin-attention'}>
 					<div className={'admin-card-head'}>
 						<div>
-							<h2>{t('Bookings by patient language')}</h2>
-							<p>{t('Last 30 days · share of bookings')}</p>
+							<h2>{t('Needs attention')}</h2>
 						</div>
 					</div>
-					{!stats && loading ? (
-						<Skeleton variant={'rounded'} height={180} />
-					) : stats?.languages.length ? (
-						<ul className={'admin-lang-bars'}>
-							{stats.languages.map((row) => (
-								<li key={row.lang}>
-									<span className={'name'}>{languageName(row.lang)}</span>
-									<span className={'track'}>
-										<span style={{ width: `${Math.round(row.share * 100)}%` }} />
+					<ul>
+						{attention.map((row) => (
+							<li key={row.href}>
+								<Link href={row.href}>
+									<span className={'icon'}>{row.icon}</span>
+									<span className={'text'}>
+										<b>{row.label}</b>
+										<small>{row.sub}</small>
 									</span>
-									<strong>{Math.round(row.share * 100)}%</strong>
-								</li>
-							))}
-						</ul>
-					) : (
-						<p className={'admin-muted'}>{t('No bookings in the last 30 days.')}</p>
-					)}
+									<strong>{row.value === undefined ? '—' : row.value}</strong>
+								</Link>
+							</li>
+						))}
+					</ul>
 				</section>
 			</div>
 

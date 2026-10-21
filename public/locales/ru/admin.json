@@ -303,5 +303,12 @@
   "{{count}} reports closed_one": "Закрыта {{count}} жалоба",
   "{{count}} reports closed_few": "Закрыто {{count}} жалобы",
   "{{count}} reports closed_many": "Закрыто {{count}} жалоб",
-  "{{count}} reports closed_other": "Закрыто {{count}} жалоб"
+  "{{count}} reports closed_other": "Закрыто {{count}} жалоб",
+  "Operations": "Операции",
+  "People": "Люди",
+  "Support": "Поддержка",
+  "Needs attention": "Требует внимания",
+  "Treatments to review": "Процедуры на проверке",
+  "Reviews to moderate": "Отзывы на модерации",
+  "Reported posts": "Жалобы на посты"
 }
