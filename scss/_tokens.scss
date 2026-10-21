@@ -9,6 +9,18 @@ $primary-dark: var(--mv-primary-dark);
 $primary-tint: var(--mv-primary-tint);
 $primary-soft: var(--mv-primary-soft);
 
+/* Decoration only — never under text. */
+$mint: var(--mv-mint);
+$leaf: var(--mv-leaf);
+$leaf-tint: var(--mv-leaf-tint);
+$coral: var(--mv-coral);
+
+/* Dark surfaces */
+$ink: var(--mv-ink);
+$ink-line: var(--mv-ink-line);
+$ink-text: var(--mv-ink-text);
+$glass: var(--mv-glass);
+
 $text: var(--mv-text);
 $text-secondary: var(--mv-text-secondary);
 $text-muted: var(--mv-text-muted);
@@ -36,7 +48,13 @@ $radius-pill: var(--mv-radius-pill);
 $shadow-card: var(--mv-shadow-card);
 $shadow-menu: var(--mv-shadow-menu);
 $shadow-modal: var(--mv-shadow-modal);
+$shadow-glass: var(--mv-shadow-glass);
+$shadow-button: var(--mv-shadow-button);
+
+$gradient-primary: var(--mv-gradient-primary);
+$gradient-text: var(--mv-gradient-text);
 
 $font: var(--mv-font);
+$font-heading: var(--mv-font-heading);
 $container: var(--mv-container);
 $header-height: var(--mv-header-height);

@@ -930,6 +930,12 @@
 		flex-shrink: 0;
 		position: sticky;
 		top: calc(#{$header-height} + 20px);
+		/* The narrow column: the score on top, the star bars under it (no side-by-side grid) */
+		.rating-summary {
+			grid-template-columns: 1fr;
+			gap: 18px;
+			padding: 22px 20px;
+		}
 	}
 }
 .reply-review {
@@ -1006,9 +1012,18 @@
 	.reply-tools {
 		display: flex;
 		align-items: center;
-		gap: 10px;
+		gap: 12px;
+		/* The language select keeps its own width (the theme makes text fields full width) */
+		> .MuiTextField-root {
+			flex: 0 0 180px;
+			width: 180px;
+		}
 		.hint {
 			flex: 1;
+			min-width: 0;
+			font-size: 12px;
+			line-height: 1.45;
+			color: $text-secondary;
 		}
 	}
 }

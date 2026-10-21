@@ -1,0 +1,233 @@
+/* Motion skin mixins — shared by skin.scss and homepage/landing.scss. */
+
+/* The aurora: three soft colour fields drifting behind a band, plus a faint grid. */
+@mixin mv-aurora($strength: 1) {
+	position: relative;
+	isolation: isolate;
+	overflow: hidden;
+	&::before {
+		content: '';
+		position: absolute;
+		inset: -40% -10% -20% -10%;
+		z-index: -1;
+		pointer-events: none;
+		background:
+			radial-gradient(34% 48% at 10% 18%, rgba(61, 179, 154, 0.5 * $strength), transparent 70%),
+			radial-gradient(30% 44% at 90% 8%, rgba(95, 174, 110, 0.38 * $strength), transparent 70%),
+			radial-gradient(28% 40% at 52% 4%, rgba(255, 126, 107, 0.24 * $strength), transparent 70%),
+			radial-gradient(22% 34% at 78% 60%, rgba(61, 179, 154, 0.18 * $strength), transparent 70%);
+		animation: mv-aurora 14s ease-in-out infinite alternate;
+	}
+}
+@mixin mv-grid {
+	background-image:
+		linear-gradient(rgba(15, 42, 42, 0.05) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(15, 42, 42, 0.05) 1px, transparent 1px);
+	background-size: 64px 64px;
+}
+@mixin mv-glass($alpha: 0.66) {
+	background: rgba(255, 255, 255, $alpha);
+	backdrop-filter: blur(18px) saturate(150%);
+	-webkit-backdrop-filter: blur(18px) saturate(150%);
+	border: 1px solid rgba(255, 255, 255, 0.85);
+}
+@mixin mv-gradient-text {
+	background: $gradient-text;
+	background-size: 300% 100%;
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+	animation: mv-gradient-move 8s linear infinite;
+}
+
+/* Parts of the Motion skin that look the same on a computer and a phone (included by both skins). */
+@mixin mv-skin-shared {
+	/** MYPAGE: the next visit is the dark aurora card */
+	.next-visit.card {
+		@include mv-aurora(0.7);
+		padding: 26px 28px;
+		border: 0;
+		border-radius: 28px;
+		background: $ink;
+		color: #ffffff;
+		box-shadow: 0 24px 50px rgba(15, 42, 42, 0.2);
+		.date {
+			width: 66px;
+			height: 70px;
+			border-radius: 18px;
+			background: rgba(255, 255, 255, 0.1);
+			border: 1px solid rgba(255, 255, 255, 0.16);
+			strong {
+				font-family: $font-heading;
+			}
+		}
+		.when b {
+			color: #ffffff;
+		}
+		.title {
+			font-family: $font-heading;
+			font-size: 22px;
+			font-weight: 700;
+			letter-spacing: -0.4px;
+			color: #ffffff;
+		}
+		.meta {
+			color: $ink-text;
+		}
+		.actions .MuiButton-outlined {
+			background: rgba(255, 255, 255, 0.08);
+			border-color: rgba(255, 255, 255, 0.2);
+			color: #ffffff;
+		}
+	}
+
+	/** STAT CARDS (Clinic Dashboard, Admin): label on top, a big number, the icon in the corner */
+	.clinic-dashboard .stat,
+	.admin-stat {
+		position: relative;
+		flex-direction: column !important;
+		align-items: flex-start !important;
+		gap: 0 !important;
+		padding: 22px 24px !important;
+		border-radius: 24px;
+		.icon {
+			position: absolute;
+			top: 18px;
+			right: 18px;
+			width: 38px;
+			height: 38px;
+			border-radius: 12px;
+		}
+		.text {
+			gap: 2px;
+			padding-right: 44px;
+			strong {
+				order: 2;
+				margin-top: 8px;
+				font-family: $font-heading;
+				font-size: 38px;
+				font-weight: 700;
+				line-height: 1.05;
+				letter-spacing: -1px;
+			}
+			> span:first-child,
+			.label {
+				order: 1;
+				font-size: 13px;
+				font-weight: 500;
+				color: $text-secondary;
+			}
+			small,
+			.sub {
+				order: 3;
+				margin-top: 6px;
+				font-size: 12px;
+				color: $text-muted;
+			}
+		}
+	}
+
+	/** CHAT: my bubble in the primary gradient */
+	.bubble.mine p {
+		background: $gradient-primary;
+		border-radius: 18px 18px 6px 18px;
+	}
+	.bubble.theirs p {
+		border-radius: 18px 18px 18px 6px;
+	}
+}
+
+@mixin mv-skin-admin-shared {
+	/* Overview: "Needs attention" — the queues on a dark card */
+	.admin-attention {
+		@include mv-aurora(0.6);
+		background: $ink;
+		border: 0;
+		color: #ffffff;
+		h2 {
+			color: #ffffff;
+		}
+		ul {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+		li + li {
+			border-top: 1px solid $ink-line;
+		}
+		a {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			padding: 12px 0;
+			color: #ffffff;
+			&:hover strong {
+				color: $mint;
+			}
+		}
+		.icon {
+			width: 38px;
+			height: 38px;
+			flex-shrink: 0;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: rgba(255, 255, 255, 0.08);
+			color: $mint;
+			svg {
+				font-size: 19px;
+			}
+		}
+		.text {
+			flex: 1;
+			min-width: 0;
+			display: flex;
+			flex-direction: column;
+			b {
+				font-size: 14px;
+			}
+			small {
+				font-size: 12px;
+				color: $ink-text;
+			}
+		}
+		strong {
+			font-family: $font-heading;
+			font-size: 24px;
+			font-weight: 700;
+			transition: color 0.2s ease;
+		}
+	}
+	.admin-chart-legend {
+		display: flex;
+		gap: 18px;
+		font-size: 12px;
+		color: $text-secondary;
+		span {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+		}
+		i {
+			width: 10px;
+			height: 10px;
+			border-radius: 3px;
+			background: linear-gradient(180deg, $mint, $primary);
+		}
+	}
+
+	/* Charts: bars grow from the teal into the leaf green; rounded tops */
+	.admin-chart .bar {
+		.fill {
+			max-width: 30px;
+			border-radius: 10px 10px 4px 4px;
+			background: linear-gradient(180deg, $mint, $primary);
+			transform-origin: bottom;
+			animation: mv-grow 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+		}
+		&.today .fill {
+			background: linear-gradient(180deg, $leaf, $primary-dark);
+		}
+	}
+}

@@ -1,0 +1,815 @@
+/**
+ * Motion skin (desktop): the green aurora look from docs/design-alternatives/motion-pages-green.
+ * Style only — it restyles the existing markup, adds no element. Imported last so it wins.
+ * Literal rgba() values are token colours with alpha: Sass cannot fade a var().
+ *   mint  #3DB39A → rgba(61, 179, 154, a)   leaf #5FAE6E → rgba(95, 174, 110, a)
+ *   coral #FF7E6B → rgba(255, 126, 107, a)  primary #0B7A8A → rgba(11, 122, 138, a)
+ */
+
+@import 'skin-mixins';
+
+#pc-wrap {
+	h1,
+	h2,
+	h3,
+	h4 {
+		font-family: $font-heading;
+	}
+
+	/** HEADER: a glass bar; the menu is a pill group with a dark active pill */
+	#top .navbar .navbar-main {
+		/* Floats over the first band's aurora; turns to glass once the page scrolls */
+		background: transparent;
+		border-bottom: 1px solid transparent;
+		&.scrolled {
+			background: rgba(255, 255, 255, 0.8);
+			backdrop-filter: blur(18px) saturate(160%);
+			-webkit-backdrop-filter: blur(18px) saturate(160%);
+			border-bottom-color: rgba(15, 42, 42, 0.06);
+			box-shadow: 0 10px 30px rgba(15, 42, 42, 0.08);
+		}
+		.mv-logo .word {
+			font-family: $font-heading;
+			font-size: 23px;
+			letter-spacing: -0.6px;
+		}
+		.router-box {
+			padding: 6px;
+			border-radius: $radius-pill;
+			@include mv-glass(0.62);
+			box-shadow: 0 8px 30px rgba(15, 42, 42, 0.06);
+			a {
+				padding: 9px 18px;
+				font-size: 14px;
+				color: $text-secondary;
+				&:hover {
+					background: rgba(255, 255, 255, 0.7);
+					color: $text;
+				}
+				&.active {
+					background: $ink;
+					color: #ffffff;
+					font-weight: 600;
+				}
+			}
+		}
+		.user-box {
+			gap: 10px;
+			.bell {
+				width: 44px;
+				height: 44px;
+				@include mv-glass(0.62);
+				color: $text;
+				&:hover {
+					background: rgba(255, 255, 255, 0.9);
+				}
+			}
+			.login-user {
+				height: 44px;
+				padding: 4px 14px 4px 4px;
+				border-radius: $radius-pill;
+				@include mv-glass(0.62);
+				.avatar {
+					box-shadow: none;
+				}
+				.name {
+					font-size: 14px;
+					font-weight: 600;
+				}
+			}
+			.login-link {
+				padding: 0 6px;
+				font-size: 14px;
+			}
+			/* Sign up: the mockup's dark pill */
+			.MuiButton-contained {
+				height: 44px;
+				padding: 0 24px;
+				background: $ink;
+				box-shadow: 0 10px 24px rgba(15, 42, 42, 0.18);
+				&:hover {
+					background: #163a39;
+				}
+			}
+		}
+	}
+	.lang-btn {
+		height: 44px;
+		padding: 0 14px 0 16px;
+		font-size: 13px;
+		@include mv-glass(0.62);
+	}
+
+	/* The first band slides under the transparent header so its aurora reaches the top */
+	&.layout-basic,
+	&.layout-home {
+		background: $background;
+	}
+	.home-page .hero,
+	.list-banner,
+	.join-page {
+		margin-top: calc(-1 * #{$header-height});
+	}
+
+	/** PAGE BANDS (lists, MyPage, workspaces): the aurora + grid */
+	.list-banner {
+		@include mv-aurora(1.35);
+		background: $background;
+		@include mv-grid;
+		padding: calc(#{$header-height} + 48px) 0 72px;
+		&::after {
+			opacity: 0.07;
+			top: calc(#{$header-height} - 30px);
+		}
+		h1 {
+			font-size: 48px;
+			font-weight: 700;
+			letter-spacing: -1.6px;
+			line-height: 1.06;
+		}
+		p {
+			font-size: 17px;
+			color: $text-secondary;
+		}
+	}
+	/* Workspaces (MyPage, Clinic Dashboard, Doctor Panel): the band keeps only the breadcrumb —
+	   the page head below already carries the title (the mockup's layout) */
+	.my-page .list-banner {
+		padding: calc(#{$header-height} + 28px) 0 30px;
+		h1 {
+			display: none;
+		}
+		&::after {
+			display: none;
+		}
+	}
+	&.layout-basic #main {
+		background: $background;
+	}
+
+	/** HOME HERO */
+	.home-page .hero {
+		@include mv-aurora(1.5);
+		background: $background;
+		@include mv-grid;
+		padding: calc(#{$header-height} + 64px) 0 40px;
+		.right .photo {
+			border-radius: 32px;
+			box-shadow: 0 40px 80px rgba(15, 42, 42, 0.18);
+		}
+		.right .verified-card {
+			border-radius: 20px;
+			@include mv-glass(0.72);
+			box-shadow: $shadow-glass;
+			.icon {
+				border-radius: 12px;
+			}
+			strong {
+				font-family: $font-heading;
+			}
+		}
+	}
+	.home-page .hero-chat {
+		left: -56px;
+		top: 56px;
+		bottom: auto;
+		z-index: 2;
+		border-radius: 22px;
+		@include mv-glass(0.72);
+		box-shadow: $shadow-glass;
+		animation:
+			mv-fade-up 0.6s 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both,
+			mv-float 6s 1.1s ease-in-out infinite;
+	}
+
+	/** HERO COMPOSITION (from the Motion mockup): a second drifting aurora, a dashed ring,
+	    the photo slowly zooming, glass cards floating out of step, clinic names gliding below */
+	.home-page .hero {
+		&::after {
+			content: '';
+			position: absolute;
+			inset: -20% -10% -30% 30%;
+			z-index: -1;
+			pointer-events: none;
+			background:
+				radial-gradient(30% 40% at 70% 60%, rgba(95, 174, 110, 0.22), transparent 70%),
+				radial-gradient(26% 36% at 20% 80%, rgba(255, 126, 107, 0.14), transparent 70%);
+			animation: mv-aurora 11s ease-in-out infinite alternate-reverse;
+		}
+		.right {
+			&::before {
+				content: '';
+				position: absolute;
+				left: -84px;
+				bottom: 36px;
+				width: 168px;
+				height: 168px;
+				border-radius: 50%;
+				border: 1.5px dashed rgba(11, 122, 138, 0.35);
+				animation: mv-spin 16s linear infinite;
+				pointer-events: none;
+			}
+			.photo img {
+				animation: mv-kenburns 12s ease-in-out infinite alternate;
+			}
+			.verified-card {
+				top: -20px;
+				right: 28px;
+				z-index: 2;
+			}
+		}
+	}
+	.home-page .hero-text .badge i {
+		position: relative;
+		&::after {
+			content: '';
+			position: absolute;
+			inset: 0;
+			border-radius: 50%;
+			background: $mint;
+			animation: mv-ping 2s ease-out infinite;
+		}
+	}
+	.hero-search .search-box .search-btn {
+		position: relative;
+		overflow: hidden;
+		&::after {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: -60%;
+			width: 40%;
+			height: 100%;
+			background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+			transform: skewX(-20deg);
+			animation: mv-shine 3s ease-in-out infinite;
+			pointer-events: none;
+		}
+	}
+	.hero-float {
+		position: absolute;
+		z-index: 2;
+		padding: 14px 16px;
+		border-radius: 22px;
+		@include mv-glass(0.72);
+		box-shadow: $shadow-glass;
+		&.pulse-card {
+			right: -40px;
+			top: 46%;
+			width: 220px;
+			display: flex;
+			flex-direction: column;
+			gap: 6px;
+			animation:
+				mv-fade-up 0.6s 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both,
+				mv-float 6s 1.5s ease-in-out infinite;
+			.label {
+				font-size: 12px;
+				font-weight: 600;
+				color: $text-secondary;
+			}
+			path {
+				stroke: $primary;
+				stroke-dasharray: 260;
+				animation: mv-ecg 3s linear infinite;
+			}
+		}
+		&.booking-card {
+			left: 28px;
+			bottom: -30px;
+			display: flex;
+			flex-direction: row;
+			white-space: nowrap;
+			align-items: center;
+			gap: 12px;
+			animation:
+				mv-fade-up 0.6s 1.2s cubic-bezier(0.2, 0.7, 0.2, 1) both,
+				mv-float 6s 3.2s ease-in-out infinite;
+			.check {
+				width: 42px;
+				height: 42px;
+				flex-shrink: 0;
+				border-radius: 14px;
+				background: $success;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				path {
+					stroke: #ffffff;
+					stroke-dasharray: 30;
+					animation: mv-check 3s ease infinite;
+				}
+			}
+			.text {
+				display: flex;
+				flex-direction: column;
+				strong {
+					font-family: $font-heading;
+					font-size: 15px;
+				}
+				span {
+					font-size: 12px;
+					color: $text-secondary;
+				}
+			}
+		}
+	}
+	.hero-marquee {
+		position: relative;
+		margin-top: 64px;
+		padding: 18px 0;
+		border-top: 1px solid rgba(15, 42, 42, 0.07);
+		border-bottom: 1px solid rgba(15, 42, 42, 0.07);
+		overflow: hidden;
+		mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+		.track {
+			display: flex;
+			width: max-content;
+			animation: mv-marquee 32s linear infinite;
+		}
+		&:hover .track {
+			animation-play-state: paused;
+		}
+		.set {
+			display: flex;
+			gap: 56px;
+			padding-right: 56px;
+		}
+		a {
+			font-family: $font-heading;
+			font-size: 18px;
+			font-weight: 600;
+			color: $text-muted;
+			&::before {
+				content: '✦';
+				margin-right: 14px;
+				color: $mint;
+			}
+			&:hover {
+				color: $text;
+			}
+		}
+	}
+	.home-page .hero-text {
+		.badge {
+			@include mv-glass(0.7);
+			padding: 7px 14px;
+			font-size: 13px;
+			i {
+				background: $mint;
+				box-shadow: 0 0 0 3px rgba(61, 179, 154, 0.25);
+				animation: mv-pulse 1.6s ease-in-out infinite;
+			}
+		}
+		h1 {
+			font-size: 64px;
+			font-weight: 700;
+			line-height: 1.04;
+			letter-spacing: -2px;
+		}
+		p {
+			font-size: 18px;
+		}
+	}
+	.hero-search .search-box {
+		border-radius: 24px;
+		border-color: rgba(15, 42, 42, 0.06);
+		box-shadow: 0 20px 50px rgba(15, 42, 42, 0.1);
+		.search-btn {
+			border-radius: $radius-pill;
+			background: $gradient-primary;
+			box-shadow: $shadow-button;
+			&:hover {
+				background: $primary;
+			}
+		}
+	}
+
+	/** HOME BANDS */
+	.home-section {
+		padding: 88px 0;
+		&.tint {
+			background: $background;
+		}
+		.section-head h2 {
+			font-size: 40px;
+			font-weight: 700;
+			letter-spacing: -1.2px;
+		}
+	}
+
+	/** LOG IN / SIGN UP: an aurora page, the left panel dark ink with a soft glow */
+	.join-page {
+		@include mv-aurora(1.2);
+		padding-top: calc(#{$header-height} + 56px);
+		background: $background;
+		@include mv-grid;
+		.main {
+			border-radius: 32px;
+			border-color: rgba(15, 42, 42, 0.06);
+			box-shadow: 0 30px 70px rgba(15, 42, 42, 0.12);
+		}
+		.left {
+			@include mv-aurora(0.9);
+			background: $ink;
+			border-radius: 24px;
+			h2 {
+				font-size: 40px;
+				font-weight: 700;
+				letter-spacing: -1.2px;
+			}
+			.points span {
+				background: rgba(61, 179, 154, 0.22);
+				color: $mint;
+			}
+			.illustration {
+				border-radius: 20px;
+				&::after {
+					background: linear-gradient(180deg, rgba(15, 42, 42, 0) 40%, rgba(15, 42, 42, 0.55) 100%);
+				}
+			}
+		}
+	}
+
+	/** PAGES WITHOUT A BAND (clinic, doctor, booking, posts, notices, notifications): the aurora glows
+	    behind the head, under the transparent header */
+	.clinic-detail-page,
+	.doctor-detail-page,
+	.notifications-page,
+	.booking-page,
+	.article-page,
+	.write-page {
+		position: relative;
+		isolation: isolate;
+		margin-top: calc(-1 * #{$header-height});
+		padding-top: calc(#{$header-height} + 24px);
+		&::before {
+			content: '';
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			height: 440px;
+			z-index: -1;
+			pointer-events: none;
+			background:
+				radial-gradient(30% 60% at 10% 20%, rgba(61, 179, 154, 0.45), transparent 70%),
+				radial-gradient(28% 55% at 88% 10%, rgba(95, 174, 110, 0.32), transparent 70%),
+				radial-gradient(26% 50% at 52% 0%, rgba(255, 126, 107, 0.2), transparent 70%),
+				linear-gradient(rgba(15, 42, 42, 0.05) 1px, transparent 1px) 0 0 / 64px 64px,
+				linear-gradient(90deg, rgba(15, 42, 42, 0.05) 1px, transparent 1px) 0 0 / 64px 64px;
+			mask-image: linear-gradient(180deg, #000 55%, transparent);
+		}
+		.clinic-head h1 {
+			font-size: 44px;
+			font-weight: 700;
+			letter-spacing: -1.4px;
+		}
+	}
+	.doctor-hero {
+		border-radius: 28px;
+		@include mv-glass(0.74);
+		box-shadow: $shadow-glass;
+		.photo {
+			box-shadow:
+				0 0 0 6px rgba(255, 255, 255, 0.9),
+				0 0 0 8px rgba(61, 179, 154, 0.35);
+		}
+	}
+
+	@include mv-skin-shared;
+
+	/** SEGMENTED FILTERS (admin pills, booking tabs): one grey track, the active item a white pill */
+	.admin-pills,
+	.my-page .booking-tabs,
+	.booking-tabs {
+		display: inline-flex;
+		align-self: flex-start;
+		gap: 2px;
+		padding: 4px;
+		border: 0;
+		border-radius: $radius-pill;
+		background: $surface-alt;
+		button {
+			height: 36px;
+			padding: 0 16px;
+			border: 0;
+			border-radius: $radius-pill;
+			background: transparent;
+			color: $text-secondary;
+			font-weight: 600;
+			&:hover {
+				color: $text;
+				background: rgba(255, 255, 255, 0.6);
+			}
+			&.active,
+			&[aria-selected='true'] {
+				background: $surface;
+				color: $text;
+				box-shadow: 0 2px 8px rgba(15, 42, 42, 0.08);
+			}
+		}
+	}
+
+	/** WORKSPACE PAGE HEAD */
+	.my-page .page-head h1 {
+		font-size: 32px;
+		font-weight: 700;
+		letter-spacing: -0.8px;
+	}
+
+	/** SIDE MENUS — MyPage: white card; Clinic Dashboard and Doctor Panel: dark ink */
+	.my-menu.side {
+		padding: 14px;
+		border-radius: 24px;
+		border-color: rgba(15, 42, 42, 0.07);
+		box-shadow: $shadow-card;
+		.who .avatar {
+			background: linear-gradient(135deg, $primary, $leaf);
+			color: #ffffff;
+		}
+		.my-menu-item {
+			border-radius: 12px;
+			&.active {
+				position: relative;
+				background: $primary-tint;
+				color: $primary;
+				&::before {
+					content: '';
+					position: absolute;
+					left: -14px;
+					top: 9px;
+					bottom: 9px;
+					width: 4px;
+					border-radius: 0 4px 4px 0;
+					background: linear-gradient(180deg, $primary, $leaf);
+				}
+			}
+		}
+	}
+	.workspace-side .my-menu.side {
+		@include mv-aurora(0.55);
+		/* The aurora makes it position: relative — the sticky offset from mypage.scss must not move it. */
+		top: auto;
+		background: $ink;
+		border: 0;
+		box-shadow: 0 24px 50px rgba(15, 42, 42, 0.22);
+		color: #cfddd9;
+		.who {
+			strong {
+				color: #ffffff;
+			}
+			span {
+				color: $ink-text;
+			}
+			.avatar {
+				box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.08);
+			}
+		}
+		h2 {
+			color: #6a857f;
+		}
+		.my-menu-item {
+			color: #cfddd9;
+			.icon {
+				color: $ink-text;
+			}
+			&:hover {
+				background: rgba(255, 255, 255, 0.06);
+			}
+			&.active {
+				background: linear-gradient(135deg, rgba(11, 122, 138, 0.55), rgba(95, 174, 110, 0.32));
+				color: #ffffff;
+				.icon {
+					color: #ffffff;
+				}
+				&::before {
+					background: $mint;
+				}
+			}
+		}
+	}
+
+	/** FOOTER: dark ink with a quiet aurora */
+	#footer .footer-container {
+		@include mv-aurora(0.45);
+		background: $ink;
+		border-top: 0;
+		color: $ink-text;
+		.footer-box {
+			> strong {
+				color: #ffffff;
+			}
+			p,
+			a {
+				color: $ink-text;
+			}
+			a:hover {
+				color: #ffffff;
+			}
+			.mv-logo .word {
+				color: #ffffff;
+				b {
+					color: $mint;
+				}
+			}
+			.contact {
+				.icon {
+					background: rgba(255, 255, 255, 0.08);
+					color: $mint;
+				}
+				div span {
+					color: #6a857f;
+				}
+				div strong,
+				div a {
+					color: #ffffff;
+				}
+			}
+		}
+		.second {
+			border-top-color: $ink-line;
+			color: #6a857f;
+		}
+	}
+}
+
+/** ADMIN (its own frame, also inside #pc-wrap): dark side menu, glass top bar */
+#pc-wrap.admin-layout {
+	.admin-side {
+		@include mv-aurora(0.5);
+		/* keep admin.scss's sticky full-height column (the mixin sets relative) */
+		position: sticky;
+		overflow-y: auto;
+		background: $ink;
+		border-right: 0;
+	}
+	.admin-menu {
+		.admin-logo .mv-logo .word {
+			color: #ffffff;
+			b {
+				color: $mint;
+			}
+		}
+		h2 {
+			color: #6a857f;
+		}
+		.admin-menu-item {
+			position: relative;
+			border-radius: 12px;
+			color: #cfddd9;
+			.icon {
+				color: $ink-text;
+			}
+			&:hover {
+				background: rgba(255, 255, 255, 0.06);
+			}
+			&.active {
+				background: linear-gradient(135deg, rgba(11, 122, 138, 0.55), rgba(95, 174, 110, 0.32));
+				color: #ffffff;
+				.icon {
+					color: #ffffff;
+				}
+				&::before {
+					content: '';
+					position: absolute;
+					left: -14px;
+					top: 9px;
+					bottom: 9px;
+					width: 4px;
+					border-radius: 0 4px 4px 0;
+					background: $mint;
+				}
+			}
+		}
+		.admin-menu-sub {
+			color: $ink-text;
+			&:hover,
+			&.active {
+				color: #ffffff;
+			}
+		}
+	}
+	/* The mockup's menu: group titles, flat items, queue badges, the admin at the bottom */
+	.admin-menu {
+		flex: 1 0 auto;
+		gap: 0;
+		padding: 22px 14px 0;
+		.admin-logo {
+			padding: 0 8px 18px;
+		}
+		.admin-menu-section {
+			gap: 2px;
+			margin-bottom: 6px;
+		}
+		h2 {
+			margin: 12px 0 6px;
+			padding: 0 12px;
+			font-size: 11px;
+			letter-spacing: 0.08em;
+		}
+		.admin-menu-item {
+			height: 42px;
+			font-size: 14px;
+			.label {
+				flex: 1;
+				min-width: 0;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+			.badge {
+				min-width: 22px;
+				height: 20px;
+				padding: 0 7px;
+				border-radius: $radius-pill;
+				background: $coral;
+				color: #ffffff;
+				font-size: 11px;
+				font-weight: 700;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+			}
+		}
+		.admin-menu-foot {
+			position: sticky;
+			bottom: 0;
+			margin: auto -14px 0;
+			padding: 14px 22px;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			border-top: 1px solid $ink-line;
+			background: $ink;
+			.avatar {
+				width: 34px;
+				height: 34px;
+				flex-shrink: 0;
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: linear-gradient(135deg, $primary, $leaf);
+				color: #ffffff;
+				font-size: 12px;
+				font-weight: 700;
+			}
+			.who {
+				display: flex;
+				flex-direction: column;
+				min-width: 0;
+				b {
+					color: #ffffff;
+					font-size: 13px;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+				small {
+					color: $ink-text;
+					font-size: 11px;
+				}
+			}
+		}
+	}
+	/* The side column must let the menu fill it so the admin sits at the bottom */
+	.admin-side {
+		display: flex;
+		flex-direction: column;
+	}
+
+	@include mv-skin-admin-shared;
+
+	/* Tables fit a 1440px screen: tighter cells, codes and dates on one line, the actions never wrap */
+	.admin-table {
+		th,
+		td {
+			padding-left: 16px;
+			padding-right: 16px;
+		}
+		th:first-child,
+		td:first-child {
+			padding-left: 22px;
+		}
+		td.strong {
+			white-space: nowrap;
+		}
+		.actions {
+			flex-wrap: nowrap;
+		}
+		tbody tr:hover td {
+			background: rgba(61, 179, 154, 0.05);
+		}
+	}
+
+	.admin-top {
+		background: rgba(255, 255, 255, 0.8);
+		backdrop-filter: blur(16px) saturate(160%);
+		-webkit-backdrop-filter: blur(16px) saturate(160%);
+		border-bottom-color: rgba(15, 42, 42, 0.06);
+		.admin-crumbs {
+			font-family: $font-heading;
+		}
+	}
+}
