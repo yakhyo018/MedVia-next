@@ -122,8 +122,10 @@ const Community: NextPage = () => {
 	const writeLabel =
 		board.key === 'qna' ? t('Ask a question') : board.key === 'tips' ? t('Write a tip') : t('Write a post');
 
+	// Not ready yet counts as loading: the static server render has isReady false (query skipped), while
+	// the first client render may already be ready and loading — both must show the skeletons.
 	let list: React.ReactNode;
-	if (result.loading && shown === 0) {
+	if ((result.loading || !router.isReady) && shown === 0) {
 		list = (
 			<Stack className={'article-list'}>
 				{Array.from({ length: 3 }).map((_, index) => (
