@@ -925,6 +925,8 @@
 .qna-item {
 	gap: 8px !important;
 	.title {
+		/* A link: app.scss keeps links on one line, a long question must wrap */
+		white-space: normal;
 		font-size: 17px;
 		font-weight: 800;
 		color: $text;

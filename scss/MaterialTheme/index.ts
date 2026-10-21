@@ -1,5 +1,5 @@
 import { ThemeOptions } from '@mui/material/styles';
-import { colors, cssVariables, font, radius, shadows } from './tokens';
+import { colors, cssVariables, font, gradients, radius, shadows } from './tokens';
 
 /**
  * LIGHT THEME (the only one). Every value comes from tokens.ts.
@@ -16,15 +16,15 @@ export const light: ThemeOptions = {
 		text: { primary: colors.text, secondary: colors.textSecondary, disabled: colors.textMuted },
 		divider: colors.border,
 	},
-	shape: { borderRadius: radius.button },
+	shape: { borderRadius: 12 },
 	typography: {
 		fontFamily: font.family,
-		h1: { fontSize: 48, fontWeight: 800, letterSpacing: '-1px', lineHeight: 1.15 },
-		h2: { fontSize: 34, fontWeight: 800, letterSpacing: '-0.6px', lineHeight: 1.25 },
-		h3: { fontSize: 26, fontWeight: 800, letterSpacing: '-0.4px' },
-		h4: { fontSize: 20, fontWeight: 700 },
-		h5: { fontSize: 17, fontWeight: 700 },
-		h6: { fontSize: 15, fontWeight: 700 },
+		h1: { fontFamily: font.heading, fontSize: 52, fontWeight: 700, letterSpacing: '-1.6px', lineHeight: 1.06 },
+		h2: { fontFamily: font.heading, fontSize: 36, fontWeight: 700, letterSpacing: '-1px', lineHeight: 1.15 },
+		h3: { fontFamily: font.heading, fontSize: 26, fontWeight: 700, letterSpacing: '-0.6px' },
+		h4: { fontFamily: font.heading, fontSize: 20, fontWeight: 600, letterSpacing: '-0.3px' },
+		h5: { fontFamily: font.heading, fontSize: 17, fontWeight: 600 },
+		h6: { fontFamily: font.heading, fontSize: 15, fontWeight: 600 },
 		body1: { fontSize: 15 },
 		body2: { fontSize: 14 },
 		caption: { fontSize: 12 },
@@ -35,6 +35,7 @@ export const light: ThemeOptions = {
 			styleOverrides: {
 				':root': cssVariables,
 				body: { background: colors.surface, color: colors.text },
+				'h1, h2, h3, h4, h5': { fontFamily: font.heading, letterSpacing: '-0.02em' },
 				p: { margin: 0 },
 			},
 		},
@@ -42,7 +43,7 @@ export const light: ThemeOptions = {
 			defaultProps: { disableElevation: true },
 			styleOverrides: {
 				root: {
-					height: 42,
+					height: 44,
 					padding: '0 22px',
 					borderRadius: radius.button,
 					fontSize: 14,
@@ -56,9 +57,12 @@ export const light: ThemeOptions = {
 				sizeSmall: { height: 36, padding: '0 16px', fontSize: 13 },
 				sizeLarge: { height: 50, fontSize: 15 },
 				containedPrimary: {
-					'&:hover': { background: colors.primaryHover, boxShadow: '0 8px 20px rgba(11, 122, 138, 0.25)' },
+					background: gradients.primary,
+					boxShadow: shadows.button,
+					'&:hover': { background: colors.primary, boxShadow: '0 12px 30px rgba(11, 122, 138, 0.38)' },
+					'&.Mui-disabled': { background: colors.surfaceAlt, boxShadow: 'none' },
 				},
-				outlined: { borderColor: colors.borderStrong, color: colors.text, background: colors.surface },
+				outlined: { borderColor: colors.border, color: colors.text, background: colors.surface },
 				outlinedPrimary: {
 					borderColor: colors.borderStrong,
 					color: colors.text,
@@ -78,8 +82,8 @@ export const light: ThemeOptions = {
 					fontSize: 14,
 					'& .MuiOutlinedInput-notchedOutline': { borderColor: colors.borderStrong },
 					'&:hover .MuiOutlinedInput-notchedOutline': { borderColor: colors.textMuted },
-					'&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: colors.primary, borderWidth: 1 },
-					'&.Mui-focused': { boxShadow: `0 0 0 3px ${colors.primaryTint}` },
+					// Focus is the border alone (teal, a touch thicker) — no halo around the field.
+					'&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: colors.primary, borderWidth: 1.5 },
 					'&.Mui-error .MuiOutlinedInput-notchedOutline': { borderColor: colors.danger },
 					// An icon in front of the text: the icon takes the left padding, the text none.
 					'&.MuiInputBase-adornedStart': { paddingLeft: 14, '& .MuiOutlinedInput-input': { paddingLeft: 0 } },
@@ -112,7 +116,11 @@ export const light: ThemeOptions = {
 		MuiTabs: {
 			styleOverrides: {
 				root: { minHeight: 44, borderBottom: `1px solid ${colors.border}` },
-				indicator: { height: 2, background: colors.primary },
+				indicator: {
+					height: 3,
+					borderRadius: 3,
+					background: `linear-gradient(90deg, ${colors.primary}, ${colors.leaf})`,
+				},
 			},
 		},
 		MuiTab: {
@@ -126,7 +134,7 @@ export const light: ThemeOptions = {
 					fontWeight: 500,
 					color: colors.textSecondary,
 					textTransform: 'none',
-					'&.Mui-selected': { color: colors.primary, fontWeight: 800 },
+					'&.Mui-selected': { color: colors.text, fontWeight: 700 },
 				},
 			},
 		},
@@ -135,14 +143,14 @@ export const light: ThemeOptions = {
 		},
 		MuiMenu: {
 			styleOverrides: {
-				paper: { borderRadius: 14, border: `1px solid ${colors.border}`, boxShadow: shadows.menu },
+				paper: { borderRadius: 18, border: `1px solid ${colors.border}`, boxShadow: shadows.menu },
 			},
 		},
 		MuiMenuItem: {
 			styleOverrides: {
 				root: {
 					margin: '2px 8px',
-					borderRadius: 10,
+					borderRadius: 12,
 					fontSize: 14,
 					'&.Mui-selected': { background: colors.primaryTint },
 					'&.Mui-selected:hover': { background: colors.primaryTint },
@@ -165,8 +173,8 @@ export const light: ThemeOptions = {
 					background: colors.surface,
 					fontWeight: 600,
 					color: colors.text,
-					'&.Mui-selected': { background: colors.primary, borderColor: colors.primary, color: '#FFFFFF' },
-					'&.Mui-selected:hover': { background: colors.primaryHover },
+					'&.Mui-selected': { background: colors.ink, borderColor: colors.ink, color: '#FFFFFF' },
+					'&.Mui-selected:hover': { background: colors.primaryDark },
 				},
 				ellipsis: { border: 0, background: 'transparent' },
 			},

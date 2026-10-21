@@ -110,21 +110,29 @@ public/locales/   en, ru, uz, kk, ko   (common.json …)
 - Dates are stored UTC and **shown in Asia/Seoul**; prices in KRW.
 - Languages: `KO`, `EN`, `RU`, `UZ`, `KK` (the backend `Language` enum); locales en/ru/uz/kk/ko.
 
-## Design (from MedVia-design — tokens live in one place)
+## Design (Motion redesign, 2026-10-21 — tokens live in one place)
 
 `scss/MaterialTheme/tokens.ts` + `scss/_tokens.scss`; the MUI theme, sweetalert and SCSS all read
-them.
-- Primary teal `#0B7A8A` (hover `#168390`, tint `#E4F3F5`); text navy `#0F2A3D`, secondary
-  `#52667A`, muted `#8A9BAB`; borders `#E3EAF0` / `#D3DDE5`; page background `#F4F8FA`.
+them. The look: `scss/pc/skin.scss` (computer), `scss/mobile/skin.scss` (phone), shared mixins in
+`scss/pc/_skin-mixins.scss` (aurora, glass, grid, parts that look the same on both). Mockups:
+`docs/design-alternatives/motion-pages-green/` (not in git).
+- Primary teal `#0B7A8A` (hover `#168390`, dark `#086170`, tint `#E4F3F0`); text `#0F2A2A`,
+  secondary `#566B68`, muted `#8A9C98`; borders `#E1EAE6` / `#D6E2DD`; page background `#F5F8F7`.
+- Decoration only, never under text: mint `#3DB39A`, leaf `#5FAE6E`, coral `#FF7E6B`.
+  Dark surfaces (footer, workspace / admin side menus, dark cards): ink `#0F2A2A`.
+- Text-bearing gradient = `#086170 → #0B7A8A` only (white text keeps 4.5:1).
 - Success `#15803D` on `#E7F6EC`; warning `#B45309` on `#FEF3E2`; danger `#C0392B` on `#FDECEA`.
-- Buttons 42px high, radius 10px, padding `0 22px`, 14px/600 (small: 36px); pills radius 999px,
-  `8px 16px`, 13px/600; cards and modals radius 16px, modal shadow `0 24px 48px rgba(15,42,61,.16)`.
-- Font: Plus Jakarta Sans.
+- Buttons: pills (radius 999), 44px, `0 22px`, 14px/600, primary = gradient + soft shadow (small: 36px);
+  cards radius 22–28px; fields radius 14px, focus = teal border only (no halo); modal radius 24px.
+- Fonts: Onest (headings — has Cyrillic for RU/UZ/KK), Inter (text).
+- Header transparent over the first band's aurora, glass once scrolled; the first band slides under it.
+- Motion: CSS only (`scss/motion.scss`), `transform` / `opacity`, everything stops under
+  `prefers-reduced-motion`.
 - **Alerts:** keep nestar-next's sweetAlert function names; `Swal.mixin` with
   `buttonsStyling: false` + `customClass` → MedVia classes: confirm modal (teal confirm, outlined
-  cancel), new `sweetDangerConfirmAlert` (red confirm: cancel booking, delete), error (danger
+  cancel), `sweetDangerConfirmAlert` (red confirm: cancel booking, delete), error (danger
   icon), top toast (white pill, green mark), login prompt (teal → `/account/join`). Backdrop
-  `rgba(15,42,61,.45)`. Button texts and titles from i18n.
+  `rgba(15,42,42,.45)`. Button texts and titles from i18n.
 - Shared UI: `StatusChip` (CONFIRMED/ACTIVE green, PENDING amber, DECLINED/CANCELLED red,
   COMPLETED teal), MUI overrides for Button/TextField/Chip/Tabs, teal spinner + skeletons, empty
   state, red 12px field errors. A dev-only page `/_dev/ui` shows every variant.

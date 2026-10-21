@@ -3,10 +3,7 @@
 Where the frontend stands, what comes next, and how we work. A new session reads this first.
 Update it whenever a milestone closes.
 
-_Last updated: 2026-10-15 — **F9 (Deploy) in progress: code ready (backend `feature/seed-variety`,
-`feature/demo-mode`, `feature/docker`; frontend `feature/f9-deploy`). Next: merge both repos
-`develop` → `main`, then the server: `docker-compose.yml` + `deploy.sh` in each repository (see
-COMMANDS → Production update).**_
+_Last updated: 2026-10-21 — **Motion redesign merged and deployed (`feature/redesign-motion` → `develop` → `main`): green palette, Onest + Inter, aurora / glass skins for computer and phone, new landing page, new admin side menu. Next: watch the deploy, then the open items under "Motion redesign".**_
 
 ## The project
 
@@ -28,7 +25,8 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
 | F6 | Community + CS — posts, FAQ, inquiries | done 2026-10-14 |
 | F7 | Admin — dashboard (one GraphQL request), moderation, audit | done 2026-10-15 |
 | F8 | Assistant UI — chat panel, cards, Confirm button | done 2026-10-15 |
-| **F9** | **Deploy — `medvia.tech` + `api.medvia.tech`, Docker Compose, both repos `develop` → `main`** | **in progress** |
+| F9 | Deploy — `medvia.tech` + `api.medvia.tech`, Docker Compose, CI/CD | done 2026-10-18 |
+| **R** | **Motion redesign — green aurora look, new landing, admin menu (computer + phone)** | **done 2026-10-21** |
 
 ## F0 — what was built (2026-10-12)
 
@@ -51,6 +49,37 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
   other tab turns guest; RU locale; 1440 px, 800 px and 375 px mobile (drawer).
 - Not in F0: Google sign-in (needs `GOOGLE_CLIENT_ID`), clinic signup (F5).
 - Test account made during the check: `f0.feride@medvia.test` (local DB only).
+
+## Motion redesign (2026-10-21, done)
+
+- The user's request: a modern, animated look for every page, only the design (no component
+  removed, no static content without an API), first on a computer, then on a phone. Direction
+  chosen from PNG mockups (4 static + 1 animated), then the blue / violet palette swapped for the
+  site's green (contrast and brand). Mockups: `docs/design-alternatives/` (not in git).
+- Tokens: `mint`, `leaf`, `coral`, `ink`, `glass`, gradients; Onest headings, Inter text; pill
+  buttons, 22px cards, 14px fields; focus = teal border, no halo (the user's request).
+- `scss/pc/skin.scss` + `scss/mobile/skin.scss` restyle the existing markup; shared parts in
+  `scss/pc/_skin-mixins.scss`. Header transparent → glass on scroll; aurora bands; dark footer and
+  workspace side menus; segmented filters; stat cards (label, big number, corner icon).
+- Landing (the user's request, from `home-desktop.png`): live badge (clinics + Seoul time),
+  rotating "in your language" (UZ / RU), looping sample chat, floating cards, review trust row,
+  clinic marquee, "Why MedVia" bento (translated chat, clinics per district, verified counter,
+  next 7 Seoul days, latest review), trending treatments, CTA. Data from the API only. The old
+  bands left the page (files kept). The hero keeps the "Verified clinics only" card.
+- Admin (the user's choices): mockup side menu (groups, flat items, queue badges, admin at the
+  bottom), bookings chart in the mockup style, dark "Needs attention" card; the patient-language
+  card removed; the rest unchanged.
+- Fixed while checking: reply tools / rating summary layout, admin tables at 1440px, phone clinic
+  cards and forms (desktop `align-items` leaking into a column), board / segmented tabs widening
+  the phone page, booking-card buttons, long Q&A titles.
+- `/community` hydration error (pre-existing, `router.isReady`): fixed on `fix/community-hydration`,
+  merged with this release. `/booking` without query parameters shows the same kind of error —
+  not fixed yet.
+- Checked: 47 pages × 5 roles at 1440px and 390px (phone user agent), no horizontal scroll;
+  `yarn build:check`, typecheck, lint, i18n.
+- Open: weekday names on `/uz` come out in English (`Intl` has no short `uz` weekdays) — the date
+  strip on booking shows the same; `/booking` hydration; the favicon (`favicon.svg` deleted in the
+  working copy, `_document` still links it — not part of this release).
 
 ## F9 — Deploy (2026-10-15, in progress)
 

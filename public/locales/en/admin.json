@@ -289,5 +289,12 @@
   "{{count}} reports_one": "{{count}} report",
   "{{count}} reports_other": "{{count}} reports",
   "{{count}} reports closed_one": "{{count}} report closed",
-  "{{count}} reports closed_other": "{{count}} reports closed"
+  "{{count}} reports closed_other": "{{count}} reports closed",
+  "Operations": "Operations",
+  "People": "People",
+  "Support": "Support",
+  "Needs attention": "Needs attention",
+  "Treatments to review": "Treatments to review",
+  "Reviews to moderate": "Reviews to moderate",
+  "Reported posts": "Reported posts"
 }
