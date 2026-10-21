@@ -85,6 +85,56 @@
 .admin-drawer {
 	width: 270px;
 }
+/* Shared by the desktop column and the phone drawer (the drawer is outside #pc-wrap) */
+.admin-menu {
+	.admin-menu-item .label {
+		flex: 1;
+	}
+	.admin-menu-item .badge {
+		min-width: 22px;
+		height: 20px;
+		padding: 0 7px;
+		border-radius: $radius-pill;
+		background: $coral;
+		color: #ffffff;
+		font-size: 11px;
+		font-weight: 700;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.admin-menu-foot {
+		margin-top: auto;
+		padding: 14px 8px 18px;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		border-top: 1px solid $border;
+		.avatar {
+			width: 34px;
+			height: 34px;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: $primary-tint;
+			color: $primary;
+			font-size: 12px;
+			font-weight: 700;
+		}
+		.who {
+			display: flex;
+			flex-direction: column;
+			b {
+				font-size: 13px;
+			}
+			small {
+				font-size: 11px;
+				color: $text-secondary;
+			}
+		}
+	}
+}
 
 /** TOP BAR **/
 .admin-main {

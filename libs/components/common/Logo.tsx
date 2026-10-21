@@ -15,10 +15,17 @@ const Logo = (props: LogoProps) => {
 	const mark = (
 		<Box component={'span'} className={`mv-logo ${variant}`}>
 			<svg className={'mark'} viewBox="0 0 36 36" width="36" height="36" aria-hidden="true">
+				{/* The heart runs from the brand teal into mint (tokens: primary → mint). */}
+				<defs>
+					<linearGradient id={'mv-logo-heart'} x1={'0'} y1={'0'} x2={'1'} y2={'1'}>
+						<stop offset={'0'} stopColor={'#0B7A8A'} />
+						<stop offset={'1'} stopColor={'#3DB39A'} />
+					</linearGradient>
+				</defs>
 				<path
 					className={'heart'}
 					d="M18 32S3 23 3 12.5A7.5 7.5 0 0 1 18 9a7.5 7.5 0 0 1 15 3.5C33 23 18 32 18 32z"
-					fill={white ? '#FFFFFF' : '#0B7A8A'}
+					fill={white ? '#FFFFFF' : 'url(#mv-logo-heart)'}
 				/>
 				<path
 					className={'pulse'}

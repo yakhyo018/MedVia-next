@@ -2,6 +2,9 @@ import { TFunction } from 'i18next';
 import { AuditAction, AuditGroup } from '../../enums/admin.enum';
 import { BatchName } from '../../enums/batch.enum';
 import { MemberType } from '../../enums/member.enum';
+import { ClinicStatus } from '../../enums/clinic.enum';
+import { ReviewStatus } from '../../enums/review.enum';
+import { ReportStatus } from '../../enums/board-article.enum';
 import { LANGUAGES } from '../../config';
 import { seoulTime } from '../../utils';
 
@@ -12,6 +15,14 @@ import { seoulTime } from '../../utils';
  */
 export const ADMIN_NS = ['admin', 'common'];
 export const ADMIN_I18N = { nsMode: 'fallback' } as const;
+
+/** The review queues, totals only (one row each, `metaCounter` is read): the dashboard and the menu badges. */
+export const ADMIN_QUEUES_INPUT = {
+	clinics: { page: 1, limit: 1, clinicStatus: ClinicStatus.PENDING },
+	reviews: { page: 1, limit: 1, reviewStatus: ReviewStatus.PENDING },
+	reports: { page: 1, limit: 1, reportStatus: ReportStatus.PENDING },
+	treatments: { page: 1, limit: 1, reviewQueue: true },
+};
 
 export type AuditTone = 'success' | 'warning' | 'danger';
 

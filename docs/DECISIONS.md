@@ -133,3 +133,17 @@ user's check, the merge. Details and the clinic-page plan: STATUS.md → "Next s
 | Every photo of the site generated (2026-10-16, the user's decision; replaces stock and the design sample): `yarn images:generate`, FLUX.1 Krea [dev] through Hugging Face Inference Providers, files in `public/img/`, prompts in `docs/IMAGES.md`. | No licence questions (the hero sample's source was unknown), no hot-link to a CDN, no credit line; foreign patients from the site's markets in the pictures. The token is read from the API's `.env` — the frontend's env files never hold it. | AI details (a tablet face, hands) — every file is looked at before commit. | Stock photos with credits; the design sample. |
 | Health tips show up to 2 photos (backend `articleImages`): cover cards in a two-column grid on the tips board, photos after the first paragraph on the detail, a Photos block on the write page for tips only. | The mockups (CommunityNews, ArticleDetail, WriteArticle) have them; questions and free posts stay text (the API refuses photos there). | — | Photos on every board; a single cover. |
 | Google sign-in with `@react-oauth/google` (planned in CLAUDE.md), patients only; the button hides without `REACT_APP_GOOGLE_CLIENT_ID`. | Google's own button gives the ID token the API's `googleLogin` already verifies; a clinic sign-up needs the clinic's details. | Needs an OAuth client in Google Cloud. | Google Identity Services script by hand. |
+
+## Motion redesign (2026-10-21)
+
+| Decision | Why | Risks | Alternatives |
+| --- | --- | --- | --- |
+| Green palette instead of the mockup's blue / violet (the user's choice). | Brand continuity; white text on the mockup's `#0B9AA8` / `#14C8C0` fails 4.5:1, on `#0B7A8A` it passes. | Status green and primary are close — chips checked side by side. | Keep blue / violet with darker text surfaces. |
+| Mint, leaf, coral only as decoration; text gradient `#086170 → #0B7A8A`. | Both gradient stops keep white text readable. | — | Brighter buttons with dark text. |
+| Onest for headings (not the mockup's Outfit). | Outfit has no Cyrillic: RU and KK headings fell back to another font. | One more web font. | Manrope; Inter everywhere. |
+| A skin layer (`skin.scss`, imported last) over the existing SCSS. | Style only, no markup change, easy to review or revert. | Specificity fights; desktop rules leaking into phone columns (seen and fixed: `align-items`). | Rewrite every section's SCSS. |
+| Landing: new bands from the API only; old bands off the page, files kept (the user's choice). | The mockup; no fake numbers on a medical site. | Smaller page (less SEO text). | Keep the old bands under the new ones. |
+| Admin: flat grouped menu with queue badges; overview + "Needs attention" (the user's choice). | The mockup; badges reuse the dashboard's totals query. | One more small request per admin page. | Keep the nested menu. |
+| Focus = teal border, no halo (the user's request). | The halo read as a stray shadow. | Weaker focus cue — the border also thickens. | A thin outline ring. |
+| Motion in CSS (`@keyframes`), stopped by reduced motion. | No animation library, no JS per frame. | — | Framer Motion. |
+

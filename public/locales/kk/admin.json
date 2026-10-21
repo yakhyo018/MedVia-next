@@ -289,5 +289,12 @@
   "{{count}} reports_one": "{{count}} шағым",
   "{{count}} reports_other": "{{count}} шағым",
   "{{count}} reports closed_one": "{{count}} шағым жабылды",
-  "{{count}} reports closed_other": "{{count}} шағым жабылды"
+  "{{count}} reports closed_other": "{{count}} шағым жабылды",
+  "Operations": "Операциялар",
+  "People": "Адамдар",
+  "Support": "Қолдау",
+  "Needs attention": "Назар аударуды қажет етеді",
+  "Treatments to review": "Тексерілетін емдер",
+  "Reviews to moderate": "Модерациядағы пікірлер",
+  "Reported posts": "Шағым түскен посттар"
 }

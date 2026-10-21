@@ -16,13 +16,13 @@ import HomeCarousel from './HomeCarousel';
  * Sorted by clinicScore (the batch's RANK: rating weighed by how many reviews it stands on),
  * not by clinicRating, where one 5-star review would beat forty 4.8 ones.
  */
-const INPUT: ClinicsInquiry = { page: 1, limit: 8, sort: 'clinicScore', direction: Direction.DESC };
+export const TOP_CLINICS_INPUT: ClinicsInquiry = { page: 1, limit: 8, sort: 'clinicScore', direction: Direction.DESC };
 
 const TopClinics = () => {
 	const { t } = useTranslation('common');
 	const likeHandler = useLikeTarget();
 	const { data, loading, error } = useQuery(GET_CLINICS, {
-		variables: { input: INPUT },
+		variables: { input: TOP_CLINICS_INPUT },
 		fetchPolicy: 'cache-and-network',
 	});
 	const list: Clinic[] = data?.getClinics?.list ?? [];

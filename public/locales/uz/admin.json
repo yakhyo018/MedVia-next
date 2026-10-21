@@ -289,5 +289,12 @@
   "{{count}} reports_one": "{{count}} ta shikoyat",
   "{{count}} reports_other": "{{count}} ta shikoyat",
   "{{count}} reports closed_one": "{{count}} ta shikoyat yopildi",
-  "{{count}} reports closed_other": "{{count}} ta shikoyat yopildi"
+  "{{count}} reports closed_other": "{{count}} ta shikoyat yopildi",
+  "Operations": "Operatsiyalar",
+  "People": "Odamlar",
+  "Support": "Yordam",
+  "Needs attention": "Eʼtibor talab qiladi",
+  "Treatments to review": "Tekshiriladigan muolajalar",
+  "Reviews to moderate": "Moderatsiyadagi sharhlar",
+  "Reported posts": "Shikoyat qilingan postlar"
 }

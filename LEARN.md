@@ -844,3 +844,38 @@ Clinics list (8 cards, all photos load), a clinic page (4 rooms in one look, 3 p
    builds on start. Build an image in CI, push it to a registry, and `docker compose pull && up -d`
    on the server — or run two containers and switch nginx between them.
 
+## Motion redesign (2026-10-21)
+
+- **Design tokens as the single source.** `tokens.ts` feeds the MUI theme and writes CSS custom
+  properties on `:root`; SCSS reads them as `$vars`. Changing the palette was one file, the rest
+  followed. Because the values are `var()`, Sass colour functions cannot fade them — the skins
+  write `rgba()` with the token's RGB, listed in the skin's header.
+- **A skin layer.** `skin.scss` is imported last and only restyles existing class names. The page
+  structure and logic did not move, so the change is easy to review and to revert. The cost is
+  specificity: a desktop rule (`align-items: start` for a grid) leaked into the phone's flex
+  column and shrank cards — found by measuring `scrollWidth` on every page at 390px.
+- **Aurora without JS.** A `::before` with three radial gradients in token colours, drifting
+  with a `transform` animation; a faint grid with two linear gradients. Only `transform` and
+  `opacity` animate, so the browser composites instead of repainting.
+- **Hydration.** Server HTML and the first client render must match. Anything that depends on
+  "now" (Seoul time, the next 7 days) renders after mount (`useMounted`), because the page is
+  built statically at another time. The `/community` bug: `router.isReady` is false at build time,
+  so the server and the first client render took different branches.
+- **Contrast.** WCAG AA needs 4.5:1 for body text. White on `#14C8C0` is about 2:1, on `#0B7A8A`
+  about 5:1 — the bright greens stay decorative.
+
+### Interview questions
+
+1. **How do you restyle a whole app without touching its components?** Central tokens + a skin
+   stylesheet loaded last that targets the existing class names; verify every page by screenshot
+   and by measuring overflow.
+2. **Why animate only transform and opacity?** They run on the compositor; width, top or
+   box-shadow animations trigger layout or paint every frame.
+3. **What causes a hydration mismatch and how do you avoid it?** Different output on the server
+   and the first client render (time, `window`, router state before `isReady`, random ids).
+   Render those parts after mount or make both sides render the same placeholder.
+4. **How do you respect users who dislike motion?** `@media (prefers-reduced-motion: reduce)`
+   stops CSS animations; JS rotations check `matchMedia` before starting.
+5. **Why not use the mockup's font?** It lacked Cyrillic; a font must cover every locale the site
+   serves.
+
