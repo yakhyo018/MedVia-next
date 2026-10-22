@@ -101,6 +101,9 @@
 	.my-page {
 		position: relative;
 		isolation: isolate;
+		/* The page is its own layer (for the glow); it must sit above the footer, or the footer
+		   paints over the page's fixed Book / Continue bar while scrolling */
+		z-index: 1;
 		&::before {
 			content: '';
 			position: absolute;
