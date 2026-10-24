@@ -225,6 +225,7 @@
 				border-radius: $radius-pill;
 				background: rgba(255, 255, 255, 0.12);
 				backdrop-filter: blur(8px);
+				-webkit-backdrop-filter: blur(8px);
 				font-size: 11px;
 				font-style: normal;
 				font-weight: 600;
@@ -254,6 +255,7 @@
 			-webkit-background-clip: text;
 			background-clip: text;
 			color: transparent;
+			-webkit-text-fill-color: transparent;
 		}
 		.bar {
 			display: block;
