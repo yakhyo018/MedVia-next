@@ -223,16 +223,15 @@
 		opacity: 0;
 	}
 }
+/* No filter here: on text clipped to its background (gradient words) WebKit then paints nothing */
 @keyframes mv-word-in {
 	from {
 		opacity: 0;
 		transform: translateY(40%);
-		filter: blur(4px);
 	}
 	to {
 		opacity: 1;
 		transform: none;
-		filter: none;
 	}
 }
 @keyframes mv-shine {

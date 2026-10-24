@@ -43,6 +43,7 @@
 				&.scrolled {
 					background: rgba(255, 255, 255, 0.92);
 					backdrop-filter: saturate(160%) blur(10px);
+					-webkit-backdrop-filter: saturate(160%) blur(10px);
 					box-shadow: 0 6px 24px rgba(15, 42, 42, 0.08);
 				}
 				.container {
