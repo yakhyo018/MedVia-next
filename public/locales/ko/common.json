@@ -1054,5 +1054,19 @@
   "faceIssue.LOW_LIGHT": "너무 어두워요",
   "faceIssue.BLURRY": "사진이 흐려요",
   "faceIssue.BAD_ANGLE": "각도가 맞지 않아요",
-  "faceIssue.MAKEUP_OR_FILTER": "화장 또는 필터"
+  "faceIssue.MAKEUP_OR_FILTER": "화장 또는 필터",
+  "Ask MedVia Navi": "MedVia Navi에게 물어보세요",
+  "Answers from MedVia’s own guides, FAQ and clinic pages — with the sources.": "MedVia 가이드, FAQ, 클리닉 페이지에서 찾은 답변 — 출처와 함께.",
+  "Ask in your language…": "편한 언어로 질문하세요…",
+  "Ask": "질문하기",
+  "How far ahead can I book a treatment?": "시술은 며칠 전까지 예약할 수 있나요?",
+  "How long does the clinic have to confirm my booking?": "클리닉은 예약을 언제까지 확인해야 하나요?",
+  "What should I bring on the day of my visit?": "방문 당일에 무엇을 가져가야 하나요?",
+  "Navi is reading MedVia’s content…": "Navi가 MedVia 콘텐츠를 읽는 중…",
+  "Try the questions below, or send a 1:1 inquiry — a person answers it.": "아래 질문을 확인하거나 1:1 문의를 보내 주세요 — 담당자가 답변합니다.",
+  "Sources": "출처",
+  "Answers come from MedVia’s own content and may be incomplete. This is not medical advice.": "답변은 MedVia 자체 콘텐츠에서 나오며 불완전할 수 있습니다. 의료 조언이 아닙니다.",
+  "Log in to ask MedVia Navi": "MedVia Navi에게 질문하려면 로그인하세요",
+  "MedVia Navi is not available right now. Please try again later!": "MedVia Navi를 지금 사용할 수 없어요. 잠시 후 다시 시도해 주세요!",
+  "Too many questions in a minute. Please wait a moment!": "1분 동안 질문이 너무 많아요. 잠시 기다려 주세요!"
 }

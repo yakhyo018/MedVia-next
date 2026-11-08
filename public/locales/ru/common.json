@@ -1090,5 +1090,19 @@
   "faceIssue.LOW_LIGHT": "Слишком темно",
   "faceIssue.BLURRY": "Фото размыто",
   "faceIssue.BAD_ANGLE": "Неудачный ракурс",
-  "faceIssue.MAKEUP_OR_FILTER": "Макияж или фильтр"
+  "faceIssue.MAKEUP_OR_FILTER": "Макияж или фильтр",
+  "Ask MedVia Navi": "Спросите MedVia Navi",
+  "Answers from MedVia’s own guides, FAQ and clinic pages — with the sources.": "Ответы из руководств, FAQ и страниц клиник MedVia — с источниками.",
+  "Ask in your language…": "Спросите на своём языке…",
+  "Ask": "Спросить",
+  "How far ahead can I book a treatment?": "За сколько дней можно записаться на процедуру?",
+  "How long does the clinic have to confirm my booking?": "Сколько времени у клиники на подтверждение записи?",
+  "What should I bring on the day of my visit?": "Что взять с собой в день визита?",
+  "Navi is reading MedVia’s content…": "Navi читает материалы MedVia…",
+  "Try the questions below, or send a 1:1 inquiry — a person answers it.": "Посмотрите вопросы ниже или отправьте личное обращение — на него ответит человек.",
+  "Sources": "Источники",
+  "Answers come from MedVia’s own content and may be incomplete. This is not medical advice.": "Ответы основаны на материалах MedVia и могут быть неполными. Это не медицинская консультация.",
+  "Log in to ask MedVia Navi": "Войдите, чтобы спросить MedVia Navi",
+  "MedVia Navi is not available right now. Please try again later!": "MedVia Navi сейчас недоступен. Попробуйте позже!",
+  "Too many questions in a minute. Please wait a moment!": "Слишком много вопросов за минуту. Подождите немного!"
 }

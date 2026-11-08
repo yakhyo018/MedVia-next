@@ -1066,5 +1066,19 @@
   "faceIssue.LOW_LIGHT": "Too dark",
   "faceIssue.BLURRY": "The photo is blurry",
   "faceIssue.BAD_ANGLE": "The face is turned away",
-  "faceIssue.MAKEUP_OR_FILTER": "Make-up or a filter"
+  "faceIssue.MAKEUP_OR_FILTER": "Make-up or a filter",
+  "Ask MedVia Navi": "Ask MedVia Navi",
+  "Answers from MedVia’s own guides, FAQ and clinic pages — with the sources.": "Answers from MedVia’s own guides, FAQ and clinic pages — with the sources.",
+  "Ask in your language…": "Ask in your language…",
+  "Ask": "Ask",
+  "How far ahead can I book a treatment?": "How far ahead can I book a treatment?",
+  "How long does the clinic have to confirm my booking?": "How long does the clinic have to confirm my booking?",
+  "What should I bring on the day of my visit?": "What should I bring on the day of my visit?",
+  "Navi is reading MedVia’s content…": "Navi is reading MedVia’s content…",
+  "Try the questions below, or send a 1:1 inquiry — a person answers it.": "Try the questions below, or send a 1:1 inquiry — a person answers it.",
+  "Sources": "Sources",
+  "Answers come from MedVia’s own content and may be incomplete. This is not medical advice.": "Answers come from MedVia’s own content and may be incomplete. This is not medical advice.",
+  "Log in to ask MedVia Navi": "Log in to ask MedVia Navi",
+  "MedVia Navi is not available right now. Please try again later!": "MedVia Navi is not available right now. Please try again later!",
+  "Too many questions in a minute. Please wait a moment!": "Too many questions in a minute. Please wait a moment!"
 }

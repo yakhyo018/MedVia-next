@@ -1066,5 +1066,19 @@
   "faceIssue.LOW_LIGHT": "Juda qorong'i",
   "faceIssue.BLURRY": "Rasm xira",
   "faceIssue.BAD_ANGLE": "Burchak noto'g'ri",
-  "faceIssue.MAKEUP_OR_FILTER": "Pardoz yoki filtr"
+  "faceIssue.MAKEUP_OR_FILTER": "Pardoz yoki filtr",
+  "Ask MedVia Navi": "MedVia Navi'dan so'rang",
+  "Answers from MedVia’s own guides, FAQ and clinic pages — with the sources.": "MedVia qo'llanmalari, FAQ va klinika sahifalaridan javoblar — manbalari bilan.",
+  "Ask in your language…": "O'z tilingizda so'rang…",
+  "Ask": "So'rash",
+  "How far ahead can I book a treatment?": "Muolajaga necha kun oldin yozilish mumkin?",
+  "How long does the clinic have to confirm my booking?": "Klinika bronni qancha vaqtda tasdiqlashi kerak?",
+  "What should I bring on the day of my visit?": "Tashrif kuni nimalarni olib borishim kerak?",
+  "Navi is reading MedVia’s content…": "Navi MedVia ma'lumotlarini o'qiyapti…",
+  "Try the questions below, or send a 1:1 inquiry — a person answers it.": "Quyidagi savollarni ko'ring yoki 1:1 murojaat yuboring — unga odam javob beradi.",
+  "Sources": "Manbalar",
+  "Answers come from MedVia’s own content and may be incomplete. This is not medical advice.": "Javoblar MedVia ma'lumotlariga asoslanadi va to'liq bo'lmasligi mumkin. Bu tibbiy maslahat emas.",
+  "Log in to ask MedVia Navi": "MedVia Navi'dan so'rash uchun tizimga kiring",
+  "MedVia Navi is not available right now. Please try again later!": "MedVia Navi hozir ishlamayapti. Keyinroq urinib ko'ring!",
+  "Too many questions in a minute. Please wait a moment!": "Bir daqiqada juda ko'p savol. Biroz kuting!"
 }

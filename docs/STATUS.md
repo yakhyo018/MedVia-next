@@ -3,7 +3,7 @@
 Where the frontend stands, what comes next, and how we work. A new session reads this first.
 Update it whenever a milestone closes.
 
-_Last updated: 2026-11-08 — **AI-3 face scan on `feature/face-scan`: `/mypage/face-scan` (camera + MediaPipe hints, gallery fallback, result, history) and a landing band + hero link. Next: Navi "Ask MedVia" card on `/cs`.**_
+_Last updated: 2026-11-08 — **`feature/face-scan` (AI-3 face scan) and `feature/navi` (on top of it: the "Ask MedVia Navi" card on `/cs`) wait for the user's check. The API side is on the API's `feature/navi`.**_
 
 ## The project
 
@@ -49,6 +49,14 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
   other tab turns guest; RU locale; 1440 px, 800 px and 375 px mobile (drawer).
 - Not in F0: Google sign-in (needs `GOOGLE_CLIENT_ID`), clinic signup (F5).
 - Test account made during the check: `f0.feride@medvia.test` (local DB only).
+
+## N1 — Ask MedVia Navi (2026-11-08, `feature/navi`, branched from `feature/face-scan`)
+
+- `NaviAsk` card on `/cs` → FAQ tab: question, examples, answer with `[n]` badges, source chips
+  (cited first, links to clinic / article / notice pages), refusal style, disclaimer.
+- `askNavi` (GraphQL, the API's `feature/navi`); needs `NAVI_URL` + `NAVI_API_KEY` in the API's
+  `.env` and Navi running. Guests get the login prompt.
+- 15 i18n keys × 5 locales. Checked at 1440px (RU) and 375px (UZ): answer, refusal, links.
 
 ## AI-3 — Face scan (2026-11-08, `feature/face-scan`)
 

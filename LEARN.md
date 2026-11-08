@@ -928,3 +928,30 @@ preview browser) — try it in Chrome or Safari on `localhost`.
 5. **How do you keep a "skin reading" from becoming a medical claim?** Fixed wording (cosmetic,
    not a diagnosis), a disclaimer on every result, routing decided by the server, and a
    SEE_DOCTOR concern that never names a disease.
+
+## N1 — "Ask MedVia Navi" on the help center (2026-11-08)
+
+**Problem.** Patients ask the same questions the guides and FAQ already answer ("how far ahead can
+I book?", "what to bring?"), in Russian or Uzbek, while the FAQ is in English. MedVia Navi (a RAG
+service) answers from MedVia's own content in the question's language and names its sources.
+
+**What was built.** A card at the top of `/cs` → FAQ: a question field, three example questions,
+the answer with every `[n]` as a small badge, the sources as chips (the cited one highlighted, a
+link when the source has a page — a clinic, an article, a notice), a refusal style with a pointer
+to the 1:1 inquiry, and the disclaimer. GraphQL `askNavi` through MedVia — the browser never sees
+Navi's key. Guests are asked to log in (MedVia limits each member per minute).
+
+**Decisions.** On `/cs`, not a second floating button: the assistant already owns the corner, and
+the help center is where a patient looks for answers. `useLazyQuery` with `no-cache`: answers are
+not reused from the Apollo cache — the content behind them changes. Sources are sorted cited first.
+
+### Interview questions
+
+1. **Why show the sources at all?** A patient can check the answer, and a wrong one points at the
+   document to fix — trust comes from being checkable.
+2. **Why does the browser call MedVia, not Navi?** The key stays on the server, and MedVia knows the
+   member for the rate limit.
+3. **How do you render `[1]` inside text without `dangerouslySetInnerHTML`?** Split on the pattern
+   and map parts to React nodes — no HTML from the model ever reaches the DOM.
+4. **What does the user see when Navi does not know?** A distinct "refused" style and a way to a
+   human (the 1:1 inquiry) — a dead end is worse than "I don't know".

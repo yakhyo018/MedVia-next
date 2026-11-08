@@ -1194,3 +1194,26 @@ export const GET_MY_FACE_SCANS = gql`
 		}
 	}
 `;
+
+/**************************
+ *          NAVI          *
+ *************************/
+
+/** MedVia Navi (RAG): an answer from MedVia's own content, with its sources. */
+export const ASK_NAVI = gql`
+	query AskNavi($input: AskNaviInput!) {
+		askNavi(input: $input) {
+			answer
+			refused
+			sources {
+				index
+				docId
+				title
+				heading
+				cited
+				url
+			}
+			disclaimer
+		}
+	}
+`;
