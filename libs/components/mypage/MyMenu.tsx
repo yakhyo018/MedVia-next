@@ -7,6 +7,7 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import ChatBubbleOutlineRoundedIcon from '@mui/icons-material/ChatBubbleOutlineRounded';
 import VerifiedUserOutlinedIcon from '@mui/icons-material/VerifiedUserOutlined';
+import FaceRetouchingNaturalOutlinedIcon from '@mui/icons-material/FaceRetouchingNaturalOutlined';
 import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
 import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
@@ -38,6 +39,7 @@ export const MY_MENU: MyMenuGroup[] = [
 			{ href: '/mypage/bookings', label: 'My Bookings', icon: <CalendarMonthOutlinedIcon /> },
 			{ href: '/mypage/chat', label: 'Consultation Chat', icon: <ChatBubbleOutlineRoundedIcon /> },
 			{ href: '/mypage/medical', label: 'Medical data & consent', icon: <VerifiedUserOutlinedIcon /> },
+			{ href: '/mypage/face-scan', label: 'Face scan', icon: <FaceRetouchingNaturalOutlinedIcon /> },
 		],
 	},
 	{

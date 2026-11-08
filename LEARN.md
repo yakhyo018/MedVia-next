@@ -879,3 +879,52 @@ Clinics list (8 cards, all photos load), a clinic page (4 rooms in one look, 3 p
 5. **Why not use the mockup's font?** It lacked Cyrillic; a font must cover every locale the site
    serves.
 
+
+## AI-3 — Face scan page and landing band (2026-11-08)
+
+**Problem.** A patient who does not know which treatment they need has no way in: the site
+starts from a search box. The backend can read a face photo (cosmetic, never a diagnosis); the
+client must take a usable photo, keep the video private, and lead from the result to clinics.
+
+**Alternatives.**
+- A plain `<input type="file">` only: simplest, but every dark, blurry or faceless photo costs a
+  paid vision call and a round trip before the patient learns it was useless.
+- Stream the video to the server: the server sees the face continuously — a privacy cost with no
+  benefit.
+- **Chosen:** the camera in the browser + MediaPipe face detection on the device; only the one
+  frame the patient takes is uploaded. A gallery photo is the fallback.
+
+**What was built.**
+- `/mypage/face-scan`: AI consent → camera with live hints (no face, two faces, too far, off
+  centre, too dark) → result (concern, severity, zone, summary, disclaimer, "See dermatology
+  clinics") → earlier readings with delete.
+- `FaceCamera`: `getUserMedia({ facingMode: 'user' })`; MediaPipe **FaceDetector** (BlazeFace,
+  ~230 KB model) rather than FaceLandmarker (3.6 MB, 478 points) — a face box is all the checks
+  need. Brightness from a 64 × 48 copy of the frame, five checks a second.
+- Every photo — camera or gallery — is redrawn on a canvas into a ≤1280 px JPEG. Drawing keeps
+  only pixels, so the gallery photo's EXIF (GPS, phone, time) is gone before upload.
+- `@mediapipe/tasks-vision` is imported **dynamically** when the camera opens; the WASM (14.6 MB)
+  and the model come from a CDN then. The page bundle stays 8.5 KB; the landing loads none of it.
+- If the detector cannot load (CDN blocked, old browser) the camera still works without hints.
+- Landing: a second way in under the hero search ("Not sure which treatment you need?") and a
+  band with a drawn face being scanned — a drawing, never a real person's photo.
+
+**Checked.** Desktop 1440 px and phone 375 px (EN, UZ): consent, gallery photo → result,
+delete, guest → login prompt, no horizontal scroll, no console errors; the MediaPipe version,
+WASM and model load and a detector runs. Not checked here: the live camera (blocked in the
+preview browser) — try it in Chrome or Safari on `localhost`.
+
+### Interview questions
+
+1. **Why run face detection in the browser?** Privacy (the video never leaves the device), cost
+   (a bad photo never reaches the paid model) and speed (hints in real time, no round trip).
+2. **How do you remove EXIF from a photo without a library?** Draw it on a canvas and export
+   the canvas: the output is built from pixels only. The server strips metadata again — the
+   client is never trusted for it.
+3. **Why a dynamic `import()` for MediaPipe?** 14.6 MB of WASM would slow every visitor; only a
+   patient who opens the camera pays for it.
+4. **Why does the camera need HTTPS?** `getUserMedia` is limited to secure contexts (HTTPS or
+   `localhost`), so a page on plain HTTP cannot open a camera.
+5. **How do you keep a "skin reading" from becoming a medical claim?** Fixed wording (cosmetic,
+   not a diagnosis), a disclaimer on every result, routing decided by the server, and a
+   SEE_DOCTOR concern that never names a disease.
