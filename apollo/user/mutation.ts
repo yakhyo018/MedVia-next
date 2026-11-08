@@ -702,3 +702,17 @@ export const CLOSE_ASSISTANT_SESSION = gql`
 		}
 	}
 `;
+
+/**************************
+ *       FACE SCAN        *
+ *************************/
+
+/** The scan itself goes over REST (POST /face-scan, multipart): see useFaceScan. */
+export const DELETE_FACE_SCAN = gql`
+	mutation DeleteFaceScan($scanId: String!) {
+		deleteFaceScan(scanId: $scanId) {
+			_id
+			faceScanStatus
+		}
+	}
+`;

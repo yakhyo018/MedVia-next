@@ -14,6 +14,7 @@ import ListBanner from '../../libs/components/common/ListBanner';
 import EmptyState from '../../libs/components/common/EmptyState';
 import StatusChip from '../../libs/components/common/StatusChip';
 import InquiryForm from '../../libs/components/cs/InquiryForm';
+import NaviAsk from '../../libs/components/cs/NaviAsk';
 import { CATEGORY_LABEL, INQUIRY_STATUS } from '../../libs/components/cs/csLabels';
 import { GET_MY_INQUIRIES, GET_NOTICES } from '../../apollo/user/query';
 import { sessionReadyVar, userVar } from '../../apollo/store';
@@ -128,6 +129,7 @@ const HelpCenter: NextPage = () => {
 		body = (
 			<Box className={'cs-columns'}>
 				<Stack className={'cs-main'}>
+					<NaviAsk />
 					<div className={'faq-filter'} role={'tablist'} aria-label={t('FAQ')}>
 						{[
 							{ key: '', label: 'All' },

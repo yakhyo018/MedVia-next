@@ -1164,3 +1164,56 @@ export const GET_DOCTOR_CLINIC = gql`
 		}
 	}
 `;
+
+/**************************
+ *       FACE SCAN        *
+ *************************/
+
+export const GET_MY_FACE_SCANS = gql`
+	query GetMyFaceScans($input: OrdinaryInquiry!) {
+		getMyFaceScans(input: $input) {
+			list {
+				_id
+				faceScanStatus
+				findings {
+					concern
+					severity
+					zone
+				}
+				qualityIssues
+				faceScanSummary
+				faceScanLang
+				suggestedSpecialty
+				aiProvider
+				disclaimer
+				createdAt
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+/**************************
+ *          NAVI          *
+ *************************/
+
+/** MedVia Navi (RAG): an answer from MedVia's own content, with its sources. */
+export const ASK_NAVI = gql`
+	query AskNavi($input: AskNaviInput!) {
+		askNavi(input: $input) {
+			answer
+			refused
+			sources {
+				index
+				docId
+				title
+				heading
+				cited
+				url
+			}
+			disclaimer
+		}
+	}
+`;
