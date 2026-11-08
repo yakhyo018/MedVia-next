@@ -3,7 +3,7 @@
 Where the frontend stands, what comes next, and how we work. A new session reads this first.
 Update it whenever a milestone closes.
 
-_Last updated: 2026-10-21 — **Motion redesign merged and deployed (`feature/redesign-motion` → `develop` → `main`): green palette, Onest + Inter, aurora / glass skins for computer and phone, new landing page, new admin side menu. Next: watch the deploy, then the open items under "Motion redesign".**_
+_Last updated: 2026-11-08 — **`feature/face-scan` (AI-3 face scan) and `feature/navi` (on top of it: the "Ask MedVia Navi" card on `/cs`) wait for the user's check. The API side is on the API's `feature/navi`.**_
 
 ## The project
 
@@ -49,6 +49,25 @@ the look from `~/Desktop/MedVia-design`. Sample patient personas: Feride Karimov
   other tab turns guest; RU locale; 1440 px, 800 px and 375 px mobile (drawer).
 - Not in F0: Google sign-in (needs `GOOGLE_CLIENT_ID`), clinic signup (F5).
 - Test account made during the check: `f0.feride@medvia.test` (local DB only).
+
+## N1 — Ask MedVia Navi (2026-11-08, `feature/navi`, branched from `feature/face-scan`)
+
+- `NaviAsk` card on `/cs` → FAQ tab: question, examples, answer with `[n]` badges, source chips
+  (cited first, links to clinic / article / notice pages), refusal style, disclaimer.
+- `askNavi` (GraphQL, the API's `feature/navi`); needs `NAVI_URL` + `NAVI_API_KEY` in the API's
+  `.env` and Navi running. Guests get the login prompt.
+- 15 i18n keys × 5 locales. Checked at 1440px (RU) and 375px (UZ): answer, refusal, links.
+
+## AI-3 — Face scan (2026-11-08, `feature/face-scan`)
+
+- Backend: `POST /face-scan` (REST multipart) + `getMyFaceScans` / `deleteFaceScan` — merged on
+  the API's `develop` (AI-3). Fake provider returns the same reading every time.
+- `/mypage/face-scan` (MyPage menu → Face scan): consent card, camera with MediaPipe
+  FaceDetector hints, gallery fallback, canvas → JPEG (EXIF gone), result card, earlier readings.
+- Landing: `HeroFaceScanLink` under the search, `FaceScanBand` after "Why MedVia".
+- New package `@mediapipe/tasks-vision@1.2.2` (dynamic import; WASM + model from CDN).
+- 66 i18n keys × 5 locales. Checked at 1440px and 375px (EN, UZ). Not checked: the live camera
+  (blocked in the preview browser).
 
 ## Motion redesign (2026-10-21, done)
 

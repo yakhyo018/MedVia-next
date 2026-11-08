@@ -10,8 +10,9 @@ import HeroChat from '../libs/components/homepage/HeroChat';
 import HeroWords from '../libs/components/homepage/HeroWords';
 import HeroFloatCards from '../libs/components/homepage/HeroFloatCards';
 import HeroMarquee from '../libs/components/homepage/HeroMarquee';
-import { HeroLiveBadge, HeroTrust } from '../libs/components/homepage/HeroParts';
+import { HeroFaceScanLink, HeroLiveBadge, HeroTrust } from '../libs/components/homepage/HeroParts';
 import WhyMedvia from '../libs/components/homepage/WhyMedvia';
+import FaceScanBand from '../libs/components/homepage/FaceScanBand';
 import FlyInTreatments from '../libs/components/homepage/FlyInTreatments';
 import HomeCta from '../libs/components/homepage/HomeCta';
 import { T } from '../libs/types/common';
@@ -56,10 +57,12 @@ const Home: NextPage = () => {
 							<HeroChat compact />
 						</Box>
 						<HeroSearch />
+						<HeroFaceScanLink />
 						<HeroTrust />
 					</Stack>
 				</Stack>
 				<WhyMedvia />
+				<FaceScanBand />
 				<FlyInTreatments />
 				<HomeCta />
 			</Stack>
@@ -72,6 +75,7 @@ const Home: NextPage = () => {
 						<Stack className={'left'}>
 							{heading}
 							<HeroSearch />
+							<HeroFaceScanLink />
 							<HeroTrust />
 						</Stack>
 						<Stack className={'right'}>
@@ -94,6 +98,7 @@ const Home: NextPage = () => {
 					<HeroMarquee />
 				</Stack>
 				<WhyMedvia />
+				<FaceScanBand />
 				<FlyInTreatments />
 				<HomeCta />
 			</Stack>

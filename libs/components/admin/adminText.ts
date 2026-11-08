@@ -87,11 +87,12 @@ export const auditTargetHref = (group: AuditGroup, refId: string): string | null
 	}
 };
 
-/** The batch's three runs: the name and the schedule (the batch's CRON_* in Asia/Seoul). */
+/** The batch's runs: the name and the schedule (the batch's CRON_* in Asia/Seoul). */
 export const BATCH_JOBS: Record<BatchName, { label: string; schedule: string }> = {
 	[BatchName.SLOT_RELEASE]: { label: 'Slot hold release', schedule: 'Every 5 minutes' },
 	[BatchName.RECOUNT]: { label: 'Counters recount', schedule: 'Daily · 02:30' },
 	[BatchName.RANK]: { label: 'Top clinics & doctors ranking', schedule: 'Daily · 03:00' },
+	[BatchName.NAVI_SYNC]: { label: 'MedVia Navi index sync', schedule: 'Daily · 03:30' },
 };
 
 /** "just now", "12 min ago", "3 h ago"; older than a day — the Seoul date and time. */

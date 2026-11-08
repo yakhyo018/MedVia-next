@@ -1,0 +1,180 @@
+/* Help center → "Ask MedVia Navi" card (FAQ tab). Computer and phone. */
+
+.navi-ask {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	padding: 22px;
+	border-radius: $radius-card;
+	border: 1px solid $border;
+	background: $surface;
+	box-shadow: $shadow-card;
+	.head {
+		display: flex;
+		align-items: flex-start;
+		gap: 14px;
+		.mark {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			flex-shrink: 0;
+			width: 42px;
+			height: 42px;
+			border-radius: 14px;
+			background: $gradient-primary;
+			color: #ffffff;
+		}
+		h2 {
+			font-family: $font-heading;
+			font-size: 20px;
+			font-weight: 700;
+		}
+		p {
+			margin-top: 2px;
+			font-size: 13px;
+			color: $text-secondary;
+		}
+	}
+	.ask {
+		display: flex;
+		gap: 10px;
+		.MuiButton-root {
+			flex-shrink: 0;
+			min-width: 88px;
+		}
+	}
+	.examples {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		button {
+			padding: 7px 12px;
+			border-radius: $radius-pill;
+			border: 1px solid $border;
+			background: $surface-alt;
+			color: $text;
+			font-size: 13px;
+			cursor: pointer;
+			transition: border-color 0.2s;
+			&:hover {
+				border-color: $primary;
+			}
+		}
+	}
+	.thinking {
+		font-size: 13px;
+		color: $text-muted;
+	}
+	.answer {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		padding: 16px;
+		border-radius: 16px;
+		background: $primary-tint;
+		.text {
+			font-size: 15px;
+			line-height: 1.6;
+			color: $text;
+		}
+		.cite {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			min-width: 18px;
+			height: 18px;
+			margin: 0 2px;
+			padding: 0 4px;
+			border-radius: 6px;
+			background: $primary;
+			color: #ffffff;
+			font-size: 11px;
+			font-weight: 700;
+			vertical-align: super;
+		}
+		.next {
+			font-size: 13px;
+			color: $text-secondary;
+		}
+		&.refused {
+			background: $surface-alt;
+		}
+	}
+	.sources {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 8px;
+		small {
+			font-size: 12px;
+			font-weight: 600;
+			color: $text-secondary;
+		}
+		.source {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			max-width: 100%;
+			padding: 5px 10px 5px 5px;
+			border-radius: $radius-pill;
+			border: 1px solid $border;
+			background: $surface;
+			color: $text-secondary;
+			font-size: 12px;
+			b {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				width: 20px;
+				height: 20px;
+				border-radius: 50%;
+				background: $surface-alt;
+				font-size: 11px;
+			}
+			span {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+			svg {
+				flex-shrink: 0;
+				width: 14px;
+				height: 14px;
+			}
+			&.cited {
+				border-color: $primary;
+				color: $text;
+				b {
+					background: $primary;
+					color: #ffffff;
+				}
+			}
+		}
+		a.source:hover {
+			border-color: $primary;
+			color: $primary;
+		}
+	}
+	.disclaimer {
+		display: flex;
+		align-items: flex-start;
+		gap: 6px;
+		font-size: 12px;
+		line-height: 1.5;
+		color: $text-muted;
+		svg {
+			flex-shrink: 0;
+			width: 16px;
+			height: 16px;
+		}
+	}
+}
+
+@media (max-width: 700px) {
+	.navi-ask {
+		padding: 18px;
+		.ask {
+			flex-direction: column;
+		}
+	}
+}
